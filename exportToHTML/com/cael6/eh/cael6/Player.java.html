@@ -1,0 +1,322 @@
+<html>
+<head>
+<title>Player.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+Player.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.cael6.eh.cael6; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.graphics.drawable.Drawable; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.view.ViewGroup; 
+</span><span class="s0">import </span><span class="s1">android.widget.ImageView; 
+</span><span class="s0">import </span><span class="s1">android.widget.LinearLayout; 
+</span><span class="s0">import </span><span class="s1">android.widget.RelativeLayout; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+ 
+</span><span class="s0">import </span><span class="s1">com.cael6.eh.GameActivity; 
+</span><span class="s0">import </span><span class="s1">com.cael6.eh.R; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+</span><span class="s0">import </span><span class="s1">java.util.Iterator; 
+</span><span class="s0">import </span><span class="s1">java.util.ListIterator; 
+ 
+</span><span class="s2">/** 
+ * Created by cael6 on 23/02/14. 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">Player { 
+    </span><span class="s0">public </span><span class="s1">ArrayList&lt;Energy&gt; currEnergy; 
+    </span><span class="s0">public </span><span class="s1">Deck deck; 
+    </span><span class="s0">public </span><span class="s1">LinearLayout statusBar, playerCardZone, playerBoard; 
+    </span><span class="s0">public boolean </span><span class="s1">cardsDefaultHidden; 
+    </span><span class="s0">public int </span><span class="s1">cardWidth, cardHeight, cardSpacing; 
+    </span><span class="s0">public boolean </span><span class="s1">playerControl = </span><span class="s0">false</span><span class="s1">; 
+    </span><span class="s0">public </span><span class="s1">ArrayList&lt;Card&gt; cardsInHand; 
+    </span><span class="s0">public </span><span class="s1">ArrayList&lt;Card&gt; cardsOnBoard; 
+    </span><span class="s0">public </span><span class="s1">ArrayList&lt;ViewGroup&gt; creatureBoardPositions; 
+    </span><span class="s0">public </span><span class="s1">Player enemy; 
+    </span><span class="s0">public boolean </span><span class="s1">isAi = </span><span class="s0">false</span><span class="s1">; 
+    </span><span class="s0">public int </span><span class="s1">colorlessEnergy; 
+ 
+    </span><span class="s0">private final </span><span class="s1">String TURN_TAG = </span><span class="s3">&quot;turn&quot;</span><span class="s1">; 
+    </span><span class="s0">private final </span><span class="s1">String HEALTH_TAG = </span><span class="s3">&quot;health&quot;</span><span class="s1">;<hr> 
+ 
+    </span><span class="s0">public </span><span class="s1">Player(Context context, </span><span class="s0">int </span><span class="s1">deck, LinearLayout statusBar, LinearLayout playerCardZone, LinearLayout playerBoard, </span><span class="s0">int </span><span class="s1">cardWidth, </span><span class="s0">int </span><span class="s1">cardHeight, </span><span class="s0">int </span><span class="s1">cardSpacing){ 
+        </span><span class="s0">this</span><span class="s1">.deck = </span><span class="s0">new </span><span class="s1">Deck(context, deck); 
+        </span><span class="s0">this</span><span class="s1">.statusBar = statusBar; 
+        </span><span class="s0">this</span><span class="s1">.playerCardZone = playerCardZone; 
+        </span><span class="s0">this</span><span class="s1">.playerBoard = playerBoard; 
+        </span><span class="s0">this</span><span class="s1">.cardWidth = cardWidth; 
+        </span><span class="s0">this</span><span class="s1">.cardHeight = cardHeight; 
+        </span><span class="s0">this</span><span class="s1">.cardSpacing = cardSpacing; 
+        </span><span class="s0">this</span><span class="s1">.cardsInHand = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Card&gt;(); 
+        </span><span class="s0">this</span><span class="s1">.cardsOnBoard = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Card&gt;(); 
+        </span><span class="s0">this</span><span class="s1">.creatureBoardPositions = </span><span class="s0">new </span><span class="s1">ArrayList&lt;ViewGroup&gt;(); 
+        createElements(context); 
+        </span><span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s4">1</span><span class="s1">; j &lt; playerBoard.getChildCount(); j++){ 
+            RelativeLayout boardPosition = (RelativeLayout) playerBoard.getChildAt(j); 
+            creatureBoardPositions.add(boardPosition); 
+        } 
+        createPlayerUiStatusBar(context); 
+        updatePlayerUiStatusBar(); 
+    }<hr> 
+ 
+    </span><span class="s0">private void </span><span class="s1">createPlayerUiStatusBar(Context context) { 
+        Iterator&lt;Energy&gt; enIt = deck.hero.energyGen.iterator(); 
+        </span><span class="s0">while</span><span class="s1">(enIt.hasNext()){ 
+            Energy en = enIt.next(); 
+            statusBar.addView(getStatusBarTextView(context, String.valueOf(en.level), en.name)); 
+            statusBar.addView(getStatusBarImageView(context, en.image)); 
+        } 
+        </span><span class="s2">//Actions</span><span class="s1"> 
+        statusBar.addView(getStatusBarTextView(context, String.valueOf(deck.hero.turns), TURN_TAG)); 
+        statusBar.addView(getStatusBarImageView(context, context.getResources().getDrawable(R.drawable.turn))); 
+ 
+        </span><span class="s2">//Health</span><span class="s1"> 
+        statusBar.addView(getStatusBarTextView(context, String.valueOf(deck.hero.health), HEALTH_TAG)); 
+        statusBar.addView(getStatusBarImageView(context, context.getResources().getDrawable(R.drawable.health))); 
+    }<hr> 
+ 
+    </span><span class="s0">protected </span><span class="s1">TextView getStatusBarTextView(Context context, String value, String tag){ 
+        TextView tv = </span><span class="s0">new </span><span class="s1">TextView(context); 
+        LinearLayout.LayoutParams params = </span><span class="s0">new </span><span class="s1">LinearLayout.LayoutParams( 
+                ViewGroup.LayoutParams.WRAP_CONTENT, 
+                ViewGroup.LayoutParams.WRAP_CONTENT); 
+</span><span class="s2">//        params.leftMargin = (int)((GameActivity)context).pxFromDp(10);</span><span class="s1"> 
+</span><span class="s2">//        params.topMargin = (int)((GameActivity)context).pxFromDp(-4);</span><span class="s1"> 
+</span><span class="s2">//        params.rightMargin = (int)((GameActivity)context).pxFromDp(5);</span><span class="s1"> 
+        tv.setText(value); 
+        tv.setTag(tag); 
+        tv.setTextColor(</span><span class="s4">0xFFFFFFFF</span><span class="s1">); 
+        tv.setTextSize(context.getResources().getDimensionPixelSize(R.dimen.status_text_size)); 
+        tv.setLayoutParams(params); 
+        </span><span class="s0">return </span><span class="s1">tv; 
+    }<hr> 
+ 
+    </span><span class="s0">protected </span><span class="s1">ImageView getStatusBarImageView(Context context, Drawable drawable){ 
+ 
+        ImageView iv = </span><span class="s0">new </span><span class="s1">ImageView(context); 
+        iv.setImageDrawable(drawable); 
+        LinearLayout.LayoutParams params = </span><span class="s0">new </span><span class="s1">LinearLayout.LayoutParams( 
+                context.getResources().getDimensionPixelSize(R.dimen.hero_energy_icon_size), 
+                context.getResources().getDimensionPixelSize(R.dimen.hero_energy_icon_size)); 
+        iv.setLayoutParams(params); 
+        </span><span class="s0">return </span><span class="s1">iv; 
+    }<hr> 
+ 
+ 
+    </span><span class="s0">public void </span><span class="s1">updatePlayerUiStatusBar() { 
+ 
+        </span><span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s4">0</span><span class="s1">; i &lt; statusBar.getChildCount(); i++){ 
+            View child = statusBar.getChildAt(i); 
+            </span><span class="s0">if</span><span class="s1">(child </span><span class="s0">instanceof </span><span class="s1">TextView){ 
+                TextView tv = (TextView) child; 
+                Iterator&lt;Energy&gt; enIt = currEnergy.iterator(); 
+                </span><span class="s0">while</span><span class="s1">(enIt.hasNext()){ 
+                   Energy currEn = enIt.next(); 
+                   </span><span class="s0">if</span><span class="s1">(currEn.name.equals(tv.getTag())){ 
+                       tv.setText(String.valueOf(currEn.level)); 
+                       </span><span class="s0">break</span><span class="s1">; 
+                   } 
+                } 
+                </span><span class="s0">if</span><span class="s1">(tv.getTag().equals(TURN_TAG)){ 
+                   tv.setText(String.valueOf(deck.hero.turns)); 
+                } 
+                </span><span class="s0">if</span><span class="s1">(tv.getTag().equals(HEALTH_TAG)){ 
+                    tv.setText(String.valueOf(deck.hero.health)); 
+                } 
+            } 
+        } 
+        statusBar.invalidate(); 
+    }<hr> 
+ 
+    </span><span class="s0">private void </span><span class="s1">createElements(Context context){ 
+        currEnergy = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Energy&gt;(); 
+        Iterator&lt;Energy&gt; enIt = deck.hero.energyGen.iterator(); 
+        </span><span class="s0">while</span><span class="s1">(enIt.hasNext()){ 
+            Energy en = enIt.next(); 
+            currEnergy.add(</span><span class="s0">new </span><span class="s1">Energy(context, en.id, </span><span class="s4">0</span><span class="s1">)); 
+        } 
+    }<hr> 
+ 
+    </span><span class="s0">public void </span><span class="s1">generateElements(){ 
+        Iterator&lt;Energy&gt; it = deck.hero.energyGen.iterator(); 
+        </span><span class="s0">while</span><span class="s1">(it.hasNext()){ 
+            Energy en = it.next(); 
+            Iterator&lt;Energy&gt; currEnIt = currEnergy.iterator(); 
+            </span><span class="s0">while</span><span class="s1">(it.hasNext()){ 
+                Energy currEn = currEnIt.next(); 
+                </span><span class="s0">if</span><span class="s1">(en.id == currEn.id){ 
+                    currEn.level += en.level; 
+                } 
+            } 
+        } 
+    }<hr> 
+ 
+    </span><span class="s0">public </span><span class="s1">Card drawCard(){ 
+        Card drawnCard = deck.drawCard(); 
+        drawnCard.inHand = </span><span class="s0">true</span><span class="s1">; 
+        drawnCard.movable = </span><span class="s0">true</span><span class="s1">; 
+        drawnCard.hidden = cardsDefaultHidden; 
+        cardsInHand.add(drawnCard); 
+        LinearLayout.LayoutParams params = </span><span class="s0">new </span><span class="s1">LinearLayout.LayoutParams(cardWidth, cardHeight); 
+        params.setMargins(cardSpacing, </span><span class="s4">0</span><span class="s1">, </span><span class="s4">0</span><span class="s1">, </span><span class="s4">0</span><span class="s1">); 
+        drawnCard.setLayoutParams(params); 
+        ((LinearLayout)playerCardZone.findViewWithTag(</span><span class="s3">&quot;hand&quot;</span><span class="s1">)).addView(drawnCard); 
+ 
+        </span><span class="s0">if</span><span class="s1">(playerControl){ 
+            drawnCard.setOnTouchListener(</span><span class="s0">new </span><span class="s1">MovableCardOnTouchListener((GameActivity)drawnCard.getContext())); 
+            drawnCard.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+                @Override 
+                </span><span class="s0">public void </span><span class="s1">onClick(View view) { 
+                    ((GameActivity)view.getContext()).previewCard((Card) view); 
+                } 
+            }); 
+        } 
+        </span><span class="s0">return </span><span class="s1">drawnCard; 
+    }<hr> 
+ 
+    </span><span class="s0">public boolean </span><span class="s1">checkResources(Card card) { 
+        Iterator&lt;Energy&gt; it = card.energy.iterator(); 
+        </span><span class="s0">boolean </span><span class="s1">haveResources = deck.hero.turns &gt; </span><span class="s4">0</span><span class="s1">; 
+        </span><span class="s0">if</span><span class="s1">(haveResources){ 
+            </span><span class="s0">while</span><span class="s1">(it.hasNext()){ 
+                Energy en = it.next(); 
+                Iterator&lt;Energy&gt; currEnIt = currEnergy.iterator(); 
+                </span><span class="s0">while</span><span class="s1">(currEnIt.hasNext()){ 
+                    Energy currEn = currEnIt.next(); 
+                    </span><span class="s0">if</span><span class="s1">(en.id == currEn.id){ 
+                        haveResources &amp;= currEn.level &gt;= en.level; 
+                    } 
+                } 
+            } 
+        } 
+        </span><span class="s0">return </span><span class="s1">haveResources; 
+    }<hr> 
+ 
+    </span><span class="s0">public boolean </span><span class="s1">attemptToPlayCard(Card card) { 
+        </span><span class="s0">if</span><span class="s1">(!checkResources(card)){ 
+            </span><span class="s0">return false</span><span class="s1">; 
+        } 
+        spendResources(card); </span><span class="s2">//spend resources</span><span class="s1"> 
+        updatePlayerUiStatusBar(); </span><span class="s2">//update ui</span><span class="s1"> 
+        </span><span class="s0">return true</span><span class="s1">; 
+    }<hr> 
+ 
+    </span><span class="s0">public void </span><span class="s1">spendResources(Card card) { 
+        deck.hero.spendAction(); 
+        Iterator&lt;Energy&gt; it = card.energy.iterator(); 
+        </span><span class="s0">while</span><span class="s1">(it.hasNext()){ 
+            Energy en = it.next(); 
+ 
+            Iterator&lt;Energy&gt; currEnIt = currEnergy.iterator(); 
+            </span><span class="s0">while</span><span class="s1">(currEnIt.hasNext()){ 
+                Energy currEn = currEnIt.next(); 
+                </span><span class="s0">if</span><span class="s1">(en.id == currEn.id){ 
+                    currEn.level -= en.level; 
+                } 
+            } 
+        } 
+    }<hr> 
+ 
+    </span><span class="s0">public void </span><span class="s1">resetActions(){ 
+        deck.hero.resetActions(); 
+        </span><span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s4">0</span><span class="s1">; i &lt; playerBoard.getChildCount(); i++){ 
+            ViewGroup child = (ViewGroup)playerBoard.getChildAt(i); 
+            </span><span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s4">0</span><span class="s1">; j &lt; child.getChildCount(); j++){ 
+                View possibleCard = child.getChildAt(j); 
+                </span><span class="s0">if</span><span class="s1">(possibleCard </span><span class="s0">instanceof </span><span class="s1">Card){ 
+                    ((Card) possibleCard).resetActions(); 
+                    possibleCard.invalidate(); 
+                } 
+            } 
+        } 
+    }<hr> 
+ 
+    </span><span class="s0">public void </span><span class="s1">endTurn(GameActivity context){ 
+        enemy.startTurn(context); 
+    }<hr> 
+ 
+    </span><span class="s0">public void </span><span class="s1">startTurn(GameActivity context){ 
+        drawCard(); 
+        generateElements(); 
+        resetActions(); 
+        updatePlayerUiStatusBar(); 
+        </span><span class="s0">if</span><span class="s1">(isAi){ 
+            aiTurn(</span><span class="s0">this</span><span class="s1">, context); 
+        } 
+    }<hr> 
+ 
+    </span><span class="s0">public void </span><span class="s1">aiTurn(Player player, GameActivity context){ 
+        aiPlayCards(context); 
+        aiAttack(context); 
+        endTurn(context); 
+    }<hr> 
+ 
+    </span><span class="s0">private void </span><span class="s1">aiAttack(GameActivity context) { 
+        Iterator&lt;Card&gt; cardIterator = cardsOnBoard.iterator(); 
+        </span><span class="s0">while</span><span class="s1">(cardIterator.hasNext()){ 
+            Card card = cardIterator.next(); 
+            Iterator&lt;Card&gt;enemyCardIterator = enemy.cardsOnBoard.iterator(); 
+            </span><span class="s0">while</span><span class="s1">(enemyCardIterator.hasNext()){ 
+                Card enemyCard = enemyCardIterator.next(); 
+                </span><span class="s0">if</span><span class="s1">(card.attack &gt; enemyCard.defense){ 
+                    </span><span class="s0">if</span><span class="s1">(context.attackCard(card, enemyCard)){ 
+                        enemyCardIterator.remove(); 
+                    } 
+                } 
+            } 
+            context.attackCard(card, enemy.deck.hero); 
+        } 
+        ListIterator&lt;Card&gt; enemyCardIterator = enemy.cardsOnBoard.listIterator(); 
+        </span><span class="s0">while</span><span class="s1">(enemyCardIterator.hasNext()){ 
+            Card enemyCard = enemyCardIterator.next(); 
+            </span><span class="s0">if</span><span class="s1">(deck.hero.attack &gt; enemyCard.defense){ 
+                </span><span class="s0">if</span><span class="s1">(context.attackCard(deck.hero, enemyCard)){ 
+                    enemyCardIterator.remove(); 
+                } 
+            } 
+        } 
+        </span><span class="s0">while</span><span class="s1">(deck.hero.turns &gt; </span><span class="s4">0</span><span class="s1">){ 
+            context.attackCard(deck.hero, enemy.deck.hero); 
+        } 
+    }<hr> 
+ 
+    </span><span class="s0">private void </span><span class="s1">aiPlayCards(GameActivity context) { 
+        ListIterator&lt;Card&gt; cardIterator = cardsInHand.listIterator(); 
+        </span><span class="s0">while</span><span class="s1">(cardIterator.hasNext()){ 
+            Card card = cardIterator.next(); 
+            ListIterator&lt;ViewGroup&gt; boardPositionsIt = creatureBoardPositions.listIterator(); 
+            </span><span class="s0">while</span><span class="s1">(boardPositionsIt.hasNext()){ 
+                ViewGroup boardPosition = boardPositionsIt.next(); 
+                </span><span class="s0">if</span><span class="s1">(boardPosition.getChildCount() &lt; </span><span class="s4">1</span><span class="s1">){ 
+                    </span><span class="s0">if</span><span class="s1">(context.dropCard(card, boardPosition, </span><span class="s0">this</span><span class="s1">)){ 
+                        cardIterator.remove(); 
+                        cardsOnBoard.add(card); 
+                        context.setBackground(boardPosition, </span><span class="s0">null</span><span class="s1">); 
+                        </span><span class="s0">break</span><span class="s1">; 
+                    } 
+                } 
+            } 
+        } 
+    } 
+} 
+</span></pre>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="card001" parent="CreatureCard">
+        <item name="name">@string/campfire</item>
+        <item name="attack">2</item>
+        <item name="defense">0</item>
+        <item name="fireCost">1</item>
+        <item name="enrage">true</item>
+        <item name="image">@drawable/campfire</item>
+    </style>
+    <style name="card002" parent="CreatureCard">
+        <item name="name">@string/pyro_freak</item>
+        <item name="attack">3</item>
+        <item name="defense">1</item>
+        <item name="fireCost">1</item>
+        <item name="colorlessCost">2</item>
+        <item name="image">@drawable/pyro_freak</item>
+    </style>
+    <style name="card003" parent="CreatureCard">
+        <item name="name">@string/fire_striker</item>
+        <item name="attack">4</item>
+        <item name="defense">2</item>
+        <item name="fireCost">2</item>
+        <item name="colorlessCost">3</item>
+        <item name="battleReady">true</item>
+        <item name="image">@drawable/fire_striker</item>
+    </style>
+    <style name="card004" parent="CreatureCard">
+        <item name="name">@string/elrath</item>
+        <item name="attack">3</item>
+        <item name="defense">3</item>
+        <item name="fireCost">3</item>
+        <item name="health">3</item>
+        <item name="colorlessCost">3</item>
+        <item name="enrage">true</item>
+        <item name="image">@drawable/elrath</item>
+    </style>
+    <style name="card005" parent="CreatureCard">
+        <item name="name">@string/numbal</item>
+        <item name="attack">3</item>
+        <item name="defense">4</item>
+        <item name="fireCost">2</item>
+        <item name="colorlessCost">4</item>
+        <item name="battleReady">true</item>
+        <item name="image">@drawable/numbal</item>
+    </style>
+    <style name="card006" parent="CreatureCard">
+        <item name="name">@string/wallc</item>
+        <item name="attack">5</item>
+        <item name="defense">4</item>
+        <item name="fireCost">3</item>
+        <item name="colorlessCost">5</item>
+        <item name="enrage">true</item>
+        <item name="image">@drawable/wallc</item>
+    </style>
+    <style name="card101" parent="CreatureCard">
+        <item name="name">@string/small_trout</item>
+        <item name="attack">1</item>
+        <item name="defense">1</item>
+        <item name="waterCost">3</item>
+    </style>
+    <style name="card102" parent="CreatureCard">
+        <item name="name">@string/fiesty_salmon</item>
+        <item name="attack">2</item>
+        <item name="defense">2</item>
+        <item name="waterCost">5</item>
+    </style>
+    <style name="card103" parent="CreatureCard">
+        <item name="name">@string/mermaid_warrior</item>
+        <item name="attack">3</item>
+        <item name="defense">3</item>
+        <item name="waterCost">8</item>
+    </style>
+    <style name="card104" parent="CreatureCard">
+        <item name="name">@string/Leviathan</item>
+        <item name="attack">4</item>
+        <item name="defense">4</item>
+        <item name="waterCost">10</item>
+    </style>
+    <style name="card201" parent="CreatureCard">
+        <item name="name">@string/baby_owl</item>
+        <item name="attack">1</item>
+        <item name="defense">1</item>
+        <item name="windCost">3</item>
+    </style>
+    <style name="card202" parent="CreatureCard">
+        <item name="name">@string/bat</item>
+        <item name="attack">2</item>
+        <item name="defense">2</item>
+        <item name="windCost">5</item>
+    </style>
+    <style name="card203" parent="CreatureCard">
+        <item name="name">@string/swift_eagle</item>
+        <item name="attack">3</item>
+        <item name="defense">3</item>
+        <item name="windCost">8</item>
+    </style>
+    <style name="card204" parent="CreatureCard">
+        <item name="name">@string/sky_hawk</item>
+        <item name="attack">4</item>
+        <item name="defense">4</item>
+        <item name="windCost">10</item>
+    </style>
+    <style name="card301" parent="CreatureCard">
+        <item name="name">@string/lively_pebble</item>
+        <item name="attack">1</item>
+        <item name="defense">1</item>
+        <item name="earthCost">3</item>
+    </style>
+    <style name="card302" parent="CreatureCard">
+        <item name="name">@string/crocker</item>
+        <item name="attack">2</item>
+        <item name="defense">2</item>
+        <item name="earthCost">5</item>
+    </style>
+    <style name="card303" parent="CreatureCard">
+        <item name="name">@string/flailing_boulder</item>
+        <item name="attack">3</item>
+        <item name="defense">3</item>
+        <item name="earthCost">8</item>
+    </style>
+    <style name="card304" parent="CreatureCard">
+        <item name="name">@string/giant_golemn</item>
+        <item name="attack">4</item>
+        <item name="defense">4</item>
+        <item name="earthCost">10</item>
+    </style>
+
+
+    <style name="hero001" parent="HeroCard">
+        <item name="name">General Huǒ</item>
+        <item name="attack">3</item>
+        <item name="health">26</item>
+        <item name="fireGen">2</item>
+        <item name="colorlessGen">5</item>
+    </style>
+
+    <string name="Pheonix">Pheonix</string>
+    <string name="Phoenix">Phoenix</string>
+    <string name="phoenix_king">Phoenix King</string>
+    <string name="elrath">Elrath</string>
+    <string name="numbal">Numbal</string>
+    <string name="wallc">Wallc</string>
+</resources>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.cael6.eh.cael6.Card
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card001"
+        app:name="@string/campfire"
+        app:attack="2"
+        app:defense="0"
+        app:fireCost="1"
+        app:enrage="true"
+        app:image="@drawable/campfire"
+        style="@style/CreatureCard"/>
+
+    <com.cael6.eh.cael6.Card
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card002"
+        app:name="@string/pyro_freak"
+        app:attack="3"
+        app:defense="1"
+        app:fireCost="1"
+        app:colorlessCost="2"
+        app:image="@drawable/pyro_freak"
+        style="@style/CreatureCard"/>
+
+    <com.cael6.eh.cael6.Card
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card003"
+        app:name="@string/fire_striker"
+        app:attack="4"
+        app:defense="2"
+        app:fireCost="2"
+        app:colorlessCost="3"
+        app:battleReady="true"
+        app:image="@drawable/fire_striker"
+        style="@style/CreatureCard"/>
+
+
+    <com.cael6.eh.cael6.Card
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card004"
+        app:name="@string/elrath"
+        app:attack="3"
+        app:defense="3"
+        app:fireCost="3"
+        app:health="3"
+        app:colorlessCost="3"
+        app:enrage="true"
+        app:image="@drawable/elrath"
+        style="@style/CreatureCard"/>
+
+    <com.cael6.eh.cael6.Card
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card005"
+        app:name="@string/numbal"
+        app:attack="3"
+        app:defense="4"
+        app:fireCost="2"
+        app:colorlessCost="4"
+        app:battleReady="true"
+        app:image="@drawable/numbal"
+        style="@style/CreatureCard"/>
+
+    <com.cael6.eh.cael6.Card
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card006"
+        app:name="@string/wallc"
+        app:attack="5"
+        app:defense="4"
+        app:fireCost="3"
+        app:colorlessCost="5"
+        app:battleReady="true"
+        app:enrage="true"
+        app:image="@drawable/wallc"
+        style="@style/CreatureCard"/>
+
+    <com.cael6.eh.cael6.HeroCard
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hero001"
+        app:name="@string/fire_general"
+        app:attack="3"
+        app:fireGen="2"
+        app:colorlessGen="3"
+        app:image="@drawable/general_huo"
+        style="@style/HeroCard"/>
+</LinearLayout>

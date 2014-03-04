@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Elemental Heroes</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="action_settings">Settings</string>
+    <string name="start_game">Start Game</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="card_1">Card 1</string>
+    <string name="card_2">Card 2</string>
+    <string name="draw_card">Draw Card</string>
+    <string name="flame_man">Flame Man</string>
+    <string name="pyro_freak">Pyro Freak</string>
+    <string name="fire_striker">Fire Striker</string>
+    <string name="fire_lord">Fire Lord</string>
+    <string name="small_trout">Small Trout</string>
+    <string name="fiesty_salmon">Fiesty Salmon</string>
+    <string name="mermaid_warrior">Mermaid Warrior</string>
+    <string name="Leviathan">Leviathan</string>
+    <string name="campfire">Campfire</string>
+    <string name="baby_owl">Baby Owl</string>
+    <string name="bat">Bat</string>
+    <string name="swift_eagle">Swift Eagle</string>
+    <string name="sky_hawk">Sky Hawk</string>
+    <string name="lively_pebble">Lively Pebble</string>
+    <string name="giant_golemn">Giant Golemn</string>
+    <string name="crocker">Crocker</string>
+    <string name="flailing_boulder">Flailing Boulder</string>
+    <string name="cancel">Cancel</string>
+    <string name="play_card">Play Card</string>
+    <string name="endTurn">End Turn</string>
+    <string name="fire_general">General Huǒ</string>
+    <string name="enrage_description">\t\t\t\t\t\t(This creature gains +1 attack when it destroys another creature</string>
+    <string name="enrage">Enrage</string>
+    <string name="battle_ready_description">\t\t\t\t\t\t\t\t\t\t(This creature can act as soon as it enters the battlefield)</string>
+    <string name="battle_ready">Battle Ready</string>
+</resources>

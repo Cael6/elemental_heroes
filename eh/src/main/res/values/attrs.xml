@@ -1,0 +1,43 @@
+<resources>
+
+    <!-- Declare custom theme attributes that allow changing which styles are
+         used for button bars depending on the API level.
+         ?android:attr/buttonBarStyle is new as of API 11 so this is
+         necessary to support previous API levels. -->
+    <declare-styleable name="ButtonBarContainerTheme">
+        <attr name="metaButtonBarStyle" format="reference" />
+        <attr name="metaButtonBarButtonStyle" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="Card">
+        <attr name="type" format="enum" >
+            <enum name="creature" value="0"/>
+            <enum name="spell" value="1"/>
+            <enum name="hero" value="2"/>
+            <enum name="equipment" value="3"/>
+            <enum name="trigger" value="4"/>
+        </attr>
+        <attr name="attack" format="integer" />
+        <attr name="defense" format="integer" />
+        <attr name="health" format="integer" />
+        <attr name="effect" format="string"/>
+        <attr name="name" format="string|reference"/>
+        <attr name="image" format="reference"/>
+        <attr name="fireCost" format="integer" />
+        <attr name="waterCost" format="integer" />
+        <attr name="earthCost" format="integer"/>
+        <attr name="windCost" format="integer" />
+        <attr name="colorlessCost" format="integer" />
+        <attr name="fireGen" format="integer" />
+        <attr name="waterGen" format="integer"/>
+        <attr name="earthGen" format="integer"/>
+        <attr name="windGen" format="integer" />
+        <attr name="colorlessGen" format="integer"/>
+        <attr name="endurance" format="boolean" />
+        <attr name="battleReady" format="boolean"/>
+        <attr name="growth" format="integer" />
+        <attr name="enrage" format="boolean" />
+        <attr name="concentrate" format="boolean"/>
+        <attr name="lifetap" format="integer"/>
+        <attr name="airShield" format="integer" />
+    </declare-styleable>
+</resources>

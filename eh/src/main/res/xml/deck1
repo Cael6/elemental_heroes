@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<deck>
+    <hero id="hero001" />
+    <card id="card001" quantity="4"/>
+    <card id="card002" quantity="4"/>
+    <card id="card003" quantity="4"/>
+    <card id="card004" quantity="4"/>
+    <card id="card005" quantity="4"/>
+    <card id="card006" quantity="4"/>
+</deck>
