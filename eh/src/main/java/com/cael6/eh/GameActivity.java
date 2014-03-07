@@ -8,61 +8,36 @@ import com.cael6.eh.cael6.TargetDragListener;
 import com.cael6.eh.cael6.ZoneDragListener;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class GameActivity extends Activity {
 
     //<editor-fold desc="Privates">
-    /**
-     * Width of each card retrieved from attrs
-     */
-    private float cardWidth;
-    /**
-     * Height of each card retrieved from attrs
-     */
-    private float cardHeight;
     public Player player;
     private Player enemy;
     public boolean previewOpen = false;
 
     //</editor-fold>
     //<editor-fold desc="Views">
-    //Top to playerCardZone
-    private LinearLayout enemyStatsBar;
+    //Top to hand
+    private LinearLayout enemyStatusBar;
 
-    private LinearLayout enemyCardZone;
     private RelativeLayout enemyHero;
-    private HorizontalScrollView enemyHandScroll;
     private LinearLayout enemyHand;
 
     private LinearLayout enemyBoard;
-    private RelativeLayout enemyTriggerZone;
-    private RelativeLayout enemyCreatureZone1;
-    private RelativeLayout enemyCreatureZone2;
-    private RelativeLayout enemyCreatureZone3;
-    private RelativeLayout enemyCreatureZone4;
 
     private LinearLayout playerBoard;
-    private RelativeLayout triggerZone;
-    private RelativeLayout creatureZone1;
-    private RelativeLayout creatureZone2;
-    private RelativeLayout creatureZone3;
-    private RelativeLayout creatureZone4;
 
-    private LinearLayout playerCardZone;
-    private RelativeLayout hero;
-    private HorizontalScrollView handScroll;
+    private RelativeLayout playerHero;
     private LinearLayout playerHand;
 
     private LinearLayout playerStatusBar;
@@ -76,7 +51,6 @@ public class GameActivity extends Activity {
 
     public int startingHandSize = 5;
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,27 +66,21 @@ public class GameActivity extends Activity {
         enterShape = getResources().getDrawable(R.drawable.board_area_hover);
         normalShape = getResources().getDrawable(R.drawable.board_area);
 
-        //Set card sizes.
-        cardHeight = getResources().getDimensionPixelSize(R.dimen.small_card_height);
-        cardWidth = getResources().getDimensionPixelSize(R.dimen.small_card_width);
         int cardSpacing = (int)pxFromDp(20);
 
-        player = new Player(this, R.xml.deck1, playerStatusBar, playerCardZone, playerBoard, (int)cardWidth, (int)cardHeight, cardSpacing);
+        player = new Player(this, R.xml.deck1, playerStatusBar, playerHand, playerBoard);
         player.cardsDefaultHidden = false;
         player.playerControl = true;
-        enemy = new Player(this, R.xml.deck1, enemyStatsBar, enemyCardZone, enemyBoard, (int)cardWidth, (int)cardHeight, cardSpacing);
+        enemy = new Player(this, R.xml.deck1, enemyStatusBar, enemyHand, enemyBoard);
         enemy.cardsDefaultHidden = true;
         enemy.isAi = true;
 
         player.enemy = enemy;
         enemy.enemy = player;
 
-        hero = (RelativeLayout)findViewById(R.id.hero);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int)cardWidth, (int)cardHeight);
-        player.deck.hero.setCardSize(Card.SMALL_CARD);
-        int spacer = getResources().getDimensionPixelSize(R.dimen.small_card_spacer);
-        player.deck.hero.setPadding(spacer, spacer, 0, 0);
-        hero.addView(player.deck.hero, params);
+        playerHero = (RelativeLayout)player.board.findViewWithTag("hero");
+        player.deck.hero.setCardForView(Card.SMALL_CARD, playerHero);
+        playerHero.addView(player.deck.hero);
 
         player.deck.hero.setOnTouchListener(new StaticCardOnTouchListener(this));
         player.deck.hero.setOnClickListener(new View.OnClickListener() {
@@ -123,9 +91,9 @@ public class GameActivity extends Activity {
         });
         player.deck.hero.setOnDragListener(new TargetDragListener(this));
 
-        enemyHero = (RelativeLayout)findViewById(R.id.enemyHero);
-        enemy.deck.hero.setCardSize(Card.SMALL_CARD);
-        enemyHero.addView(enemy.deck.hero, params);
+        enemyHero = (RelativeLayout)enemy.board.findViewWithTag("hero");
+        enemy.deck.hero.setCardForView(Card.SMALL_CARD, enemyHero);
+        enemyHero.addView(enemy.deck.hero);
 
         enemy.deck.hero.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,11 +103,12 @@ public class GameActivity extends Activity {
         });
         enemy.deck.hero.setOnDragListener(new TargetDragListener(this));
 
-        creatureZone1.setOnDragListener(new ZoneDragListener(this));
-        creatureZone2.setOnDragListener(new ZoneDragListener(this));
-        creatureZone3.setOnDragListener(new ZoneDragListener(this));
-        creatureZone4.setOnDragListener(new ZoneDragListener(this));
-
+        for(int i = 0; i <player.board.getChildCount(); i++){
+            View v = player.board.getChildAt(i);
+            if(v.getTag().equals("creatureZone")){
+                v.setOnDragListener(new ZoneDragListener(this));
+            }
+        }
         for(int i = 0; i < startingHandSize; i++){
             enemy.drawCard(this);
             player.drawCard(this);
@@ -148,33 +117,13 @@ public class GameActivity extends Activity {
     }
 
     private void initViews(){
-        enemyStatsBar = (LinearLayout) findViewById(R.id.enemyEnergy);
-
-        enemyCardZone = (LinearLayout) findViewById(R.id.enemyCardZone);
-        enemyHero = (RelativeLayout) findViewById(R.id.enemyHero);
-        enemyHandScroll = (HorizontalScrollView) findViewById(R.id.enemyHandScroll);
-        enemyHand = (LinearLayout) findViewById(R.id.enemyHand);
-
+        enemyStatusBar = (LinearLayout) findViewById(R.id.enemyStatusBar);
+        enemyHand = (LinearLayout) findViewById(R.id.enemyHand).findViewWithTag("hand");
         enemyBoard = (LinearLayout) findViewById(R.id.enemyBoard);
-        enemyTriggerZone = (RelativeLayout) findViewById(R.id.enemyTriggerZone);
-        enemyCreatureZone1 = (RelativeLayout) findViewById(R.id.enemyCreatureZone1);
-        enemyCreatureZone2 = (RelativeLayout) findViewById(R.id.enemyCreatureZone2);
-        enemyCreatureZone3 = (RelativeLayout) findViewById(R.id.enemyCreatureZone3);
-        enemyCreatureZone4 = (RelativeLayout) findViewById(R.id.enemyCreatureZone4);
 
         playerBoard = (LinearLayout) findViewById(R.id.playerBoard);
-        triggerZone = (RelativeLayout) findViewById(R.id.triggerZone);
-        creatureZone1 = (RelativeLayout) findViewById(R.id.creatureZone1);
-        creatureZone2 = (RelativeLayout) findViewById(R.id.creatureZone2);
-        creatureZone3 = (RelativeLayout) findViewById(R.id.creatureZone3);
-        creatureZone4 = (RelativeLayout) findViewById(R.id.creatureZone4);
-
-        playerCardZone = (LinearLayout) findViewById(R.id.playerCardZone);
-        hero = (RelativeLayout) findViewById(R.id.hero);
-        handScroll = (HorizontalScrollView) findViewById(R.id.handScroll);
-        playerHand = (LinearLayout) findViewById(R.id.playerHand);
-
-        playerStatusBar = (LinearLayout) findViewById(R.id.statusBar);
+        playerHand = (LinearLayout) findViewById(R.id.playerHand).findViewWithTag("hand");
+        playerStatusBar = (LinearLayout) findViewById(R.id.playerStatusBar);
 
         preview = (LinearLayout) findViewById(R.id.preview);
     }
@@ -200,7 +149,7 @@ public class GameActivity extends Activity {
     }
 
     public void previewCard(Card card){
-        RelativeLayout preview = (RelativeLayout)findViewById(R.id.previewCardZone);
+        RelativeLayout preview = (RelativeLayout)this.preview.findViewWithTag("card");
         RelativeLayout.LayoutParams params =
                 new RelativeLayout.LayoutParams(
                         getResources().getDimensionPixelSize(R.dimen.large_card_width),
@@ -213,15 +162,13 @@ public class GameActivity extends Activity {
 
         Card previewCard;
         if(card instanceof HeroCard){
-            previewCard = new HeroCard(this, (HeroCard)card);;
+            previewCard = new HeroCard(this, (HeroCard)card, card.getOwner());;
         }
         else{
-            previewCard = new Card(this, card);
+            previewCard = new Card(this, card, card.getOwner());
         }
-        previewCard.setCardSize(Card.LARGE_CARD);
+        previewCard.setCardForView(Card.LARGE_CARD, preview);
         preview.addView(previewCard, 0, params);
-        int spacer = getResources().getDimensionPixelSize(R.dimen.large_card_spacer);
-        previewCard.setPadding(spacer, spacer, 0, 0);
 
         ((ViewGroup)preview.getParent()).setVisibility(View.VISIBLE);
         previewOpen = true;
@@ -237,18 +184,14 @@ public class GameActivity extends Activity {
         player.endTurn(this);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public boolean dropCard(Card card, ViewGroup container, Player player){
         //TODO: check resource count and spend/play if possible.
         if(player.attemptToPlayCard(card)){
             ViewGroup owner = (ViewGroup) card.getParent();
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int)cardWidth,(int) cardHeight);
-            params.addRule(RelativeLayout.CENTER_IN_PARENT);
-            params.width = (int)cardWidth;
             owner.removeView(card);
             card.setOnTouchListener(new StaticCardOnTouchListener(this));
             card.setOnDragListener(new TargetDragListener(this));
-            container.addView(card, params);
+            container.addView(card);
             player.updatePlayerUiStatusBar();
             card.showCard();
             card.enterBattleField();
@@ -261,7 +204,7 @@ public class GameActivity extends Activity {
      *
      * @param card
      * @param targetCard
-     * @return true if the targetCard is destroyed
+     * @return true if the targetCard is kill
      */
     public boolean attackCard(Card card, Card targetCard) {
         if(card.spendAction()){
@@ -273,14 +216,14 @@ public class GameActivity extends Activity {
                         finish();
                         return true;
                     }
-                    targetCard.destroy();
-                    card.destroyed(targetCard);
+                    targetCard.killed();
+                    card.kill(targetCard);
                     return true;
                 }
                 player.updatePlayerUiStatusBar();
                 enemy.updatePlayerUiStatusBar();
             } else {
-                //TODO: no damage
+                //no damage
             }
         }
         return false;

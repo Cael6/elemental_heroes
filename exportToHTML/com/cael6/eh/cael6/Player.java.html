@@ -43,7 +43,7 @@ Player.java</FONT>
 </span><span class="s0">public class </span><span class="s1">Player { 
     </span><span class="s0">public </span><span class="s1">ArrayList&lt;Energy&gt; currEnergy; 
     </span><span class="s0">public </span><span class="s1">Deck deck; 
-    </span><span class="s0">public </span><span class="s1">LinearLayout statusBar, playerCardZone, playerBoard; 
+    </span><span class="s0">public </span><span class="s1">LinearLayout statusBar, hand, board;
     </span><span class="s0">public boolean </span><span class="s1">cardsDefaultHidden; 
     </span><span class="s0">public int </span><span class="s1">cardWidth, cardHeight, cardSpacing; 
     </span><span class="s0">public boolean </span><span class="s1">playerControl = </span><span class="s0">false</span><span class="s1">; 
@@ -57,11 +57,11 @@ Player.java</FONT>
     </span><span class="s0">private final </span><span class="s1">String TURN_TAG = </span><span class="s3">&quot;turn&quot;</span><span class="s1">; 
     </span><span class="s0">private final </span><span class="s1">String HEALTH_TAG = </span><span class="s3">&quot;health&quot;</span><span class="s1">;<hr> 
  
-    </span><span class="s0">public </span><span class="s1">Player(Context context, </span><span class="s0">int </span><span class="s1">deck, LinearLayout statusBar, LinearLayout playerCardZone, LinearLayout playerBoard, </span><span class="s0">int </span><span class="s1">cardWidth, </span><span class="s0">int </span><span class="s1">cardHeight, </span><span class="s0">int </span><span class="s1">cardSpacing){ 
+    </span><span class="s0">public </span><span class="s1">Player(Context context, </span><span class="s0">int </span><span class="s1">deck, LinearLayout statusBar, LinearLayout hand, LinearLayout board, </span><span class="s0">int </span><span class="s1">cardWidth, </span><span class="s0">int </span><span class="s1">cardHeight, </span><span class="s0">int </span><span class="s1">cardSpacing){
         </span><span class="s0">this</span><span class="s1">.deck = </span><span class="s0">new </span><span class="s1">Deck(context, deck); 
         </span><span class="s0">this</span><span class="s1">.statusBar = statusBar; 
-        </span><span class="s0">this</span><span class="s1">.playerCardZone = playerCardZone; 
-        </span><span class="s0">this</span><span class="s1">.playerBoard = playerBoard; 
+        </span><span class="s0">this</span><span class="s1">.hand = hand;
+        </span><span class="s0">this</span><span class="s1">.board = board;
         </span><span class="s0">this</span><span class="s1">.cardWidth = cardWidth; 
         </span><span class="s0">this</span><span class="s1">.cardHeight = cardHeight; 
         </span><span class="s0">this</span><span class="s1">.cardSpacing = cardSpacing; 
@@ -69,8 +69,8 @@ Player.java</FONT>
         </span><span class="s0">this</span><span class="s1">.cardsOnBoard = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Card&gt;(); 
         </span><span class="s0">this</span><span class="s1">.creatureBoardPositions = </span><span class="s0">new </span><span class="s1">ArrayList&lt;ViewGroup&gt;(); 
         createElements(context); 
-        </span><span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s4">1</span><span class="s1">; j &lt; playerBoard.getChildCount(); j++){ 
-            RelativeLayout boardPosition = (RelativeLayout) playerBoard.getChildAt(j); 
+        </span><span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s4">1</span><span class="s1">; j &lt; board.getChildCount(); j++){
+            RelativeLayout boardPosition = (RelativeLayout) board.getChildAt(j);
             creatureBoardPositions.add(boardPosition); 
         } 
         createPlayerUiStatusBar(context); 
@@ -178,7 +178,7 @@ Player.java</FONT>
         LinearLayout.LayoutParams params = </span><span class="s0">new </span><span class="s1">LinearLayout.LayoutParams(cardWidth, cardHeight); 
         params.setMargins(cardSpacing, </span><span class="s4">0</span><span class="s1">, </span><span class="s4">0</span><span class="s1">, </span><span class="s4">0</span><span class="s1">); 
         drawnCard.setLayoutParams(params); 
-        ((LinearLayout)playerCardZone.findViewWithTag(</span><span class="s3">&quot;hand&quot;</span><span class="s1">)).addView(drawnCard); 
+        ((LinearLayout)hand.findViewWithTag(</span><span class="s3">&quot;hand&quot;</span><span class="s1">)).addView(drawnCard);
  
         </span><span class="s0">if</span><span class="s1">(playerControl){ 
             drawnCard.setOnTouchListener(</span><span class="s0">new </span><span class="s1">MovableCardOnTouchListener((GameActivity)drawnCard.getContext())); 
@@ -237,8 +237,8 @@ Player.java</FONT>
  
     </span><span class="s0">public void </span><span class="s1">resetActions(){ 
         deck.hero.resetActions(); 
-        </span><span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s4">0</span><span class="s1">; i &lt; playerBoard.getChildCount(); i++){ 
-            ViewGroup child = (ViewGroup)playerBoard.getChildAt(i); 
+        </span><span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s4">0</span><span class="s1">; i &lt; board.getChildCount(); i++){
+            ViewGroup child = (ViewGroup)board.getChildAt(i);
             </span><span class="s0">for</span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s4">0</span><span class="s1">; j &lt; child.getChildCount(); j++){ 
                 View possibleCard = child.getChildAt(j); 
                 </span><span class="s0">if</span><span class="s1">(possibleCard </span><span class="s0">instanceof </span><span class="s1">Card){ 

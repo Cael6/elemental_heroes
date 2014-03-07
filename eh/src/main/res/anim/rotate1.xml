@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillEnabled="true"
+    android:fillAfter="true">
+    <rotate
+        android:fromDegrees="0"
+        android:toDegrees="2"
+        android:duration="0"/>
+    <translate
+        android:fromXDelta="0"
+        android:toXDelta="-100"
+        android:duration="0"/>
+</set>

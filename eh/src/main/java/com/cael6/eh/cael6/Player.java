@@ -2,6 +2,7 @@ package com.cael6.eh.cael6;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.cael6.eh.GameActivity;
 import com.cael6.eh.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,9 +25,8 @@ import java.util.ListIterator;
 public class Player {
     public ArrayList<Energy> currEnergy;
     public Deck deck;
-    public LinearLayout statusBar, playerCardZone, playerBoard;
+    public LinearLayout statusBar, hand, board;
     public boolean cardsDefaultHidden;
-    public int cardWidth, cardHeight, cardSpacing;
     public boolean playerControl = false;
     public ArrayList<Card> cardsInHand;
     public ArrayList<Card> cardsOnBoard;
@@ -35,21 +37,18 @@ public class Player {
     private final String TURN_TAG = "turn";
     private final String HEALTH_TAG = "health";
 
-    public Player(Context context, int deck, LinearLayout statusBar, LinearLayout playerCardZone, LinearLayout playerBoard, int cardWidth, int cardHeight, int cardSpacing){
-        this.deck = new Deck(context, deck);
+    public Player(Context context, int deck, LinearLayout statusBar, LinearLayout hand, LinearLayout board){
+        this.deck = new Deck(context, deck, this);
         this.statusBar = statusBar;
-        this.playerCardZone = playerCardZone;
-        this.playerBoard = playerBoard;
-        this.cardWidth = cardWidth;
-        this.cardHeight = cardHeight;
-        this.cardSpacing = cardSpacing;
+        this.hand = hand;
+        this.board = board;
         this.cardsInHand = new ArrayList<Card>();
         this.cardsOnBoard = new ArrayList<Card>();
         this.creatureBoardPositions = new ArrayList<ViewGroup>();
         createElements(context);
         generateElements();
-        for(int j = 1; j < playerBoard.getChildCount(); j++){
-            RelativeLayout boardPosition = (RelativeLayout) playerBoard.getChildAt(j);
+        for(int j = 1; j < board.getChildCount(); j++){
+            RelativeLayout boardPosition = (RelativeLayout) board.getChildAt(j);
             creatureBoardPositions.add(boardPosition);
         }
         createPlayerUiStatusBar(context);
@@ -57,17 +56,28 @@ public class Player {
     }
 
     private void createPlayerUiStatusBar(Context context) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         for (Energy en : deck.hero.energyGen) {
-            statusBar.addView(getStatusBarTextView(context, String.valueOf(en.level), en.name));
-            statusBar.addView(getStatusBarImageView(context, en.image));
+            TextView enTV = (TextView) inflater.inflate(R.layout.status_text, statusBar, false);
+            enTV.setText(String.valueOf(en.level));
+            enTV.setTag(en.name);
+            ((GameActivity)context).setBackground(enTV, en.image);
+            statusBar.addView(enTV);
         }
         //Actions
-        statusBar.addView(getStatusBarTextView(context, String.valueOf(deck.hero.turns), TURN_TAG));
-        statusBar.addView(getStatusBarImageView(context, context.getResources().getDrawable(R.drawable.turn)));
+        TextView actionTV = (TextView) inflater.inflate(R.layout.status_text, statusBar, false);
+        actionTV.setText(String.valueOf(deck.hero.turns));
+        actionTV.setTag(TURN_TAG);
+        ((GameActivity)context).setBackground(actionTV, context.getResources().getDrawable(R.drawable.turn));
+        statusBar.addView(actionTV);
 
         //Health
-        statusBar.addView(getStatusBarTextView(context, String.valueOf(deck.hero.health), HEALTH_TAG));
-        statusBar.addView(getStatusBarImageView(context, context.getResources().getDrawable(R.drawable.health)));
+        TextView lifeTV = (TextView) inflater.inflate(R.layout.status_text, statusBar, false);
+        lifeTV.setText(String.valueOf(deck.hero.turns));
+        lifeTV.setTag(HEALTH_TAG);
+        ((GameActivity)context).setBackground(lifeTV, context.getResources().getDrawable(R.drawable.life_status_icon));
+        statusBar.addView(lifeTV);
     }
 
     protected TextView getStatusBarTextView(Context context, String value, String tag){
@@ -91,8 +101,8 @@ public class Player {
         ImageView iv = new ImageView(context);
         iv.setImageDrawable(drawable);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                context.getResources().getDimensionPixelSize(R.dimen.hero_energy_icon_size),
-                context.getResources().getDimensionPixelSize(R.dimen.hero_energy_icon_size));
+                context.getResources().getDimensionPixelSize(R.dimen.status_icon_size),
+                context.getResources().getDimensionPixelSize(R.dimen.status_icon_size));
         iv.setLayoutParams(params);
         return iv;
     }
@@ -139,23 +149,15 @@ public class Player {
 
     public Card drawCard(Context context){
         Card drawnCard = deck.drawCard();
+        drawnCard.setCardForView(Card.SMALL_CARD, this.hand);
         drawnCard.inHand = true;
         drawnCard.movable = true;
         if(cardsDefaultHidden){
             drawnCard.hideCard();
         }
-        drawnCard.setCardSize(Card.SMALL_CARD);
         cardsInHand.add(drawnCard);
-
-        int spacer = context.getResources().getDimensionPixelSize(R.dimen.small_card_spacer);
-        int cardWidth = context.getResources().getDimensionPixelSize(R.dimen.small_card_width);
-        int cardHeight = context.getResources().getDimensionPixelSize(R.dimen.small_card_height);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(cardWidth, cardHeight);
-        drawnCard.setPadding(spacer, spacer, 0, 0);
-        params.setMargins(cardSpacing, 0, 0, 0);
-        drawnCard.setLayoutParams(params);
-        assert ((LinearLayout)playerCardZone.findViewWithTag("hand")) != null;
-        ((LinearLayout)playerCardZone.findViewWithTag("hand")).addView(drawnCard);
+        assert hand != null;
+        hand.addView(drawnCard);
 
         if(playerControl){
             drawnCard.setOnTouchListener(new MovableCardOnTouchListener((GameActivity)drawnCard.getContext()));
@@ -211,8 +213,8 @@ public class Player {
 
     public void resetActions(){
         deck.hero.resetActions();
-        for(int i = 0; i < playerBoard.getChildCount(); i++){
-            ViewGroup child = (ViewGroup)playerBoard.getChildAt(i);
+        for(int i = 0; i < board.getChildCount(); i++){
+            ViewGroup child = (ViewGroup) board.getChildAt(i);
             assert child != null;
             for(int j = 0; j < child.getChildCount(); j++){
                 View possibleCard = child.getChildAt(j);
@@ -284,6 +286,14 @@ public class Player {
                         break;
                     }
                 }
+            }
+        }
+    }
+
+    public void generateElement(Energy energy) {
+        for(Energy en : deck.hero.energyGen){
+            if(en.id == energy.id){
+                energy.level += en.level;
             }
         }
     }

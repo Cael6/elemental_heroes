@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="110dp"
+    android:requiresFadingEdge="horizontal"
+    android:layout_marginLeft="60dp"
+    android:layout_marginRight="60dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:minHeight="@dimen/small_card_height"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:tag="hand"
+        android:orientation="horizontal">
+    </LinearLayout>
+</HorizontalScrollView>

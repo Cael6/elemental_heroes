@@ -25,9 +25,12 @@ import java.util.Random;
 public class Deck {
     private ArrayList<Card> cards;
     public HeroCard hero;
+    private Player owner;
 
 
-    public Deck(Context context, int deck){
+    public Deck(Context context, int deck, Player owner){
+        this.owner = owner;
+
         XmlResourceParser xrp = context.getResources().getXml(deck);
         cards = new ArrayList<Card>();
         assert xrp != null;
@@ -58,7 +61,7 @@ public class Deck {
                 );
 
                 for(int i = 0; i < quantity; i++){
-                    this.cards.add(new Card(context, card));
+                    this.cards.add(new Card(context, card, owner));
                 }
             }else if(eventType == XmlPullParser.START_TAG
                     && xrp.getName().equalsIgnoreCase("hero")) {
@@ -68,7 +71,7 @@ public class Deck {
                         context.getResources().getIdentifier(
                                 cardId, "id", context.getPackageName())
                 );
-                hero = new HeroCard(context, card);
+                hero = new HeroCard(context, card, owner);
             }
             try {
                 eventType = xrp.next();
@@ -85,7 +88,7 @@ public class Deck {
     public Card drawCard(){
         if(cards.size() > 0){
             Card card = cards.remove(0);
-            return cards.remove(0);
+            return card;
         }else{
             return null;
         }
@@ -93,5 +96,13 @@ public class Deck {
 
     public void shuffleDeck(){
         Collections.shuffle(cards, new Random(System.nanoTime()));
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 }

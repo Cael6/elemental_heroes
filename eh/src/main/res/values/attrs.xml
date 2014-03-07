@@ -21,6 +21,7 @@
         <attr name="health" format="integer" />
         <attr name="effect" format="string"/>
         <attr name="name" format="string|reference"/>
+        <attr name="subName" format="string|reference"/>
         <attr name="image" format="reference"/>
         <attr name="fireCost" format="integer" />
         <attr name="waterCost" format="integer" />

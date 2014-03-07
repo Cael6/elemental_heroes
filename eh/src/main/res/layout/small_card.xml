@@ -1,96 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="@dimen/small_card_width"
-    android:layout_height="@dimen/small_card_height" android:background="#111111" android:layout_gravity="center" >
-    <RelativeLayout
-        android:tag="card"
-        android:layout_width="@dimen/small_card_width"
-        android:background="@drawable/card_background"
-        android:layout_height="@dimen/small_card_height"
-        android:paddingTop="2dp"
-        android:paddingLeft="2dp"
+<com.cael6.eh.cael6.Card xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="@dimen/small_card_width"
+    android:layout_height="@dimen/small_card_height"
+    android:layout_gravity="center"
+    android:tag="card">
 
-        >
-        <FrameLayout
-            android:tag="cardImage"
-            android:layout_width="@dimen/small_card_image_width"
-            android:layout_height="@dimen/small_card_image_height"
-            android:background="@drawable/main_background"
-            android:layout_alignParentRight="true">
-        </FrameLayout>
-        <LinearLayout
-            android:tag="costLL"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/small_card_stats_zone_dim"
-            android:padding="2dp"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="@dimen/small_card_width"
+        android:layout_height="@dimen/small_card_height">
+
+        <RelativeLayout
+            android:layout_width="@dimen/small_card_width"
+            android:background="@drawable/card_background"
+            android:layout_height="@dimen/small_card_height">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/small_card_image_height"
+                android:layout_alignParentRight="true">
+
+                <ImageView
+                    android:tag="cardImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/main_background"/>
+                <LinearLayout
+                    android:tag="traitLL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical"></LinearLayout>
+            </RelativeLayout>
+
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:tag="costLL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <include layout="@layout/small_energy_cost" />
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/small_card_stats_zone_dim"
+                android:padding="2dp"
+                android:layout_alignParentBottom="true"
                 android:orientation="horizontal">
+
                 <TextView
                     android:tag="attack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:text="3"
-                    android:textSize="@dimen/small_card_stats_text_size"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@drawable/damage"
                     android:textColor="#FFFFFF"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-                <ImageView
-                    android:layout_width="@dimen/small_card_stats_icon_dim"
-                    android:layout_height="@dimen/small_card_stats_icon_dim"
-                    android:layout_gravity="center"
-                    android:src="@drawable/attack"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                    android:text="2"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowColor="#FF222222"
+                    android:shadowRadius="0.5"
+                    android:gravity="center" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="16dp"
+                    android:layout_weight="1" />
+
                 <TextView
                     android:tag="defense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:text="2"
-                    android:textSize="@dimen/small_card_stats_text_size"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@drawable/armor"
                     android:textColor="#FFFFFF"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-                <ImageView
-                    android:layout_width="@dimen/small_card_stats_icon_dim"
-                    android:layout_height="@dimen/small_card_stats_icon_dim"
-                    android:layout_gravity="center"
-                    android:src="@drawable/defense"/>
+                    android:text="2"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowColor="#FF222222"
+                    android:shadowRadius="1"
+                    android:gravity="center" />
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="16dp"
+                    android:layout_weight="1" />
+
                 <TextView
                     android:tag="health"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:text="3"
-                    android:textSize="@dimen/small_card_stats_text_size"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@drawable/life"
                     android:textColor="#FFFFFF"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
-                <ImageView
-                    android:layout_width="@dimen/small_card_stats_icon_dim"
-                    android:layout_height="@dimen/small_card_stats_icon_dim"
-                    android:layout_gravity="center"
-                    android:src="@drawable/health"/>
+                    android:text="23"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowColor="#FF222222"
+                    android:shadowRadius="1"
+                    android:gravity="center" />
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
-</LinearLayout>
+</com.cael6.eh.cael6.Card>

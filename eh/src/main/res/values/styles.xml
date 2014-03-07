@@ -7,27 +7,7 @@
     </style>
     <!-- Basically sets the defaults of s so we don't have triggers with attack values by default.-->
     <style name="Card">
-        <item name="attack">0</item>
-        <item name="defense">0</item>
-        <item name="health">0</item>
-        <item name="fireCost">-1</item>
-        <item name="waterCost">-1</item>
-        <item name="windCost">-1</item>
-        <item name="earthCost">-1</item>
-        <item name="colorlessCost">-1</item>
-        <item name="fireGen">-1</item>
-        <item name="waterGen">-1</item>
-        <item name="earthGen">-1</item>
-        <item name="windGen">-1</item>
-        <item name="colorlessGen">-1</item>
-        <item name="endurance">false</item>
-        <item name="battleReady">false</item>
-        <item name="growth">0</item>
-        <item name="enrage">false</item>
-        <item name="concentrate">false</item>
-        <item name="lifetap">0</item>
-        <item name="airShield">-1</item>
-        <item name="image">@drawable/fire_striker</item>
+
     </style>
     <style name="CreatureCard" parent="Card">
         <item name="type">creature</item>

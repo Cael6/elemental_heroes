@@ -23,8 +23,9 @@ public class HeroCard extends Card {
         init();
     }
 
-    public HeroCard(Context context, HeroCard card){
-        super(context, card);
+    public HeroCard(Context context, HeroCard card, Player owner){
+        super(context, card, owner);
+        setOwner(owner);
         init();
         this.health = card.health;
     }

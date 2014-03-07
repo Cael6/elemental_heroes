@@ -6,50 +6,50 @@
     <dimen name="small_card_height">107dp</dimen>
     <dimen name="small_card_width">64dp</dimen>
 
-    <!-- Card dimen based on fraction of height -->
-    <item name="card_width" format="float" type="string">0.6</item>
+    <dimen name="status_text_size">20dp</dimen>
+    <dimen name="status_icon_size">24dp</dimen>
 
-    <dimen name="small_ele_icon_width">6dp</dimen>
-    <dimen name="small_ele_icon_height">6dp</dimen>
-    <dimen name="small_ele_icon_padding">1dp</dimen>
-
-    <dimen name="medium_ele_icon_width">12dp</dimen>
-    <dimen name="medium_ele_icon_height">12dp</dimen>
-    <dimen name="medium_ele_icon_padding">2dp</dimen>
-
-    <dimen name="large_ele_icon_width">30dp</dimen>
-    <dimen name="large_ele_icon_height">30dp</dimen>
-    <dimen name="large_ele_icon_padding">5dp</dimen>
-
-    <dimen name="small_card_text_size">6dp</dimen>
-    <dimen name="medium_card_text_size">12dp</dimen>
-    <dimen name="large_card_text_size">32dp</dimen>
-
-    <dimen name="status_text_size">12dp</dimen>
-    <dimen name="hero_energy_icon_size">24dp</dimen>
-    <dimen name="large_card_width">300dp</dimen>
-    <dimen name="large_card_height">450dp</dimen>
-    <dimen name="large_card_image_width">266dp</dimen>
-    <dimen name="large_card_image_height">350dp</dimen>
-    <dimen name="large_card_description_width">248dp</dimen>
+    <dimen name="large_card_width">180dp</dimen>
+    <dimen name="large_card_height">270dp</dimen>
+    <dimen name="large_card_image_width">180dp</dimen>
+    <dimen name="large_card_image_height">222dp</dimen>
+    <dimen name="large_card_description_width">180dp</dimen>
     <dimen name="large_card_description_icon_dim">48dp</dimen>
-    <dimen name="large_card_name_zone_height">48dp</dimen>
-    <dimen name="large_card_name_text_size">24dp</dimen>
-    <dimen name="large_card_sub_name_text_size">16dp</dimen>
-    <dimen name="large_card_trait_text_size">16dp</dimen>
+    <dimen name="large_card_name_zone_height">36dp</dimen>
+    <dimen name="large_card_name_text_size">20dp</dimen>
+    <dimen name="large_card_sub_name_text_size">13dp</dimen>
+    <dimen name="large_card_trait_text_size">12dp</dimen>
     <dimen name="large_card_energy_icon_dim">48dp</dimen>
     <dimen name="large_card_colorless_energy_text_size">32dp</dimen>
-    <dimen name="large_card_stats_zone_dim">86dp</dimen>
-    <dimen name="large_card_stats_text_size">54dp</dimen>
-    <dimen name="large_card_stats_icon_dim">54dp</dimen>
-    <dimen name="small_card_energy_icon_dim">13dp</dimen>
-    <dimen name="small_card_colorless_energy_text_size">12dp</dimen>
+    <dimen name="large_card_stats_zone_dim">50dp</dimen>
+    <dimen name="large_card_text_size">38dp</dimen>
+    <dimen name="large_card_icon_dim">48dp</dimen>
+    <dimen name="large_card_spacer">10dp</dimen>
+    <dimen name="large_card_description_text_size">10dp</dimen>
+
+    <dimen name="small_card_energy_icon_dim">20dp</dimen>
+    <dimen name="small_card_energy_text_size">16dp</dimen>
     <dimen name="small_card_stats_zone_dim">20dp</dimen>
     <dimen name="small_card_stats_icon_dim">12dp</dimen>
     <dimen name="small_card_stats_text_size">12dp</dimen>
     <dimen name="small_card_image_width">54dp</dimen>
     <dimen name="small_card_image_height">86dp</dimen>
     <dimen name="small_card_spacer">2dp</dimen>
-    <dimen name="large_card_spacer">10dp</dimen>
+    <dimen name="small_card_padding">4dp</dimen>
+    <dimen name="small_card_trait_icon_dim">12dp</dimen>
+
+    <dimen name="large_rounded_corners">10dp</dimen>
+
+    <dimen name="fire_top_pad">9dp</dimen>
+    <dimen name="water_top_pad">9dp</dimen>
+    <dimen name="earth_top_pad">9dp</dimen>
+    <dimen name="wind_top_pad">9dp</dimen>
+    <dimen name="colorless_top_pad">4dp</dimen>
+    
+    <dimen name="small_fire_top_pad">0dp</dimen>
+    <dimen name="small_water_top_pad">0dp</dimen>
+    <dimen name="small_earth_top_pad">0dp</dimen>
+    <dimen name="small_wind_top_pad">0dp</dimen>
+    <dimen name="small_colorless_top_pad">0dp</dimen>
 
 </resources>

@@ -15,6 +15,7 @@
         app:fireCost="1"
         app:enrage="true"
         app:image="@drawable/campfire"
+        app:subName="@string/campfire_sub"
         style="@style/CreatureCard"/>
 
     <com.cael6.eh.cael6.Card
@@ -27,6 +28,7 @@
         app:fireCost="1"
         app:colorlessCost="2"
         app:image="@drawable/pyro_freak"
+        app:subName="@string/pyro_freak_sub"
         style="@style/CreatureCard"/>
 
     <com.cael6.eh.cael6.Card
@@ -34,6 +36,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/card003"
         app:name="@string/fire_striker"
+        app:subName="@string/fire_striker_sub"
         app:attack="4"
         app:defense="2"
         app:fireCost="2"
@@ -48,6 +51,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/card004"
         app:name="@string/elrath"
+        app:subName="@string/elrath_sub"
         app:attack="3"
         app:defense="3"
         app:fireCost="3"
@@ -62,6 +66,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/card005"
         app:name="@string/numbal"
+        app:subName="@string/numbal_sub"
         app:attack="3"
         app:defense="4"
         app:fireCost="2"
@@ -75,6 +80,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/card006"
         app:name="@string/wallc"
+        app:subName="@string/wallc_sub"
         app:attack="5"
         app:defense="4"
         app:fireCost="3"
@@ -89,6 +95,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/hero001"
         app:name="@string/fire_general"
+        app:subName="@string/fire_general_sub"
         app:attack="3"
         app:fireGen="2"
         app:colorlessGen="3"

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <corners
-        android:radius="10dp"/>
+        android:radius="@dimen/large_rounded_corners"/>
     <gradient
         android:angle="90"
         android:endColor="@color/card_back_end"

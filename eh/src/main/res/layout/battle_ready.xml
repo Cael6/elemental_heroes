@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:tag="battleReady"
+    android:layout_width="@dimen/large_card_description_width"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:visibility="visible"
+    android:paddingLeft="10dp">
+    <TextView
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="@dimen/large_card_description_icon_dim"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:textColor="#222222"
+        android:textSize="@dimen/large_card_trait_text_size"
+        android:text="@string/battle_ready_description"/>
+    <ImageView
+        android:layout_width="@dimen/large_card_description_icon_dim"
+        android:layout_height="@dimen/large_card_description_icon_dim"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/battle_ready"/>
+</RelativeLayout>
