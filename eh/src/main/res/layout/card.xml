@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.cael6.eh.cael6.Card xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cael6="http://schemas.android.com/apk/com.cael6.eh.cael6"
+    xmlns:tools="http://schemas.android.com/tools"
     android:tag="card"
     android:layout_width="@dimen/large_card_width"
     android:layout_height="@dimen/large_card_height">
@@ -8,69 +10,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
+            android:tag="cardImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/card_background"/>
+            android:src="@drawable/main_background"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/image_background_desc" />
 
         <RelativeLayout
-            android:layout_width="@dimen/large_card_image_width"
-            android:layout_height="@dimen/large_card_image_height"
-            android:background="@drawable/large_rounded_corners"
-            android:layout_alignParentRight="true">
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_alignParentBottom="true">
 
-            <ImageView
-                android:tag="cardImage"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:src="@drawable/main_background"
-                android:background="@drawable/large_rounded_corners" />
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:fadingEdge="vertical"
+                tools:ignore="UselessParent">
 
-            <RelativeLayout
-                android:layout_marginTop="5dp"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/large_card_name_zone_height"
-                android:paddingRight="5dp"
-                android:background="@drawable/card_text_area">
-
-                <TextView
-                    android:tag="cardName"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:tag="traitLL"
+                    android:layout_width="@dimen/large_card_description_width"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:textSize="@dimen/large_card_name_text_size"
-                    android:textColor="#111111"
-                    android:text="Card Name" />
-
-                <TextView
-                    android:tag="cardSubName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:textSize="@dimen/large_card_sub_name_text_size"
-                    android:textColor="#222222"
-                    android:text="Card Sub Name" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="90dp"
-                android:layout_alignParentBottom="true">
-
-                <ScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:fadingEdge="vertical">
-
-                    <LinearLayout
-                        android:tag="traitLL"
-                        android:layout_width="@dimen/large_card_description_width"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/card_description_background"
-                        android:orientation="vertical"></LinearLayout>
-                </ScrollView>
-            </RelativeLayout>
+                    android:background="@drawable/card_description_background"
+                    android:orientation="vertical"/>
+            </ScrollView>
         </RelativeLayout>
 
         <LinearLayout
@@ -83,25 +48,28 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
-            <TextView
+            <com.cael6.eh.cael6.MagicTextView
                 android:tag="attack"
                 android:layout_width="@dimen/large_card_icon_dim"
                 android:layout_height="@dimen/large_card_icon_dim"
                 android:background="@drawable/damage"
                 android:textColor="#FFFFFF"
-                android:text="2"
+                android:text="@string/example_attack_value"
                 android:paddingBottom="10dp"
                 android:textStyle="bold"
                 android:shadowDy="4"
                 android:shadowRadius="1"
                 android:shadowDx="4"
                 android:shadowColor="#FF222222"
+                cael6:typeface="CevicheOne-Regular"
+                cael6:strokeColor="#FF111111"
+                cael6:strokeWidth="4dp"
                 android:textSize="@dimen/large_card_text_size"
                 android:gravity="center" />
 
@@ -110,18 +78,21 @@
                 android:layout_height="@dimen/large_card_icon_dim"
                 android:layout_weight="1" />
 
-            <TextView
+            <com.cael6.eh.cael6.MagicTextView
                 android:tag="defense"
                 android:layout_width="@dimen/large_card_icon_dim"
                 android:layout_height="@dimen/large_card_icon_dim"
                 android:background="@drawable/defense"
                 android:textColor="#FFFFFF"
-                android:text="2"
+                android:text="@string/example_armor_value"
                 android:textStyle="bold"
                 android:shadowDy="4"
                 android:shadowRadius="1"
                 android:shadowDx="4"
                 android:shadowColor="#FF222222"
+                cael6:typeface="CevicheOne-Regular"
+                cael6:strokeColor="#FF111111"
+                cael6:strokeWidth="4dp"
                 android:textSize="@dimen/large_card_text_size"
                 android:gravity="center" />
 
@@ -130,18 +101,21 @@
                 android:layout_height="@dimen/large_card_icon_dim"
                 android:layout_weight="1" />
 
-            <TextView
+            <com.cael6.eh.cael6.MagicTextView
                 android:tag="health"
                 android:layout_width="@dimen/large_card_icon_dim"
                 android:layout_height="@dimen/large_card_icon_dim"
                 android:background="@drawable/life"
                 android:textColor="#FFFFFF"
-                android:text="23"
+                android:text="@string/example_health_value"
                 android:textStyle="bold"
                 android:shadowDy="4"
                 android:shadowRadius="1"
                 android:shadowDx="4"
                 android:shadowColor="#FF222222"
+                cael6:typeface="CevicheOne-Regular"
+                cael6:strokeColor="#FF111111"
+                cael6:strokeWidth="4dp"
                 android:textSize="@dimen/large_card_text_size"
                 android:gravity="center" />
         </LinearLayout>

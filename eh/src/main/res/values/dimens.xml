@@ -3,8 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="small_card_height">107dp</dimen>
-    <dimen name="small_card_width">64dp</dimen>
+    <dimen name="small_card_height">78dp</dimen>
+    <dimen name="small_card_width">48dp</dimen>
+    <dimen name="small_card_padding">4dp</dimen>
 
     <dimen name="status_text_size">20dp</dimen>
     <dimen name="status_icon_size">24dp</dimen>
@@ -32,10 +33,7 @@
     <dimen name="small_card_stats_zone_dim">20dp</dimen>
     <dimen name="small_card_stats_icon_dim">12dp</dimen>
     <dimen name="small_card_stats_text_size">12dp</dimen>
-    <dimen name="small_card_image_width">54dp</dimen>
-    <dimen name="small_card_image_height">86dp</dimen>
     <dimen name="small_card_spacer">2dp</dimen>
-    <dimen name="small_card_padding">4dp</dimen>
     <dimen name="small_card_trait_icon_dim">12dp</dimen>
 
     <dimen name="large_rounded_corners">10dp</dimen>
@@ -51,5 +49,6 @@
     <dimen name="small_earth_top_pad">0dp</dimen>
     <dimen name="small_wind_top_pad">0dp</dimen>
     <dimen name="small_colorless_top_pad">0dp</dimen>
+    <dimen name="small_card_margin">4dp</dimen>
 
 </resources>

@@ -1,11 +1,9 @@
 package com.cael6.eh.cael6;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,14 +11,12 @@ import android.widget.TextView;
 import com.cael6.eh.GameActivity;
 import com.cael6.eh.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
 
 /**
- * Created by cael6 on 23/02/14.
+ * Class that represents the players of the game
  */
 public class Player {
     public ArrayList<Energy> currEnergy;
@@ -60,51 +56,30 @@ public class Player {
 
         for (Energy en : deck.hero.energyGen) {
             TextView enTV = (TextView) inflater.inflate(R.layout.status_text, statusBar, false);
-            enTV.setText(String.valueOf(en.level));
-            enTV.setTag(en.name);
-            ((GameActivity)context).setBackground(enTV, en.image);
-            statusBar.addView(enTV);
+            if (enTV != null) {
+                enTV.setText(String.valueOf(en.level));
+                enTV.setTag(en.name);
+                ((GameActivity)context).setBackground(enTV, en.image);
+                statusBar.addView(enTV);
+            }
         }
         //Actions
         TextView actionTV = (TextView) inflater.inflate(R.layout.status_text, statusBar, false);
-        actionTV.setText(String.valueOf(deck.hero.turns));
-        actionTV.setTag(TURN_TAG);
-        ((GameActivity)context).setBackground(actionTV, context.getResources().getDrawable(R.drawable.turn));
-        statusBar.addView(actionTV);
+        if (actionTV != null) {
+            actionTV.setText(String.valueOf(deck.hero.turns));
+            actionTV.setTag(TURN_TAG);
+            ((GameActivity)context).setBackground(actionTV, context.getResources().getDrawable(R.drawable.turn));
+            statusBar.addView(actionTV);
+        }
 
         //Health
         TextView lifeTV = (TextView) inflater.inflate(R.layout.status_text, statusBar, false);
-        lifeTV.setText(String.valueOf(deck.hero.turns));
-        lifeTV.setTag(HEALTH_TAG);
-        ((GameActivity)context).setBackground(lifeTV, context.getResources().getDrawable(R.drawable.life_status_icon));
-        statusBar.addView(lifeTV);
-    }
-
-    protected TextView getStatusBarTextView(Context context, String value, String tag){
-        TextView tv = new TextView(context);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = (int)((GameActivity)context).pxFromDp(10);
-        params.topMargin = (int)((GameActivity)context).pxFromDp(-4);
-        params.rightMargin = (int)((GameActivity)context).pxFromDp(5);
-        tv.setText(value);
-        tv.setTag(tag);
-        tv.setTextColor(0xFFFFFFFF);
-        tv.setTextSize(context.getResources().getDimensionPixelSize(R.dimen.status_text_size));
-        tv.setLayoutParams(params);
-        return tv;
-    }
-
-    protected ImageView getStatusBarImageView(Context context, Drawable drawable){
-
-        ImageView iv = new ImageView(context);
-        iv.setImageDrawable(drawable);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                context.getResources().getDimensionPixelSize(R.dimen.status_icon_size),
-                context.getResources().getDimensionPixelSize(R.dimen.status_icon_size));
-        iv.setLayoutParams(params);
-        return iv;
+        if (lifeTV != null) {
+            lifeTV.setText(String.valueOf(deck.hero.turns));
+            lifeTV.setTag(HEALTH_TAG);
+            ((GameActivity)context).setBackground(lifeTV, context.getResources().getDrawable(R.drawable.life_status_icon));
+            statusBar.addView(lifeTV);
+        }
     }
 
     public void updatePlayerUiStatusBar() {
@@ -147,7 +122,7 @@ public class Player {
         }
     }
 
-    public Card drawCard(Context context){
+    public Card drawCard(){
         Card drawnCard = deck.drawCard();
         drawnCard.setCardForView(Card.SMALL_CARD, this.hand);
         drawnCard.inHand = true;
@@ -164,7 +139,7 @@ public class Player {
             drawnCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    assert ((GameActivity)view.getContext()) != null;
+                    assert view.getContext() != null;
                     ((GameActivity)view.getContext()).previewCard((Card) view);
                 }
             });
@@ -197,14 +172,9 @@ public class Player {
 
     public void spendResources(Card card) {
         deck.hero.spendAction();
-        Iterator<Energy> it = card.energy.iterator();
-        while(it.hasNext()){
-            Energy en = it.next();
-
-            Iterator<Energy> currEnIt = currEnergy.iterator();
-            while(currEnIt.hasNext()){
-                Energy currEn = currEnIt.next();
-                if(en.id == currEn.id){
+        for (Energy en : card.energy) {
+            for (Energy currEn : currEnergy) {
+                if (en.id == currEn.id) {
                     currEn.level -= en.level;
                 }
             }
@@ -231,7 +201,7 @@ public class Player {
     }
 
     public void startTurn(GameActivity context){
-        drawCard(context);
+        drawCard();
         generateElements();
         resetActions();
         updatePlayerUiStatusBar();

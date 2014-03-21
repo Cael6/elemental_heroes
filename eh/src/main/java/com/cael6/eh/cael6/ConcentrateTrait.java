@@ -5,7 +5,7 @@ import com.cael6.eh.R;
 import java.util.ArrayList;
 
 /**
- * Created by cael6 on 04/03/14.
+ * Trait for concentrait
  */
 public class ConcentrateTrait extends CardTrait implements ITrait {
     private final int trigger;
@@ -18,7 +18,7 @@ public class ConcentrateTrait extends CardTrait implements ITrait {
     @Override
     public boolean traitEffect(Card card, ArrayList<Card> targets, int trigger) {
         Player player = card.getOwner();
-        player.drawCard(card.getContext());
+        player.drawCard();
         player.deck.hero.turns++;
         return true;
     }

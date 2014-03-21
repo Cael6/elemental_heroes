@@ -31,7 +31,6 @@ import java.util.Iterator;
 public class Card extends FrameLayout {
 
     //<editor-fold desc="Private variables">
-    private Drawable cardBackImage;
     private int maxTurns = 1;
     private boolean hidden = false;
     private Player owner;
@@ -44,8 +43,6 @@ public class Card extends FrameLayout {
     public Drawable image;
     public float mRotation = 0;
     public boolean inHand;
-    public String name;
-    public String subName;
     public int attack;
     public int defense;
     public int health;
@@ -92,8 +89,6 @@ public class Card extends FrameLayout {
         init();
         this.energy = card.energy;
         this.inHand = card.inHand;
-        this.name = card.name;
-        this.subName = card.subName;
         this.attack = card.attack;
         this.defense = card.defense;
         this.health = card.health;
@@ -119,7 +114,6 @@ public class Card extends FrameLayout {
                 sShadowRectF.height() / 40, mShadowPaint);
 
         this.inHand = false;
-        cardBackImage = getResources().getDrawable(R.drawable.card_back);
     }
 
     /**
@@ -167,12 +161,6 @@ public class Card extends FrameLayout {
                     break;
                 case R.styleable.Card_health:
                     health = ta.getInt(attr, -1);
-                    break;
-                case R.styleable.Card_name:
-                    name = ta.getString(attr);
-                    break;
-                case R.styleable.Card_subName:
-                    subName = ta.getString(attr);
                     break;
                 case R.styleable.Card_fireCost:
                     fireCost = ta.getInt(attr, -1);
@@ -353,7 +341,7 @@ public class Card extends FrameLayout {
      */
     public void killed() {
         loopTraits(null, ITrait.TRIGGER_BEFORE_KILLED);
-        ((GameActivity)getContext()).setBackground((ViewGroup) getParent(), ((GameActivity) getContext()).normalShape);
+        ((GameActivity)getContext()).setBackground((ViewGroup) getParent(), ((GameActivity) getContext()).creatureZoneNormalShape);
         ((ViewGroup)getParent()).removeView(this);
         loopTraits(null, ITrait.TRIGGER_AFTER_KILLED);
     }
@@ -401,10 +389,6 @@ public class Card extends FrameLayout {
                     RelativeLayout traitLayout = (RelativeLayout)inflater.inflate(trait.getLayoutResource(), traitLL, false);
                     traitLL.addView(traitLayout);
                 }
-                TextView cardNameTV = (TextView) findViewWithTag("cardName");
-                cardNameTV.setText(name);
-                TextView cardSubNameTV = (TextView) findViewWithTag("cardSubName");
-                cardSubNameTV.setText(subName);
                 break;
         }
 

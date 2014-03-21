@@ -33,7 +33,7 @@ public class TargetDragListener implements View.OnDragListener {
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
                     //set background target shape
-                    //context.setBackground(v, context.enterShape);
+                    //context.setBackground(v, context.creatureZoneEnterShape);
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                     //set background back to default background

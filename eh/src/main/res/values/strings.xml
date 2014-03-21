@@ -61,4 +61,8 @@
     <string name="numbal_sub">Phoenix scout</string>
     <string name="wallc_sub">Phoenix King</string>
     <string name="fire_general_sub">Commander of fire</string>
+    <string name="image_background_desc">Image background</string>
+    <string name="example_attack_value">2</string>
+    <string name="example_armor_value">2</string>
+    <string name="example_health_value">23</string>
 </resources>

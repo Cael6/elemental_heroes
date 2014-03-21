@@ -1,11 +1,11 @@
 package com.cael6.eh;
 
 import com.cael6.eh.cael6.Card;
+import com.cael6.eh.cael6.CreatureZoneDragListener;
 import com.cael6.eh.cael6.HeroCard;
 import com.cael6.eh.cael6.Player;
 import com.cael6.eh.cael6.StaticCardOnTouchListener;
 import com.cael6.eh.cael6.TargetDragListener;
-import com.cael6.eh.cael6.ZoneDragListener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -30,14 +30,12 @@ public class GameActivity extends Activity {
     //Top to hand
     private LinearLayout enemyStatusBar;
 
-    private RelativeLayout enemyHero;
     private LinearLayout enemyHand;
 
     private LinearLayout enemyBoard;
 
     private LinearLayout playerBoard;
 
-    private RelativeLayout playerHero;
     private LinearLayout playerHand;
 
     private LinearLayout playerStatusBar;
@@ -46,8 +44,8 @@ public class GameActivity extends Activity {
 
     //</editor-fold>
 
-    public Drawable enterShape;
-    public Drawable normalShape;
+    public Drawable creatureZoneEnterShape;
+    public Drawable creatureZoneNormalShape;
 
     public int startingHandSize = 5;
 
@@ -63,10 +61,8 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
 
         initViews();
-        enterShape = getResources().getDrawable(R.drawable.board_area_hover);
-        normalShape = getResources().getDrawable(R.drawable.board_area);
-
-        int cardSpacing = (int)pxFromDp(20);
+        creatureZoneEnterShape = getResources().getDrawable(R.drawable.creature_zone_enter_bg);
+        creatureZoneNormalShape = getResources().getDrawable(R.drawable.creature_zone_bg);
 
         player = new Player(this, R.xml.deck1, playerStatusBar, playerHand, playerBoard);
         player.cardsDefaultHidden = false;
@@ -78,7 +74,7 @@ public class GameActivity extends Activity {
         player.enemy = enemy;
         enemy.enemy = player;
 
-        playerHero = (RelativeLayout)player.board.findViewWithTag("hero");
+        RelativeLayout playerHero = (RelativeLayout) player.board.findViewById(R.id.heroZone);
         player.deck.hero.setCardForView(Card.SMALL_CARD, playerHero);
         playerHero.addView(player.deck.hero);
 
@@ -91,7 +87,7 @@ public class GameActivity extends Activity {
         });
         player.deck.hero.setOnDragListener(new TargetDragListener(this));
 
-        enemyHero = (RelativeLayout)enemy.board.findViewWithTag("hero");
+        RelativeLayout enemyHero = (RelativeLayout) enemy.board.findViewById(R.id.heroZone);
         enemy.deck.hero.setCardForView(Card.SMALL_CARD, enemyHero);
         enemyHero.addView(enemy.deck.hero);
 
@@ -105,13 +101,17 @@ public class GameActivity extends Activity {
 
         for(int i = 0; i <player.board.getChildCount(); i++){
             View v = player.board.getChildAt(i);
-            if(v.getTag().equals("creatureZone")){
-                v.setOnDragListener(new ZoneDragListener(this));
+            Object tag;
+            if (v != null) {
+                tag = v.getTag();
+                if(tag !=null && tag.equals("creatureZone")){
+                    v.setOnDragListener(new CreatureZoneDragListener(this));
+                }
             }
         }
         for(int i = 0; i < startingHandSize; i++){
-            enemy.drawCard(this);
-            player.drawCard(this);
+            enemy.drawCard();
+            player.drawCard();
 
         }
     }
@@ -137,7 +137,7 @@ public class GameActivity extends Activity {
     public void onBackPressed() {
         if(previewOpen){
             //if preview open close it with cancelCardSelect
-            cancelCardSelect(new View(this));
+            cancelCardSelect();
         } else {
             //Do default
             super.onBackPressed();
@@ -156,39 +156,48 @@ public class GameActivity extends Activity {
                         getResources().getDimensionPixelSize(R.dimen.large_card_height));
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
 
-        if(preview.getChildAt(0) instanceof Card){
-            preview.removeViewAt(0);
+        if (preview != null) {
+            if(preview.getChildAt(0) instanceof Card){
+                preview.removeViewAt(0);
+            }
         }
 
         Card previewCard;
         if(card instanceof HeroCard){
-            previewCard = new HeroCard(this, (HeroCard)card, card.getOwner());;
+            previewCard = new HeroCard(this, (HeroCard)card, card.getOwner());
         }
         else{
             previewCard = new Card(this, card, card.getOwner());
         }
         previewCard.setCardForView(Card.LARGE_CARD, preview);
-        preview.addView(previewCard, 0, params);
+        if (preview != null) {
+            preview.addView(previewCard, 0, params);
+        }
 
-        ((ViewGroup)preview.getParent()).setVisibility(View.VISIBLE);
+        if (preview != null) {
+            if ((preview.getParent()) != null) {
+                ((ViewGroup)preview.getParent()).setVisibility(View.VISIBLE);
+            }
+        }
         previewOpen = true;
     }
 
-    public void cancelCardSelect(View view){
+    public void cancelCardSelect(){
         LinearLayout preview = (LinearLayout)findViewById(R.id.preview);
         preview.setVisibility(View.INVISIBLE);
         previewOpen = false;
     }
 
-    public void endTurn(View view){
+    public void endTurn(){
         player.endTurn(this);
     }
 
     public boolean dropCard(Card card, ViewGroup container, Player player){
-        //TODO: check resource count and spend/play if possible.
         if(player.attemptToPlayCard(card)){
             ViewGroup owner = (ViewGroup) card.getParent();
-            owner.removeView(card);
+            if (owner != null) {
+                owner.removeView(card);
+            }
             card.setOnTouchListener(new StaticCardOnTouchListener(this));
             card.setOnDragListener(new TargetDragListener(this));
             container.addView(card);
@@ -202,8 +211,8 @@ public class GameActivity extends Activity {
 
     /**
      *
-     * @param card
-     * @param targetCard
+     * @param card attacking card
+     * @param targetCard card being attacked
      * @return true if the targetCard is kill
      */
     public boolean attackCard(Card card, Card targetCard) {
@@ -222,8 +231,6 @@ public class GameActivity extends Activity {
                 }
                 player.updatePlayerUiStatusBar();
                 enemy.updatePlayerUiStatusBar();
-            } else {
-                //no damage
             }
         }
         return false;

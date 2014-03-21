@@ -1,109 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.cael6.eh.cael6.Card xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cael6="http://schemas.android.com/apk/com.cael6.eh.cael6"
     android:orientation="vertical"
     android:layout_width="@dimen/small_card_width"
     android:layout_height="@dimen/small_card_height"
     android:layout_gravity="center"
-    android:tag="card">
+    android:tag="card"
+    android:padding="@dimen/small_card_padding">
 
     <RelativeLayout
         android:layout_width="@dimen/small_card_width"
         android:layout_height="@dimen/small_card_height">
 
-        <RelativeLayout
-            android:layout_width="@dimen/small_card_width"
-            android:background="@drawable/card_background"
-            android:layout_height="@dimen/small_card_height">
+        <ImageView
+            android:tag="cardImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/main_background"
+            android:contentDescription="@string/image_background_desc" />
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/small_card_image_height"
-                android:layout_alignParentRight="true">
 
-                <ImageView
-                    android:tag="cardImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/main_background"/>
-                <LinearLayout
-                    android:tag="traitLL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical"></LinearLayout>
-            </RelativeLayout>
+        <LinearLayout
+            android:tag="costLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
 
-            <LinearLayout
-                android:tag="costLL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <include layout="@layout/small_energy_cost" />
-                </LinearLayout>
+        <LinearLayout
+            android:id="@+id/cardStats"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/small_card_stats_zone_dim"
+            android:padding="2dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/small_card_stats_zone_dim"
-                android:padding="2dp"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal">
+            <com.cael6.eh.cael6.MagicTextView
+                android:tag="attack"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/damage"
+                android:textColor="#FFFFFF"
+                android:text="@string/example_attack_value"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowColor="#FF222222"
+                android:shadowRadius="1"
+                cael6:typeface="CevicheOne-Regular"
+                cael6:strokeWidth="1dp"
+                cael6:strokeColor="#111111"
+                android:gravity="center" />
 
-                <TextView
-                    android:tag="attack"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/damage"
-                    android:textColor="#FFFFFF"
-                    android:text="2"
-                    android:textStyle="bold"
-                    android:textSize="12dp"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowColor="#FF222222"
-                    android:shadowRadius="0.5"
-                    android:gravity="center" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="16dp"
+                android:layout_weight="1" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="16dp"
-                    android:layout_weight="1" />
+            <com.cael6.eh.cael6.MagicTextView
+                android:tag="defense"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/armor"
+                android:textColor="#FFFFFF"
+                android:text="@string/example_armor_value"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowColor="#FF222222"
+                android:shadowRadius="1"
+                cael6:typeface="CevicheOne-Regular"
+                cael6:strokeWidth="1dp"
+                cael6:strokeColor="#111111"
+                android:gravity="center" />
 
-                <TextView
-                    android:tag="defense"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/armor"
-                    android:textColor="#FFFFFF"
-                    android:text="2"
-                    android:textStyle="bold"
-                    android:textSize="12dp"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowColor="#FF222222"
-                    android:shadowRadius="1"
-                    android:gravity="center" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="16dp"
+                android:layout_weight="1" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="16dp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:tag="health"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/life"
-                    android:textColor="#FFFFFF"
-                    android:text="23"
-                    android:textStyle="bold"
-                    android:textSize="12dp"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowColor="#FF222222"
-                    android:shadowRadius="1"
-                    android:gravity="center" />
-            </LinearLayout>
-        </RelativeLayout>
+            <com.cael6.eh.cael6.MagicTextView
+                android:tag="health"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/life"
+                android:textColor="#FFFFFF"
+                android:text="@string/example_health_value"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowColor="#FF222222"
+                android:shadowRadius="1"
+                cael6:typeface="CevicheOne-Regular"
+                cael6:strokeWidth="1dp"
+                cael6:strokeColor="#111111"
+                android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:tag="traitLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_above="@id/cardStats"
+            android:orientation="vertical"/>
     </RelativeLayout>
 </com.cael6.eh.cael6.Card>
