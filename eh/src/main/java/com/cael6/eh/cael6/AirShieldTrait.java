@@ -20,8 +20,9 @@ public class AirShieldTrait extends CardTrait implements ITrait {
 
     @Override
     public boolean traitEffect(Card card, ArrayList<Card> targets, int trigger) {
-        if(shieldConsumed && card.health <= airShield){
-            card.health = airShield;
+        CharacterCard charCard = (CharacterCard)card;
+        if(shieldConsumed && charCard.health <= airShield){
+            charCard.health = airShield;
             shieldConsumed = true;
             return true;
         }

@@ -8,8 +8,7 @@
             android:layout_margin="@dimen/small_card_margin"
             android:id="@+id/heroZone"
             android:layout_width="@dimen/small_card_width"
-            android:layout_height="@dimen/small_card_height"
-            android:background="@drawable/zone_background">
+            android:layout_height="@dimen/small_card_height">
             <com.cael6.eh.cael6.Card
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -21,33 +20,28 @@
             <RelativeLayout
                 android:layout_margin="@dimen/small_card_margin"
                 android:tag="creatureZone"
-                android:background="@drawable/zone_background"
                 android:layout_width="@dimen/small_card_width"
                 android:layout_height="@dimen/small_card_height"/>
 
             <RelativeLayout
                 android:layout_margin="@dimen/small_card_margin"
                 android:tag="creatureZone"
-                android:background="@drawable/zone_background"
                 android:layout_width="@dimen/small_card_width"
                 android:layout_height="@dimen/small_card_height"/>
 
             <RelativeLayout
                 android:layout_margin="@dimen/small_card_margin"
-                android:background="@drawable/zone_background"
                 android:tag="creatureZone"
                 android:layout_width="@dimen/small_card_width"
                 android:layout_height="@dimen/small_card_height"/>
 
             <RelativeLayout
                 android:layout_margin="@dimen/small_card_margin"
-                android:background="@drawable/zone_background"
                 android:tag="creatureZone"
                 android:layout_width="@dimen/small_card_width"
                 android:layout_height="@dimen/small_card_height"/>
             <RelativeLayout
                 android:layout_margin="@dimen/small_card_margin"
-                android:background="@drawable/zone_background"
                 android:tag="creatureZone"
                 android:layout_width="@dimen/small_card_width"
                 android:layout_height="@dimen/small_card_height"/>

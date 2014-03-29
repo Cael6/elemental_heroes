@@ -1,7 +1,10 @@
 package com.cael6.eh;
 
 import com.cael6.eh.cael6.Card;
-import com.cael6.eh.cael6.CreatureZoneDragListener;
+import com.cael6.eh.cael6.CharacterCard;
+import com.cael6.eh.cael6.EggDragListener;
+import com.cael6.eh.cael6.DragonCard;
+import com.cael6.eh.cael6.EggCard;
 import com.cael6.eh.cael6.HeroCard;
 import com.cael6.eh.cael6.Player;
 import com.cael6.eh.cael6.StaticCardOnTouchListener;
@@ -105,7 +108,7 @@ public class GameActivity extends Activity {
             if (v != null) {
                 tag = v.getTag();
                 if(tag !=null && tag.equals("creatureZone")){
-                    v.setOnDragListener(new CreatureZoneDragListener(this));
+                    v.setOnDragListener(new EggDragListener(this));
                 }
             }
         }
@@ -149,6 +152,7 @@ public class GameActivity extends Activity {
     }
 
     public void previewCard(Card card){
+
         RelativeLayout preview = (RelativeLayout)this.preview.findViewWithTag("card");
         RelativeLayout.LayoutParams params =
                 new RelativeLayout.LayoutParams(
@@ -180,26 +184,29 @@ public class GameActivity extends Activity {
             }
         }
         previewOpen = true;
+        disableBackgroundActions();
     }
 
     public void cancelCardSelect(){
         LinearLayout preview = (LinearLayout)findViewById(R.id.preview);
         preview.setVisibility(View.INVISIBLE);
         previewOpen = false;
+        enableBackgroundActions();
     }
 
     public void endTurn(){
         player.endTurn(this);
     }
 
-    public boolean dropCard(Card card, ViewGroup container, Player player){
-        if(player.attemptToPlayCard(card)){
+    public boolean dropDragonCard(DragonCard card, EggCard egg, Player player){
+        if(player.attemptToPlayCard(card, egg)){
             ViewGroup owner = (ViewGroup) card.getParent();
             if (owner != null) {
                 owner.removeView(card);
             }
             card.setOnTouchListener(new StaticCardOnTouchListener(this));
             card.setOnDragListener(new TargetDragListener(this));
+            ViewGroup container = (ViewGroup)egg.getParent();
             container.addView(card);
             player.updatePlayerUiStatusBar();
             card.showCard();
@@ -215,18 +222,20 @@ public class GameActivity extends Activity {
      * @param targetCard card being attacked
      * @return true if the targetCard is kill
      */
-    public boolean attackCard(Card card, Card targetCard) {
+    public boolean attackCard(CharacterCard card, CharacterCard targetCard) {
         if(card.spendAction()){
-            if(Card.checkAttack(card, targetCard)){
+            if(CharacterCard.checkAttack(card, targetCard)){
                 targetCard.damageCard(card.attack - targetCard.defense);
                 if(targetCard.health < 1){
                     if(targetCard instanceof HeroCard){
                         //player loses.
                         finish();
                         return true;
+                    }else if(targetCard instanceof DragonCard){
+                        DragonCard targetDragonCard = (DragonCard) targetCard;
+                        targetDragonCard.killed();
+                        card.kill(targetCard);
                     }
-                    targetCard.killed();
-                    card.kill(targetCard);
                     return true;
                 }
                 player.updatePlayerUiStatusBar();
@@ -237,12 +246,27 @@ public class GameActivity extends Activity {
     }
 
     @SuppressLint("NewApi")
-    public void setBackground(View view, Drawable background){
+    public static void setBackground(View view, Drawable background){
         int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             view.setBackgroundDrawable(background);
         } else {
             view.setBackground(background);
         }
+    }
+
+    public boolean dropEggCard(Card card, RelativeLayout container, Player player) {
+        return false;
+    }
+
+    /**
+     * disables the user from being able to do things while the preview is open.
+     */
+    public void disableBackgroundActions() {
+        
+    }
+
+    public void enableBackgroundActions() {
+
     }
 }

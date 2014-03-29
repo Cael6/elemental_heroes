@@ -9,11 +9,11 @@ import android.widget.RelativeLayout;
 import com.cael6.eh.GameActivity;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class CreatureZoneDragListener implements View.OnDragListener {
+public class EggDragListener implements View.OnDragListener {
 
     private GameActivity context;
 
-    public CreatureZoneDragListener(GameActivity context){
+    public EggDragListener(GameActivity context){
         super();
         this.context = context;
     }
@@ -42,7 +42,7 @@ public class CreatureZoneDragListener implements View.OnDragListener {
                 case DragEvent.ACTION_DROP:
                     if(1 > containerChildCount){
                         // Dropped, reassign View to ViewGroup
-                        if(context.dropCard(card, container, context.player)){
+                        if(context.dropEggCard(card, container, context.player)){
                             context.player.cardsOnBoard.add(card);
                         };
                         context.setBackground(v, null);

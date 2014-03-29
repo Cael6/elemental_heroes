@@ -11,9 +11,9 @@ import java.util.ArrayList;
 /**
  * Created by cael6 on 23/02/14.
  */
-public class HeroCard extends Card {
+public class HeroCard extends CharacterCard {
 
-    private Paint paint;
+    public int dragonBreathDrawing;
     public ArrayList<Energy> energy;
 
     private int maxTurns = 2;
@@ -31,10 +31,6 @@ public class HeroCard extends Card {
     }
 
     private void init(){
-        paint = new Paint();
-        paint.setStrokeWidth(0);
-        paint.setAntiAlias(true);
-
         turns = maxTurns;
     }
 

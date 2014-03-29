@@ -50,5 +50,6 @@
     <dimen name="small_wind_top_pad">0dp</dimen>
     <dimen name="small_colorless_top_pad">0dp</dimen>
     <dimen name="small_card_margin">4dp</dimen>
+    <dimen name="hand_left_right_margin">5dp</dimen>
 
 </resources>

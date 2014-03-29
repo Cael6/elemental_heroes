@@ -1,22 +1,24 @@
 package com.cael6.eh.cael6;
 
+import com.cael6.eh.R;
+
 import java.util.ArrayList;
 
 /**
  * Created by cael6 on 04/03/14.
  */
-public class GenerateTrait extends CardTrait implements ITrait{
+public class DrawDragonBreathTrait extends CardTrait implements ITrait{
     int trigger;
-    Energy energy;
-    public GenerateTrait(Energy energy){
-        super(energy.getImageResourceById(), energy.getLayoutResourceById());
-        this.energy = energy;
+    int dragonBreathDrawing;
+    public DrawDragonBreathTrait(int dragonBreathDrawing){
+        super(R.drawable.fire, R.layout.draw_dragon_breath_trait);
+        this.dragonBreathDrawing = dragonBreathDrawing;
         this.trigger = ITrait.TRIGGER_START_TURN;
     }
 
     @Override
     public boolean traitEffect(Card card, ArrayList<Card> targets, int trigger) {
-        card.getOwner().generateElement(this.energy);
+        card.getOwner().drawDragonBreath(dragonBreathDrawing);
         return true;
     }
 

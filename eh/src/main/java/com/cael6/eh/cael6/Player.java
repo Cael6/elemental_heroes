@@ -19,7 +19,7 @@ import java.util.ListIterator;
  * Class that represents the players of the game
  */
 public class Player {
-    public ArrayList<Energy> currEnergy;
+    public int currDragonBreathDrawn;
     public Deck deck;
     public LinearLayout statusBar, hand, board;
     public boolean cardsDefaultHidden;
@@ -29,9 +29,11 @@ public class Player {
     public ArrayList<ViewGroup> creatureBoardPositions;
     public Player enemy;
     public boolean isAi = false;
+    public Deck graveyard;
 
     private final String TURN_TAG = "turn";
     private final String HEALTH_TAG = "health";
+    private final String DB_DRAWING_TAG = "dragonbreath";
 
     public Player(Context context, int deck, LinearLayout statusBar, LinearLayout hand, LinearLayout board){
         this.deck = new Deck(context, deck, this);
@@ -41,8 +43,8 @@ public class Player {
         this.cardsInHand = new ArrayList<Card>();
         this.cardsOnBoard = new ArrayList<Card>();
         this.creatureBoardPositions = new ArrayList<ViewGroup>();
-        createElements(context);
-        generateElements();
+        createDragonBreath();
+        drawDragonBreath();
         for(int j = 1; j < board.getChildCount(); j++){
             RelativeLayout boardPosition = (RelativeLayout) board.getChildAt(j);
             creatureBoardPositions.add(boardPosition);
@@ -54,21 +56,21 @@ public class Player {
     private void createPlayerUiStatusBar(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        for (Energy en : deck.hero.energyGen) {
-            TextView enTV = (TextView) inflater.inflate(R.layout.status_text, statusBar, false);
-            if (enTV != null) {
-                enTV.setText(String.valueOf(en.level));
-                enTV.setTag(en.name);
-                ((GameActivity)context).setBackground(enTV, en.image);
-                statusBar.addView(enTV);
-            }
+
+        //Dragon Breath Drawing
+        TextView enTV = (TextView) inflater.inflate(R.layout.status_text, statusBar, false);
+        if (enTV != null) {
+            enTV.setText(String.valueOf(deck.hero.dragonBreathDrawing));
+            enTV.setTag(DB_DRAWING_TAG);
+            ((GameActivity)context).setBackground(enTV, context.getResources().getDrawable(R.drawable.fire_status_icon));
+            statusBar.addView(enTV);
         }
         //Actions
         TextView actionTV = (TextView) inflater.inflate(R.layout.status_text, statusBar, false);
         if (actionTV != null) {
             actionTV.setText(String.valueOf(deck.hero.turns));
             actionTV.setTag(TURN_TAG);
-            ((GameActivity)context).setBackground(actionTV, context.getResources().getDrawable(R.drawable.turn));
+            ((GameActivity)context).setBackground(actionTV, context.getResources().getDrawable(R.drawable.action_status_icon));
             statusBar.addView(actionTV);
         }
 
@@ -88,11 +90,8 @@ public class Player {
             View child = statusBar.getChildAt(i);
             if(child instanceof TextView){
                 TextView tv = (TextView) child;
-                for (Energy currEn : currEnergy) {
-                    if (currEn.name.equals(tv.getTag())) {
-                        tv.setText(String.valueOf(currEn.level));
-                        break;
-                    }
+                if(tv.getTag().equals(DB_DRAWING_TAG)){
+                    tv.setText(String.valueOf(currDragonBreathDrawn));
                 }
                 if(tv.getTag().equals(TURN_TAG)){
                    tv.setText(String.valueOf(deck.hero.turns));
@@ -105,23 +104,32 @@ public class Player {
         statusBar.invalidate();
     }
 
-    private void createElements(Context context){
-        currEnergy = new ArrayList<Energy>();
-        for (Energy en : deck.hero.energyGen) {
-            currEnergy.add(new Energy(context, en.id, 0));
-        }
+    /**
+     * initialize dragonBreathDrawn
+     */
+    private void createDragonBreath(){
+        currDragonBreathDrawn = 0;
     }
 
-    public void generateElements(){
-        for(Energy en : deck.hero.energyGen){
-            for(Energy currEn : currEnergy){
-                if(en.id == currEn.id){
-                    currEn.level += en.level;
-                }
-            }
-        }
+    /**
+     * Draw dragon breath each turn. Add to current count
+     */
+    public void drawDragonBreath(){
+        drawDragonBreath(deck.hero.dragonBreathDrawing);
     }
 
+    /**
+     * Draws a specific amount of dragon breath
+     * @param amount the amount of breath to draw
+     */
+    public void drawDragonBreath(int amount){
+        currDragonBreathDrawn += amount;
+    }
+
+    /**
+     * Draw card from deck and put it into the player's hand.
+     * @return returns the drawn card.
+     */
     public Card drawCard(){
         Card drawnCard = deck.drawCard();
         drawnCard.setCardForView(Card.SMALL_CARD, this.hand);
@@ -130,12 +138,14 @@ public class Player {
         if(cardsDefaultHidden){
             drawnCard.hideCard();
         }
+        int leftRightMargin = drawnCard.getContext().getResources().getDimensionPixelSize(R.dimen.hand_left_right_margin);
         cardsInHand.add(drawnCard);
-        assert hand != null;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(drawnCard.getWidth(), drawnCard.getHeight());
+        params.setMargins(leftRightMargin, 0, leftRightMargin, 0);
         hand.addView(drawnCard);
 
         if(playerControl){
-            drawnCard.setOnTouchListener(new MovableCardOnTouchListener((GameActivity)drawnCard.getContext()));
+            drawnCard.setOnTouchListener(new CardOnTouchListener());
             drawnCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -147,40 +157,56 @@ public class Player {
         return drawnCard;
     }
 
-    public boolean checkResources(Card card) {
+    /**
+     * Check to see if the player has the appropriate resources to play a card.
+     * @param card The card that the player is playing
+     * @param egg The egg to be sacrificed for dragon cards
+     * @return Does the player have the appropriate resources.
+     */
+    public boolean checkResources(Card card, EggCard egg) {
         boolean haveResources = deck.hero.turns > 0;
         if(haveResources){
-            for(Energy en : card.energy){
-                for (Energy currEn : currEnergy) {
-                    if (en.id == currEn.id) {
-                        haveResources &= currEn.level >= en.level;
-                    }
-                }
+            if(card instanceof SpellCard){
+                haveResources &= currDragonBreathDrawn >= ((SpellCard)card).dragonBreathCost;
+            }else if(card instanceof DragonCard && null != egg){
+                haveResources &= ((DragonCard)card).getHatchCost() <= egg.getHatchTimer();
             }
         }
         return haveResources;
     }
 
-    public boolean attemptToPlayCard(Card card) {
-        if(!checkResources(card)){
+    /**
+     * Player attempts to play the card.
+     * @param card The card that the player is playing
+     * @param egg The egg to be sacrificed for dragon cards
+     * @return true if the card is played.
+     */
+    public boolean attemptToPlayCard(Card card, EggCard egg) {
+        if(!checkResources(card, egg)){
             return false;
         }
-        spendResources(card); //spend resources
+        spendResources(card, egg); //spend resources
         updatePlayerUiStatusBar(); //update ui
         return true;
     }
 
-    public void spendResources(Card card) {
+    /**
+     * Spend the resources to play the card.
+     * @param card The card that the player is playing
+     * @param egg The egg to be sacrificed for dragon cards
+     */
+    public void spendResources(Card card, EggCard egg) {
         deck.hero.spendAction();
-        for (Energy en : card.energy) {
-            for (Energy currEn : currEnergy) {
-                if (en.id == currEn.id) {
-                    currEn.level -= en.level;
-                }
-            }
+        if(card instanceof SpellCard){
+            currDragonBreathDrawn -= ((SpellCard)card).dragonBreathCost;
+        }else if(card instanceof DragonCard && null != egg){
+            egg.destroyCard();
         }
     }
 
+    /**
+     * reset the actions for every card on the board.
+     */
     public void resetActions(){
         deck.hero.resetActions();
         for(int i = 0; i < board.getChildCount(); i++){
@@ -189,20 +215,28 @@ public class Player {
             for(int j = 0; j < child.getChildCount(); j++){
                 View possibleCard = child.getChildAt(j);
                 if(possibleCard instanceof Card){
-                    ((Card) possibleCard).resetActions();
+                    ((CharacterCard) possibleCard).resetActions();
                     possibleCard.invalidate();
                 }
             }
         }
     }
 
+    /**
+     * End the current player's turn and start the enemy's turn
+     * @param context game activity
+     */
     public void endTurn(GameActivity context){
         enemy.startTurn(context);
     }
 
+    /**
+     * Does all the necessary actions to start a player's turn.
+     * @param context Game Activity
+     */
     public void startTurn(GameActivity context){
         drawCard();
-        generateElements();
+        drawDragonBreath();
         resetActions();
         updatePlayerUiStatusBar();
         if(isAi){
@@ -210,12 +244,20 @@ public class Player {
         }
     }
 
+    /**
+     * Run an ai's complete turn.
+     * @param context
+     */
     public void aiTurn(GameActivity context){
         aiPlayCards(context);
         aiAttack(context);
         endTurn(context);
     }
 
+    /**
+     * Make attacks for the ai
+     * @param context
+     */
     private void aiAttack(GameActivity context) {
         for (Card card : cardsOnBoard) {
             Iterator<Card> enemyCardIterator = enemy.cardsOnBoard.iterator();
@@ -243,6 +285,10 @@ public class Player {
         }
     }
 
+    /**
+     * play cards for the ai
+     * @param context
+     */
     private void aiPlayCards(GameActivity context) {
         ListIterator<Card> cardIterator = cardsInHand.listIterator();
         while(cardIterator.hasNext()){
@@ -260,11 +306,4 @@ public class Player {
         }
     }
 
-    public void generateElement(Energy energy) {
-        for(Energy en : deck.hero.energyGen){
-            if(en.id == energy.id){
-                energy.level += en.level;
-            }
-        }
-    }
 }

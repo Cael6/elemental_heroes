@@ -98,6 +98,10 @@ public class Deck {
         Collections.shuffle(cards, new Random(System.nanoTime()));
     }
 
+    public void addCard(Card card){
+        cards.add(card);
+    }
+
     public Player getOwner() {
         return owner;
     }

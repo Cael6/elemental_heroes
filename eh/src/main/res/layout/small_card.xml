@@ -100,13 +100,5 @@
                 cael6:strokeColor="#111111"
                 android:gravity="center" />
         </LinearLayout>
-        <LinearLayout
-            android:tag="traitLL"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_above="@id/cardStats"
-            android:orientation="vertical"/>
     </RelativeLayout>
 </com.cael6.eh.cael6.Card>
