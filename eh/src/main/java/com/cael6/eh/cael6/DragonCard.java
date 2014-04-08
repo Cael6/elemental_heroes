@@ -87,17 +87,25 @@ public class DragonCard extends CharacterCard{
 
     protected void setCardChildrenValues(){
         super.setCardChildrenValues();
+        LayoutInflater inflater = ((GameActivity) getContext()).getLayoutInflater();
+        LinearLayout costLL = (LinearLayout)findViewWithTag("costLL");
+        TextView hatchCostTV = null;
         switch(cardSize){
             case LARGE_CARD:
                 LinearLayout traitLL = (LinearLayout)this.findViewWithTag("traitLL");
                 for(ITrait trait : traits){
-                    LayoutInflater inflater = ((GameActivity) getContext()).getLayoutInflater();
                     RelativeLayout traitLayout = (RelativeLayout)inflater.inflate(trait.getLayoutResource(), traitLL, false);
                     traitLL.addView(traitLayout);
                 }
+                hatchCostTV = (TextView)inflater.inflate(R.layout.hatch_cost, costLL, false);
+                break;
+            case SMALL_CARD:
+                hatchCostTV = (TextView)inflater.inflate(R.layout.small_hatch_cost, costLL, false);
                 break;
         }
 
+        hatchCostTV.setText(Integer.toString(hatchCost));
+        costLL.addView(hatchCostTV);
         TextView attackText = (TextView)this.findViewWithTag("attack");
         attackText.setText(String.valueOf(attack));
     }

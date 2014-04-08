@@ -137,6 +137,7 @@ public class Card extends FrameLayout implements ICard {
         for (int i = 0; i < getChildCount(); i++) {
             getChildAt(i).setVisibility(VISIBLE);
         }
+        GameActivity.setBackground(this, null);
     }
 
     public Player getOwner() {
