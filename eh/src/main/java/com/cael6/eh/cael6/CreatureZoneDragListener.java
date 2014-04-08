@@ -9,11 +9,11 @@ import android.widget.RelativeLayout;
 import com.cael6.eh.GameActivity;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class EggDragListener implements View.OnDragListener {
+public class CreatureZoneDragListener implements View.OnDragListener {
 
     private GameActivity context;
 
-    public EggDragListener(GameActivity context){
+    public CreatureZoneDragListener(GameActivity context){
         super();
         this.context = context;
     }
@@ -22,7 +22,7 @@ public class EggDragListener implements View.OnDragListener {
     public boolean onDrag(View v, DragEvent event) {
         Card card = (Card)event.getLocalState();
         int action = event.getAction();
-        if(card.movable){
+        if(card instanceof EggCard){
             RelativeLayout container = (RelativeLayout) v;
             int containerChildCount = container.getChildCount();
             switch (action) {
@@ -31,29 +31,29 @@ public class EggDragListener implements View.OnDragListener {
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
                     if(1 > containerChildCount){
-                        context.setBackground(v, context.creatureZoneEnterShape);
+                        GameActivity.setBackground(v, context.creatureZoneEnterShape);
                     }
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                     if(1 > containerChildCount){
-                        context.setBackground(v, context.creatureZoneNormalShape);
+                        GameActivity.setBackground(v, context.creatureZoneNormalShape);
                     }
                     break;
                 case DragEvent.ACTION_DROP:
                     if(1 > containerChildCount){
                         // Dropped, reassign View to ViewGroup
-                        if(context.dropEggCard(card, container, context.player)){
-                            context.player.cardsOnBoard.add(card);
+                        if(context.dropEggCard((EggCard)card, container, context.player)){
+                            context.player.eggsOnBoard.add((EggCard)card);
                         };
-                        context.setBackground(v, null);
+                        GameActivity.setBackground(v, null);
                         card.setVisibility(View.VISIBLE);
                     }
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
                     if(1 <= containerChildCount){
-                        context.setBackground(v, null);
+                        GameActivity.setBackground(v, null);
                     } else {
-                        context.setBackground(v, context.creatureZoneNormalShape);
+                        GameActivity.setBackground(v, context.creatureZoneNormalShape);
                     }
                     card.setVisibility(View.VISIBLE);
                 default:
@@ -65,4 +65,3 @@ public class EggDragListener implements View.OnDragListener {
         }
     }
 }
-

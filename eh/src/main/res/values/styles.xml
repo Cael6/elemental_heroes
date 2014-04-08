@@ -9,8 +9,8 @@
     <style name="Card">
 
     </style>
-    <style name="CreatureCard" parent="Card">
-        <item name="type">creature</item>
+    <style name="DragonCard" parent="Card">
+        <item name="type">dragon</item>
         <item name="attack">0</item>
         <item name="defense">0</item>
         <item name="health">1</item>
@@ -19,6 +19,12 @@
         <item name="type">hero</item>
         <item name="attack">0</item>
         <item name="health">24</item>
+    </style>
+    <style name="EggCard" parent="Card">
+        <item name="type">egg</item>
+    </style>
+    <style name="SpellCard" parent="Card">
+        <item name="type">spell</item>
     </style>
     <style name="CardNameStyle">
         <item name="android:color">#333333</item>

@@ -5,33 +5,32 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.cael6.eh.cael6.Card
+    <com.cael6.eh.cael6.DragonCard
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/card001"
         app:name="@string/campfire"
         app:attack="2"
         app:defense="0"
-        app:fireCost="1"
+        app:hatchCost="1"
         app:enrage="true"
         app:image="@drawable/campfire"
         app:subName="@string/campfire_sub"
-        style="@style/CreatureCard"/>
+        style="@style/DragonCard"/>
 
-    <com.cael6.eh.cael6.Card
+    <com.cael6.eh.cael6.DragonCard
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/card002"
         app:name="@string/pyro_freak"
         app:attack="3"
         app:defense="1"
-        app:fireCost="1"
-        app:colorlessCost="2"
+        app:hatchCost="1"
         app:image="@drawable/pyro_freak"
         app:subName="@string/pyro_freak_sub"
-        style="@style/CreatureCard"/>
+        style="@style/DragonCard"/>
 
-    <com.cael6.eh.cael6.Card
+    <com.cael6.eh.cael6.DragonCard
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/card003"
@@ -39,14 +38,13 @@
         app:subName="@string/fire_striker_sub"
         app:attack="4"
         app:defense="2"
-        app:fireCost="2"
-        app:colorlessCost="3"
+        app:hatchCost="2"
         app:battleReady="true"
         app:image="@drawable/fire_striker"
-        style="@style/CreatureCard"/>
+        style="@style/DragonCard"/>
 
 
-    <com.cael6.eh.cael6.Card
+    <com.cael6.eh.cael6.DragonCard
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/card004"
@@ -54,14 +52,13 @@
         app:subName="@string/elrath_sub"
         app:attack="3"
         app:defense="3"
-        app:fireCost="3"
+        app:hatchCost="3"
         app:health="3"
-        app:colorlessCost="3"
         app:enrage="true"
         app:image="@drawable/elrath"
-        style="@style/CreatureCard"/>
+        style="@style/DragonCard"/>
 
-    <com.cael6.eh.cael6.Card
+    <com.cael6.eh.cael6.DragonCard
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/card005"
@@ -69,13 +66,12 @@
         app:subName="@string/numbal_sub"
         app:attack="3"
         app:defense="4"
-        app:fireCost="2"
-        app:colorlessCost="4"
+        app:hatchCost="2"
         app:battleReady="true"
         app:image="@drawable/numbal"
-        style="@style/CreatureCard"/>
+        style="@style/DragonCard"/>
 
-    <com.cael6.eh.cael6.Card
+    <com.cael6.eh.cael6.DragonCard
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/card006"
@@ -83,12 +79,11 @@
         app:subName="@string/wallc_sub"
         app:attack="5"
         app:defense="4"
-        app:fireCost="3"
-        app:colorlessCost="5"
+        app:hatchCost="3"
         app:battleReady="true"
         app:enrage="true"
         app:image="@drawable/wallc"
-        style="@style/CreatureCard"/>
+        style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.HeroCard
         android:layout_width="wrap_content"
@@ -96,9 +91,13 @@
         android:id="@+id/hero001"
         app:name="@string/fire_general"
         app:subName="@string/fire_general_sub"
-        app:attack="3"
-        app:fireGen="2"
-        app:colorlessGen="3"
+        app:dragonBreathGen="2"
         app:image="@drawable/general_huo"
         style="@style/HeroCard"/>
+
+    <com.cael6.eh.cael6.EggCard
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/eggCard"
+        style="@style/EggCard"/>
 </LinearLayout>

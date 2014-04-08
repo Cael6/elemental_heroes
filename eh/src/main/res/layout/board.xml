@@ -21,28 +21,33 @@
                 android:layout_margin="@dimen/small_card_margin"
                 android:tag="creatureZone"
                 android:layout_width="@dimen/small_card_width"
-                android:layout_height="@dimen/small_card_height"/>
+                android:layout_height="@dimen/small_card_height"
+                android:background="@drawable/board_area"/>
 
             <RelativeLayout
                 android:layout_margin="@dimen/small_card_margin"
                 android:tag="creatureZone"
                 android:layout_width="@dimen/small_card_width"
-                android:layout_height="@dimen/small_card_height"/>
+                android:layout_height="@dimen/small_card_height"
+                android:background="@drawable/board_area"/>
 
             <RelativeLayout
                 android:layout_margin="@dimen/small_card_margin"
                 android:tag="creatureZone"
                 android:layout_width="@dimen/small_card_width"
-                android:layout_height="@dimen/small_card_height"/>
+                android:layout_height="@dimen/small_card_height"
+                android:background="@drawable/board_area"/>
 
             <RelativeLayout
                 android:layout_margin="@dimen/small_card_margin"
                 android:tag="creatureZone"
                 android:layout_width="@dimen/small_card_width"
-                android:layout_height="@dimen/small_card_height"/>
+                android:layout_height="@dimen/small_card_height"
+                android:background="@drawable/board_area"/>
             <RelativeLayout
                 android:layout_margin="@dimen/small_card_margin"
                 android:tag="creatureZone"
                 android:layout_width="@dimen/small_card_width"
-                android:layout_height="@dimen/small_card_height"/>
+                android:layout_height="@dimen/small_card_height"
+                android:background="@drawable/board_area"/>
 </LinearLayout>

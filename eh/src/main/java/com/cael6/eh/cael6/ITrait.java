@@ -1,11 +1,9 @@
 package com.cael6.eh.cael6;
 
-import android.graphics.drawable.Drawable;
-
 import java.util.ArrayList;
 
 /**
- * Created by cael6 on 04/03/14.
+ * Interface for card traits.
  */
 public interface ITrait {
     public final static int TRIGGER_KILL = 1;
@@ -21,7 +19,6 @@ public interface ITrait {
 
     public boolean checkTrigger(int trigger);
 
-    public int getImageResource();
     public int getLayoutResource();
 
 }

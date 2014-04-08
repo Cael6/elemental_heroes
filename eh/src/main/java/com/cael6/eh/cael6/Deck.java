@@ -1,11 +1,8 @@
 package com.cael6.eh.cael6;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.cael6.eh.R;
@@ -15,12 +12,11 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
 /**
- * Created by cael6 on 17/02/14.
+ * Object that represents a player's deck
  */
 public class Deck {
     private ArrayList<Card> cards;
@@ -48,20 +44,20 @@ public class Deck {
             e.printStackTrace();
         }
         LayoutInflater infl = LayoutInflater.from(context);
-        ViewGroup cards = (ViewGroup)infl.inflate(R.layout.cards, null);
+        ViewGroup cards = (ViewGroup)infl.inflate(R.layout.cards, owner.hand);
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG
-                    && xrp.getName().equalsIgnoreCase("card")) {
+                    && xrp.getName().equalsIgnoreCase("dragon")) {
                 String cardId = xrp.getAttributeValue(null, "id");
                 int quantity = xrp.getAttributeIntValue(null, "quantity", 1);
 
-                Card card = (Card)cards.findViewById(
+                DragonCard dragon = (DragonCard)cards.findViewById(
                         context.getResources().getIdentifier(
                                 cardId, "id", context.getPackageName())
                 );
 
                 for(int i = 0; i < quantity; i++){
-                    this.cards.add(new Card(context, card, owner));
+                    this.cards.add(new DragonCard(context, dragon, owner));
                 }
             }else if(eventType == XmlPullParser.START_TAG
                     && xrp.getName().equalsIgnoreCase("hero")) {
@@ -72,6 +68,32 @@ public class Deck {
                                 cardId, "id", context.getPackageName())
                 );
                 hero = new HeroCard(context, card, owner);
+            } else if(eventType == XmlPullParser.START_TAG
+                    && xrp.getName().equalsIgnoreCase("egg")) {
+
+                int quantity = xrp.getAttributeIntValue(null, "quantity", 1);
+
+                EggCard egg = null;
+                if (cards != null) {
+                    egg = (EggCard)cards.findViewById(R.id.eggCard);
+                }
+
+                for(int i = 0; i < quantity; i++){
+                    this.cards.add(new EggCard(context, egg, owner));
+                }
+            } else if(eventType == XmlPullParser.START_TAG
+                    && xrp.getName().equalsIgnoreCase("spell")){
+                String cardId = xrp.getAttributeValue(null, "id");
+                int quantity = xrp.getAttributeIntValue(null, "quantity", 1);
+
+                SpellCard spell = (SpellCard)cards.findViewById(
+                        context.getResources().getIdentifier(
+                                cardId, "id", context.getPackageName())
+                );
+
+                for(int i = 0; i < quantity; i++){
+                    this.cards.add(new SpellCard(context, spell, owner));
+                }
             }
             try {
                 eventType = xrp.next();
@@ -87,8 +109,7 @@ public class Deck {
 
     public Card drawCard(){
         if(cards.size() > 0){
-            Card card = cards.remove(0);
-            return card;
+            return cards.remove(0);
         }else{
             return null;
         }
@@ -104,9 +125,5 @@ public class Deck {
 
     public Player getOwner() {
         return owner;
-    }
-
-    public void setOwner(Player owner) {
-        this.owner = owner;
     }
 }

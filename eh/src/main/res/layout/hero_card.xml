@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.cael6.eh.cael6.HeroCard xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cael6="http://schemas.android.com/apk/com.cael6.eh.cael6"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/large_card_width"
+    android:layout_height="@dimen/large_card_height"
+    android:tag="card">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/image_background_desc"
+            android:scaleType="centerCrop"
+            android:src="@drawable/main_background"
+            android:tag="cardImage" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <com.cael6.eh.cael6.MagicTextView
+                android:layout_width="@dimen/large_card_icon_dim"
+                android:layout_height="@dimen/large_card_icon_dim"
+                android:background="@drawable/fire"
+                android:gravity="center"
+                android:shadowColor="#FF222222"
+                android:shadowDx="4"
+                android:shadowDy="4"
+                android:shadowRadius="1"
+                android:tag="drawStrength"
+                android:text="@string/example_armor_value"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/large_card_text_size"
+                android:textStyle="bold"
+                cael6:strokeColor="#FF111111"
+                cael6:strokeWidth="4dp"
+                cael6:typeface="CevicheOne-Regular" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/large_card_icon_dim"
+                android:layout_weight="1" />
+
+            <com.cael6.eh.cael6.MagicTextView
+                android:layout_width="@dimen/large_card_icon_dim"
+                android:layout_height="@dimen/large_card_icon_dim"
+                android:background="@drawable/life"
+                android:gravity="center"
+                android:shadowColor="#FF222222"
+                android:shadowDx="4"
+                android:shadowDy="4"
+                android:shadowRadius="1"
+                android:tag="health"
+                android:text="@string/example_health_value"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/large_card_text_size"
+                android:textStyle="bold"
+                cael6:strokeColor="#FF111111"
+                cael6:strokeWidth="4dp"
+                cael6:typeface="CevicheOne-Regular" />
+        </LinearLayout>
+    </RelativeLayout>
+</com.cael6.eh.cael6.HeroCard>

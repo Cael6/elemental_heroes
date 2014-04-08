@@ -19,35 +19,36 @@ import java.util.ListIterator;
  * Class that represents the players of the game
  */
 public class Player {
+    private final String TURN_TAG = "turn";
+    private final String HEALTH_TAG = "health";
+    private final String DB_DRAWING_TAG = "dragonbreath";
     public int currDragonBreathDrawn;
     public Deck deck;
     public LinearLayout statusBar, hand, board;
     public boolean cardsDefaultHidden;
     public boolean playerControl = false;
     public ArrayList<Card> cardsInHand;
-    public ArrayList<Card> cardsOnBoard;
-    public ArrayList<ViewGroup> creatureBoardPositions;
+    public ArrayList<DragonCard> dragonsOnBoard;
+    public ArrayList<ViewGroup> boardPositions;
+    public ArrayList<EggCard> eggsOnBoard;
     public Player enemy;
     public boolean isAi = false;
     public Deck graveyard;
 
-    private final String TURN_TAG = "turn";
-    private final String HEALTH_TAG = "health";
-    private final String DB_DRAWING_TAG = "dragonbreath";
-
-    public Player(Context context, int deck, LinearLayout statusBar, LinearLayout hand, LinearLayout board){
+    public Player(Context context, int deck, LinearLayout statusBar, LinearLayout hand, LinearLayout board) {
         this.deck = new Deck(context, deck, this);
         this.statusBar = statusBar;
         this.hand = hand;
         this.board = board;
         this.cardsInHand = new ArrayList<Card>();
-        this.cardsOnBoard = new ArrayList<Card>();
-        this.creatureBoardPositions = new ArrayList<ViewGroup>();
+        this.dragonsOnBoard = new ArrayList<DragonCard>();
+        this.eggsOnBoard = new ArrayList<EggCard>();
+        this.boardPositions = new ArrayList<ViewGroup>();
         createDragonBreath();
         drawDragonBreath();
-        for(int j = 1; j < board.getChildCount(); j++){
+        for (int j = 1; j < board.getChildCount(); j++) {
             RelativeLayout boardPosition = (RelativeLayout) board.getChildAt(j);
-            creatureBoardPositions.add(boardPosition);
+            boardPositions.add(boardPosition);
         }
         createPlayerUiStatusBar(context);
         updatePlayerUiStatusBar();
@@ -62,7 +63,7 @@ public class Player {
         if (enTV != null) {
             enTV.setText(String.valueOf(deck.hero.dragonBreathDrawing));
             enTV.setTag(DB_DRAWING_TAG);
-            ((GameActivity)context).setBackground(enTV, context.getResources().getDrawable(R.drawable.fire_status_icon));
+            GameActivity.setBackground(enTV, context.getResources().getDrawable(R.drawable.fire_status_icon));
             statusBar.addView(enTV);
         }
         //Actions
@@ -70,7 +71,7 @@ public class Player {
         if (actionTV != null) {
             actionTV.setText(String.valueOf(deck.hero.turns));
             actionTV.setTag(TURN_TAG);
-            ((GameActivity)context).setBackground(actionTV, context.getResources().getDrawable(R.drawable.action_status_icon));
+            GameActivity.setBackground(actionTV, context.getResources().getDrawable(R.drawable.action_status_icon));
             statusBar.addView(actionTV);
         }
 
@@ -79,24 +80,24 @@ public class Player {
         if (lifeTV != null) {
             lifeTV.setText(String.valueOf(deck.hero.turns));
             lifeTV.setTag(HEALTH_TAG);
-            ((GameActivity)context).setBackground(lifeTV, context.getResources().getDrawable(R.drawable.life_status_icon));
+            GameActivity.setBackground(lifeTV, context.getResources().getDrawable(R.drawable.life_status_icon));
             statusBar.addView(lifeTV);
         }
     }
 
     public void updatePlayerUiStatusBar() {
 
-        for(int i = 0; i < statusBar.getChildCount(); i++){
+        for (int i = 0; i < statusBar.getChildCount(); i++) {
             View child = statusBar.getChildAt(i);
-            if(child instanceof TextView){
+            if (child instanceof TextView) {
                 TextView tv = (TextView) child;
-                if(tv.getTag().equals(DB_DRAWING_TAG)){
+                if (tv.getTag().equals(DB_DRAWING_TAG)) {
                     tv.setText(String.valueOf(currDragonBreathDrawn));
                 }
-                if(tv.getTag().equals(TURN_TAG)){
-                   tv.setText(String.valueOf(deck.hero.turns));
+                if (tv.getTag().equals(TURN_TAG)) {
+                    tv.setText(String.valueOf(deck.hero.turns));
                 }
-                if(tv.getTag().equals(HEALTH_TAG)){
+                if (tv.getTag().equals(HEALTH_TAG)) {
                     tv.setText(String.valueOf(deck.hero.health));
                 }
             }
@@ -107,35 +108,37 @@ public class Player {
     /**
      * initialize dragonBreathDrawn
      */
-    private void createDragonBreath(){
+    private void createDragonBreath() {
         currDragonBreathDrawn = 0;
     }
 
     /**
      * Draw dragon breath each turn. Add to current count
      */
-    public void drawDragonBreath(){
+    public void drawDragonBreath() {
         drawDragonBreath(deck.hero.dragonBreathDrawing);
     }
 
     /**
      * Draws a specific amount of dragon breath
+     *
      * @param amount the amount of breath to draw
      */
-    public void drawDragonBreath(int amount){
+    public void drawDragonBreath(int amount) {
         currDragonBreathDrawn += amount;
     }
 
     /**
      * Draw card from deck and put it into the player's hand.
+     *
      * @return returns the drawn card.
      */
-    public Card drawCard(){
+    public Card drawCard() {
         Card drawnCard = deck.drawCard();
         drawnCard.setCardForView(Card.SMALL_CARD, this.hand);
         drawnCard.inHand = true;
         drawnCard.movable = true;
-        if(cardsDefaultHidden){
+        if (cardsDefaultHidden) {
             drawnCard.hideCard();
         }
         int leftRightMargin = drawnCard.getContext().getResources().getDimensionPixelSize(R.dimen.hand_left_right_margin);
@@ -144,77 +147,89 @@ public class Player {
         params.setMargins(leftRightMargin, 0, leftRightMargin, 0);
         hand.addView(drawnCard);
 
-        if(playerControl){
-            drawnCard.setOnTouchListener(new CardOnTouchListener());
-            drawnCard.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    assert view.getContext() != null;
-                    ((GameActivity)view.getContext()).previewCard((Card) view);
-                }
-            });
+        if (playerControl) {
+            drawnCard.setListeners();
         }
         return drawnCard;
     }
 
     /**
      * Check to see if the player has the appropriate resources to play a card.
+     *
      * @param card The card that the player is playing
-     * @param egg The egg to be sacrificed for dragon cards
+     * @param egg  The egg to be sacrificed for dragon cards
      * @return Does the player have the appropriate resources.
      */
     public boolean checkResources(Card card, EggCard egg) {
         boolean haveResources = deck.hero.turns > 0;
-        if(haveResources){
-            if(card instanceof SpellCard){
-                haveResources &= currDragonBreathDrawn >= ((SpellCard)card).dragonBreathCost;
-            }else if(card instanceof DragonCard && null != egg){
-                haveResources &= ((DragonCard)card).getHatchCost() <= egg.getHatchTimer();
+        if (haveResources) {
+            if (card instanceof SpellCard) {
+                haveResources = currDragonBreathDrawn >= ((SpellCard) card).dragonBreathCost;
+            } else if (card instanceof DragonCard && null != egg) {
+                haveResources = ((DragonCard) card).getHatchCost() <= egg.getHatchTimer();
             }
         }
         return haveResources;
     }
 
     /**
-     * Player attempts to play the card.
-     * @param card The card that the player is playing
-     * @param egg The egg to be sacrificed for dragon cards
-     * @return true if the card is played.
+     * Player attempts to play the dragon.
+     *
+     * @param dragon The dragon that the player is playing
+     * @param egg  The egg to be sacrificed for dragon cards
+     * @return true if the dragon is played.
      */
-    public boolean attemptToPlayCard(Card card, EggCard egg) {
-        if(!checkResources(card, egg)){
+    public boolean attemptToPlayDragonCard(Card dragon, EggCard egg) {
+        if (!checkResources(dragon, egg)) {
             return false;
         }
-        spendResources(card, egg); //spend resources
+        spendResources(dragon, egg); //spend resources
         updatePlayerUiStatusBar(); //update ui
         return true;
     }
 
     /**
+     * Player attempts to play the egg.
+     *
+     * @param egg The egg that the player is playing
+     * @return true if the dragon is played.
+     */
+    public boolean attemptToPlayEgg(EggCard egg) {
+        if(!checkResources(egg, null)){
+            return false;
+        }
+        spendResources(egg, null);
+        updatePlayerUiStatusBar();
+        return true;
+    }
+
+    /**
      * Spend the resources to play the card.
+     *
      * @param card The card that the player is playing
-     * @param egg The egg to be sacrificed for dragon cards
+     * @param egg  The egg to be sacrificed for dragon cards
      */
     public void spendResources(Card card, EggCard egg) {
         deck.hero.spendAction();
-        if(card instanceof SpellCard){
-            currDragonBreathDrawn -= ((SpellCard)card).dragonBreathCost;
-        }else if(card instanceof DragonCard && null != egg){
+        if (card instanceof SpellCard) {
+            currDragonBreathDrawn -= ((SpellCard) card).dragonBreathCost;
+        } else if (card instanceof DragonCard && null != egg) {
             egg.destroyCard();
+            eggsOnBoard.remove(egg);
         }
     }
 
     /**
      * reset the actions for every card on the board.
      */
-    public void resetActions(){
+    public void resetActions() {
         deck.hero.resetActions();
-        for(int i = 0; i < board.getChildCount(); i++){
+        for (int i = 0; i < board.getChildCount(); i++) {
             ViewGroup child = (ViewGroup) board.getChildAt(i);
             assert child != null;
-            for(int j = 0; j < child.getChildCount(); j++){
+            for (int j = 0; j < child.getChildCount(); j++) {
                 View possibleCard = child.getChildAt(j);
-                if(possibleCard instanceof Card){
+                if (possibleCard instanceof CharacterCard) {
                     ((CharacterCard) possibleCard).resetActions();
                     possibleCard.invalidate();
                 }
@@ -222,33 +237,44 @@ public class Player {
         }
     }
 
+    public void increaseHatch() {
+        for (EggCard egg : eggsOnBoard) {
+            egg.increaseHatch();
+            egg.invalidate();
+        }
+    }
+
     /**
      * End the current player's turn and start the enemy's turn
+     *
      * @param context game activity
      */
-    public void endTurn(GameActivity context){
+    public void endTurn(GameActivity context) {
         enemy.startTurn(context);
     }
 
     /**
      * Does all the necessary actions to start a player's turn.
+     *
      * @param context Game Activity
      */
-    public void startTurn(GameActivity context){
+    public void startTurn(GameActivity context) {
         drawCard();
         drawDragonBreath();
         resetActions();
+        increaseHatch();
         updatePlayerUiStatusBar();
-        if(isAi){
+        if (isAi) {
             aiTurn(context);
         }
     }
 
     /**
      * Run an ai's complete turn.
-     * @param context
+     *
+     * @param context Current Game Activity
      */
-    public void aiTurn(GameActivity context){
+    public void aiTurn(GameActivity context) {
         aiPlayCards(context);
         aiAttack(context);
         endTurn(context);
@@ -256,13 +282,14 @@ public class Player {
 
     /**
      * Make attacks for the ai
-     * @param context
+     *
+     * @param context Current Game Activity
      */
     private void aiAttack(GameActivity context) {
-        for (Card card : cardsOnBoard) {
-            Iterator<Card> enemyCardIterator = enemy.cardsOnBoard.iterator();
+        for (DragonCard card : dragonsOnBoard) {
+            Iterator<DragonCard> enemyCardIterator = enemy.dragonsOnBoard.iterator();
             while (enemyCardIterator.hasNext()) {
-                Card enemyCard = enemyCardIterator.next();
+                CharacterCard enemyCard = enemyCardIterator.next();
                 if (card.attack > enemyCard.defense) {
                     if (context.attackCard(card, enemyCard)) {
                         enemyCardIterator.remove();
@@ -271,39 +298,69 @@ public class Player {
             }
             context.attackCard(card, enemy.deck.hero);
         }
-        ListIterator<Card> enemyCardIterator = enemy.cardsOnBoard.listIterator();
-        while(enemyCardIterator.hasNext()){
-            Card enemyCard = enemyCardIterator.next();
-            if(deck.hero.attack > enemyCard.defense){
-                if(context.attackCard(deck.hero, enemyCard)){
+        ListIterator<DragonCard> enemyCardIterator = enemy.dragonsOnBoard.listIterator();
+        while (enemyCardIterator.hasNext()) {
+            DragonCard enemyCard = enemyCardIterator.next();
+            if (deck.hero.attack > enemyCard.defense) {
+                if (context.attackCard(deck.hero, enemyCard)) {
                     enemyCardIterator.remove();
                 }
             }
         }
-        while(deck.hero.turns > 0){
+        while (deck.hero.turns > 0) {
             context.attackCard(deck.hero, enemy.deck.hero);
         }
     }
 
     /**
-     * play cards for the ai
-     * @param context
+     * Plays Egg card
+     * @param context Current Game Activity
+     * @param egg Card to attempt to play
+     * @param cardIterator iterator going through player's hand
      */
-    private void aiPlayCards(GameActivity context) {
-        ListIterator<Card> cardIterator = cardsInHand.listIterator();
-        while(cardIterator.hasNext()){
-            Card card = cardIterator.next();
-            for (ViewGroup boardPosition : creatureBoardPositions) {
-                if (boardPosition.getChildCount() < 1) {
-                    if (context.dropCard(card, boardPosition, this)) {
-                        cardIterator.remove();
-                        cardsOnBoard.add(card);
-                        context.setBackground(boardPosition, null);
-                        break;
-                    }
+    private void aiPlayEggs(GameActivity context, EggCard egg, ListIterator<Card> cardIterator) {
+        for (ViewGroup boardPosition : boardPositions) {
+            if (boardPosition.getChildCount() < 1) {
+                if (context.dropEggCard(egg, boardPosition, this)) {
+                    cardIterator.remove();
+                    eggsOnBoard.add(egg);
+                    GameActivity.setBackground(boardPosition, null);
+                    break;
                 }
             }
         }
     }
 
+    /**
+     * Plays dragon card
+     * @param context Current Game Activity
+     * @param dragon dragon to attempt to play
+     * @param cardIterator iterator going through player's hand
+     */
+    private void aiPlayDragon(GameActivity context, DragonCard dragon, ListIterator<Card> cardIterator) {
+        for (EggCard egg : eggsOnBoard) {
+            if (context.dropDragonCard(dragon, egg, this)) {
+                cardIterator.remove();
+                dragonsOnBoard.add(dragon);
+                break;
+            }
+        }
+    }
+
+    /**
+     * play cards for the ai
+     *
+     * @param context Current Game Activity
+     */
+    private void aiPlayCards(GameActivity context) {
+        ListIterator<Card> cardIterator = cardsInHand.listIterator();
+        while (cardIterator.hasNext()) {
+            Card card = cardIterator.next();
+            if (card instanceof DragonCard) {
+                aiPlayDragon(context, (DragonCard) card, cardIterator);
+            } else if (card instanceof EggCard){
+                aiPlayEggs(context, (EggCard) card, cardIterator );
+            }
+        }
+    }
 }

@@ -1,19 +1,28 @@
 package com.cael6.eh.cael6;
 
+import android.annotation.TargetApi;
+import android.content.ClipData;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cael6.eh.GameActivity;
+import com.cael6.eh.R;
+
+import java.util.ArrayList;
 
 /**
  * Class that represents a dragon card.
  */
-public class DragonCard extends CharacterCard {
+public class DragonCard extends CharacterCard{
 
     private int hatchCost;
 
@@ -29,15 +38,33 @@ public class DragonCard extends CharacterCard {
 
     public DragonCard(Context context, DragonCard card, Player owner) {
         super(context, card, owner);
-        setOwner(owner);
         init();
-        this.attack = card.attack;
-        this.defense = card.defense;
-        this.health = card.health;
-        this.turns = card.turns;
-        this.traits = card.traits;
+        this.hatchCost = card.getHatchCost();
     }
+    @Override
+    protected void generateFromStyle(Context context, AttributeSet set, int style) {
+        super.generateFromStyle(context, set, style);
+        TypedArray ta = context.obtainStyledAttributes(set,
+                R.styleable.Card,
+                style,
+                0);
 
+        traits = new ArrayList<ITrait>();
+
+        final int taCount;
+        if (ta != null) {
+            taCount = ta.getIndexCount();
+            for (int i = 0; i < taCount; i++) {
+                int attr = ta.getIndex(i);
+                switch (attr) {
+                    case R.styleable.Card_hatchCost:
+                        hatchCost = ta.getInt(attr, -1);
+                        break;
+                }
+            }
+
+        }
+    }
 
     public void init(){
 
@@ -73,5 +100,22 @@ public class DragonCard extends CharacterCard {
 
         TextView attackText = (TextView)this.findViewWithTag("attack");
         attackText.setText(String.valueOf(attack));
+    }
+
+    @Override
+    public void setListeners() {
+        if(inHand){
+            setOnTouchListener(new CTouchListener(CTouchListener.TYPE_PLAYABLE));
+        } else{
+            setOnTouchListener(new CTouchListener(CTouchListener.TYPE_STATIC));
+            setOnDragListener(new CharacterDragListener());
+        }
+        final DragonCard thisCard = this;
+        setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((GameActivity)getContext()).previewCard(thisCard);
+            }
+        });
     }
 }

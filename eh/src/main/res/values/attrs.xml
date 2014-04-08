@@ -10,12 +10,12 @@
     </declare-styleable>
     <declare-styleable name="Card">
         <attr name="type" format="enum" >
-            <enum name="creature" value="0"/>
+            <enum name="dragon" value="0"/>
             <enum name="spell" value="1"/>
             <enum name="hero" value="2"/>
-            <enum name="equipment" value="3"/>
-            <enum name="trigger" value="4"/>
+            <enum name="egg" value="3"/>
         </attr>
+        <attr name="dragonBreathGen" format="integer" />
         <attr name="attack" format="integer" />
         <attr name="defense" format="integer" />
         <attr name="health" format="integer" />
@@ -23,16 +23,7 @@
         <attr name="name" format="string|reference"/>
         <attr name="subName" format="string|reference"/>
         <attr name="image" format="reference"/>
-        <attr name="fireCost" format="integer" />
-        <attr name="waterCost" format="integer" />
-        <attr name="earthCost" format="integer"/>
-        <attr name="windCost" format="integer" />
-        <attr name="colorlessCost" format="integer" />
-        <attr name="fireGen" format="integer" />
-        <attr name="waterGen" format="integer"/>
-        <attr name="earthGen" format="integer"/>
-        <attr name="windGen" format="integer" />
-        <attr name="colorlessGen" format="integer"/>
+        <attr name="hatchCost" format="integer" />
         <attr name="endurance" format="boolean" />
         <attr name="battleReady" format="boolean"/>
         <attr name="growth" format="integer" />

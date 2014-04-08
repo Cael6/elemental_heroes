@@ -1,14 +1,15 @@
 package com.cael6.eh;
 
+import com.cael6.eh.cael6.CTouchListener;
 import com.cael6.eh.cael6.Card;
 import com.cael6.eh.cael6.CharacterCard;
-import com.cael6.eh.cael6.EggDragListener;
+import com.cael6.eh.cael6.CharacterCard.CharacterDragListener;
+import com.cael6.eh.cael6.CreatureZoneDragListener;
+import com.cael6.eh.cael6.EggCard.EggDragListener;
 import com.cael6.eh.cael6.DragonCard;
 import com.cael6.eh.cael6.EggCard;
 import com.cael6.eh.cael6.HeroCard;
 import com.cael6.eh.cael6.Player;
-import com.cael6.eh.cael6.StaticCardOnTouchListener;
-import com.cael6.eh.cael6.TargetDragListener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -64,8 +65,8 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
 
         initViews();
-        creatureZoneEnterShape = getResources().getDrawable(R.drawable.creature_zone_enter_bg);
-        creatureZoneNormalShape = getResources().getDrawable(R.drawable.creature_zone_bg);
+        creatureZoneEnterShape = getResources().getDrawable(R.drawable.board_area_hover);
+        creatureZoneNormalShape = getResources().getDrawable(R.drawable.board_area);
 
         player = new Player(this, R.xml.deck1, playerStatusBar, playerHand, playerBoard);
         player.cardsDefaultHidden = false;
@@ -81,14 +82,13 @@ public class GameActivity extends Activity {
         player.deck.hero.setCardForView(Card.SMALL_CARD, playerHero);
         playerHero.addView(player.deck.hero);
 
-        player.deck.hero.setOnTouchListener(new StaticCardOnTouchListener(this));
         player.deck.hero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 previewCard(player.deck.hero);
             }
         });
-        player.deck.hero.setOnDragListener(new TargetDragListener(this));
+        player.deck.hero.setOnDragListener(new CharacterCard.CharacterDragListener());
 
         RelativeLayout enemyHero = (RelativeLayout) enemy.board.findViewById(R.id.heroZone);
         enemy.deck.hero.setCardForView(Card.SMALL_CARD, enemyHero);
@@ -100,7 +100,7 @@ public class GameActivity extends Activity {
                 previewCard(enemy.deck.hero);
             }
         });
-        enemy.deck.hero.setOnDragListener(new TargetDragListener(this));
+        enemy.deck.hero.setOnDragListener(new CharacterDragListener());
 
         for(int i = 0; i <player.board.getChildCount(); i++){
             View v = player.board.getChildAt(i);
@@ -108,7 +108,7 @@ public class GameActivity extends Activity {
             if (v != null) {
                 tag = v.getTag();
                 if(tag !=null && tag.equals("creatureZone")){
-                    v.setOnDragListener(new EggDragListener(this));
+                    v.setOnDragListener(new CreatureZoneDragListener(this));
                 }
             }
         }
@@ -140,15 +140,11 @@ public class GameActivity extends Activity {
     public void onBackPressed() {
         if(previewOpen){
             //if preview open close it with cancelCardSelect
-            cancelCardSelect();
+            cancelCardSelect(null);
         } else {
             //Do default
             super.onBackPressed();
         }
-    }
-
-    public float pxFromDp(float dp){
-        return dp / this.getResources().getDisplayMetrics().density;
     }
 
     public void previewCard(Card card){
@@ -187,30 +183,32 @@ public class GameActivity extends Activity {
         disableBackgroundActions();
     }
 
-    public void cancelCardSelect(){
+    public void cancelCardSelect(View view){
         LinearLayout preview = (LinearLayout)findViewById(R.id.preview);
         preview.setVisibility(View.INVISIBLE);
         previewOpen = false;
         enableBackgroundActions();
     }
 
-    public void endTurn(){
+    public void endTurn(View view){
         player.endTurn(this);
     }
 
-    public boolean dropDragonCard(DragonCard card, EggCard egg, Player player){
-        if(player.attemptToPlayCard(card, egg)){
-            ViewGroup owner = (ViewGroup) card.getParent();
+    public boolean dropDragonCard(DragonCard dragon, EggCard egg, Player player){
+        ViewGroup container = (ViewGroup)egg.getParent();
+        if(player.attemptToPlayDragonCard(dragon, egg)){
+            ViewGroup owner = (ViewGroup) dragon.getParent();
             if (owner != null) {
-                owner.removeView(card);
+                owner.removeView(dragon);
             }
-            card.setOnTouchListener(new StaticCardOnTouchListener(this));
-            card.setOnDragListener(new TargetDragListener(this));
-            ViewGroup container = (ViewGroup)egg.getParent();
-            container.addView(card);
+            dragon.setOnTouchListener(new CTouchListener(CTouchListener.TYPE_STATIC));
+            dragon.setOnDragListener(new CharacterDragListener());
+            if (container != null) {
+                container.addView(dragon);
+            }
             player.updatePlayerUiStatusBar();
-            card.showCard();
-            card.enterBattleField();
+            dragon.showCard();
+            dragon.enterBattleField();
             return true;
         }
         return false;
@@ -255,7 +253,20 @@ public class GameActivity extends Activity {
         }
     }
 
-    public boolean dropEggCard(Card card, RelativeLayout container, Player player) {
+    public boolean dropEggCard(EggCard egg, ViewGroup container, Player player) {
+        if(player.attemptToPlayEgg(egg)){
+            ViewGroup owner = (ViewGroup) egg.getParent();
+            if (owner != null) {
+                owner.removeView(egg);
+            }
+            egg.setOnDragListener(new EggDragListener());
+            if (container != null) {
+                container.addView(egg);
+            }
+            player.updatePlayerUiStatusBar();
+            egg.showCard();
+            return true;
+        }
         return false;
     }
 
