@@ -166,8 +166,10 @@ public class GameActivity extends Activity {
         if(card instanceof HeroCard){
             previewCard = new HeroCard(this, (HeroCard)card, card.getOwner());
         }
-        else{
-            previewCard = new Card(this, card, card.getOwner());
+        else if(card instanceof DragonCard){
+            previewCard = new DragonCard(this, (DragonCard)card, card.getOwner());
+        }else{
+            previewCard = null;
         }
         previewCard.setCardForView(Card.LARGE_CARD, preview);
         if (preview != null) {

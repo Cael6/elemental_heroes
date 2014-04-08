@@ -45,6 +45,7 @@ public class HeroCard extends CharacterCard {
 
     @Override
     protected void setCardChildrenValues() {
+        super.setCardChildrenValues();
         ((ImageView) this.findViewWithTag("cardImage")).setImageDrawable(image);
     }
 

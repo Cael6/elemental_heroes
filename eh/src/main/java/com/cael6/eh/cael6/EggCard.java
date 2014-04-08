@@ -108,7 +108,7 @@ public class EggCard extends Card {
                     case DragEvent.ACTION_DROP:
                         // Dropped, reassign View to ViewGroup
                         if (context.dropDragonCard((DragonCard) card, egg, context.player)) {
-                            context.player.eggsOnBoard.add(egg);
+                            context.player.dragonsOnBoard.add((DragonCard)card);
                         }
                         egg.setVisibility(View.VISIBLE);
                         break;
