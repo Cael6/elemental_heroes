@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cael6="http://schemas.android.com/apk/com.cael6.eh.cael6"
     android:orientation="vertical"
-    android:layout_width="@dimen/small_card_width"
-    android:layout_height="@dimen/small_card_height"
+    android:layout_width="100dp"
+    android:layout_height="150dp"
     android:layout_gravity="center"
     android:tag="card">
 
     <RelativeLayout
-        android:layout_width="@dimen/small_card_width"
-        android:layout_height="@dimen/small_card_height">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageView
             android:tag="cardImage"
@@ -23,20 +23,20 @@
         <LinearLayout
             android:id="@+id/cardStats"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/small_card_stats_zone_dim"
+            android:layout_height="40dp"
             android:padding="2dp"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
             <com.cael6.eh.cael6.MagicTextView
                 android:tag="drawStrength"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
                 android:background="@drawable/fire"
                 android:textColor="#FFFFFF"
                 android:text="@string/example_armor_value"
                 android:textStyle="bold"
-                android:textSize="12dp"
+                android:textSize="26dp"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowColor="#FF222222"
@@ -53,13 +53,13 @@
 
             <com.cael6.eh.cael6.MagicTextView
                 android:tag="health"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
                 android:background="@drawable/life"
                 android:textColor="#FFFFFF"
                 android:text="@string/example_health_value"
                 android:textStyle="bold"
-                android:textSize="12dp"
+                android:textSize="26dp"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowColor="#FF222222"

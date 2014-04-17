@@ -30,30 +30,14 @@
     <string name="play_card">Play Card</string>
     <string name="endTurn">End Turn</string>
     <string name="fire_general">General Huǒ</string>
-
-    <string name="enrage_description">
-            <strong>Enrage</strong> <em>(This creature gains +1 attack when it destroys another creature)</em>
-    </string>
-    <string name="battle_ready_description">
-            <strong>Battle Ready</strong> <em>(This creature can act as soon as it enters the battlefield)</em>
-    </string>
+    <string name="enrage_description"><strong>Enrage</strong> <em>(This creature gains +1 attack when it destroys another creature)</em></string>
+    <string name="battle_ready_description"><strong>Battle Ready</strong> <em>(This creature can act as soon as it enters the battlefield)</em></string>
     <string name="air_shield_desc"><strong>Air Shield</strong> <em>(This creature cannot be reduced below X health in 1 attack, where X is the air shield value)</em></string>
-    <string name="concentrate_description">
-        <strong>Concentrate</strong> <em>(The owner of this card draws an extra card and get an extra action at the start of each turn)</em>
-    </string>
-    <string name="endurance_description">
-        <strong>Endurance</strong> <em>(When this creature makes an attack it becomes a defender)</em>
-    </string>
-    <string name="generate_description">
-        <strong>Generate</strong> <em>(This creature generates energy and adds it to you energy supply)</em>
-    </string>
-    <string name="growth_description">
-        <strong>Growth</strong> <em>(Each turn this creature gains +1 defense and +1 health for X turns)</em>
-    </string>
-    <string name="lifetap_description">
-        <strong>Lifetap</strong> <em>(At the start of each turn this creature and it\'s owner\'s hero gains life)</em>
-    </string>
-
+    <string name="concentrate_description"><strong>Concentrate</strong> <em>(The owner of this card draws an extra card and get an extra action at the start of each turn)</em></string>
+    <string name="endurance_description"><strong>Endurance</strong> <em>(When this creature makes an attack it becomes a defender)</em></string>
+    <string name="generate_description"><strong>Generate</strong> <em>(This creature generates energy and adds it to you energy supply)</em></string>
+    <string name="growth_description"><strong>Growth</strong> <em>(Each turn this creature gains +1 defense and +1 health for X turns)</em></string>
+    <string name="lifetap_description"><strong>Lifetap</strong> <em>(At the start of each turn this creature and it\'s owner\'s hero gains life)</em></string>
     <string name="campfire_sub">A simple fire</string>
     <string name="pyro_freak_sub">Supreme firestarter</string>
     <string name="fire_striker_sub">The general\'s fastest</string>
@@ -65,4 +49,6 @@
     <string name="example_attack_value">2</string>
     <string name="example_armor_value">2</string>
     <string name="example_health_value">23</string>
+    <string name="title_activity_game_stats">GameStats</string>
+
 </resources>

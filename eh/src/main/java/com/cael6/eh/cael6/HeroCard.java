@@ -1,6 +1,7 @@
 package com.cael6.eh.cael6;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
@@ -24,19 +25,42 @@ public class HeroCard extends CharacterCard {
 
     public HeroCard(Context context, AttributeSet set){
         super(context, set);
-        init();
     }
 
     public HeroCard(Context context, HeroCard card, Player owner){
         super(context, card, owner);
         init();
         this.dragonBreathDrawing = card.dragonBreathDrawing;
+        this.setTag(card.getTag());
     }
 
     @Override
     protected void init(){
+        super.init();
         turns = maxTurns;
     }
+
+    protected void generateFromStyle(Context context, AttributeSet set, int style) {
+        super.generateFromStyle(context, set, style);
+        TypedArray ta = context.obtainStyledAttributes(set,
+                R.styleable.Card,
+                style,
+                0);
+
+        final int taCount;
+        if (ta != null) {
+            taCount = ta.getIndexCount();
+            for (int i = 0; i < taCount; i++) {
+                int attr = ta.getIndex(i);
+                switch (attr) {
+                    case R.styleable.Card_dragonBreathGen:
+                        dragonBreathDrawing = ta.getInt(attr, -1);
+                        break;
+                }
+            }
+        }
+    }
+
 
     public void resetActions(){
         turns = maxTurns;

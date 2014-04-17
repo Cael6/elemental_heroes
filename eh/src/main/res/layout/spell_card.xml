@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.cael6.eh.cael6.SpellCard xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cael6="http://schemas.android.com/apk/com.cael6.eh.cael6"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="card"
+    android:layout_width="@dimen/large_card_width"
+    android:layout_height="@dimen/large_card_height">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:tag="cardImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/main_background"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/image_background_desc" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_alignParentBottom="true">
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:fadingEdge="vertical"
+                tools:ignore="UselessParent">
+
+                <TextView
+                    android:padding="10dp"
+                    android:tag="effect"
+                    android:layout_width="@dimen/large_card_description_width"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/card_description_background"
+                    android:orientation="vertical"
+                    android:text="Deal 1 direct damage to target dragon."/>
+            </ScrollView>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:tag="costLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </RelativeLayout>
+</com.cael6.eh.cael6.SpellCard>

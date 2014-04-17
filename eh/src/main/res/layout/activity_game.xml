@@ -1,74 +1,110 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#111111"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/stats_background">
 
     <LinearLayout
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main_layout"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <include
-            layout="@layout/hand"
-            android:id="@+id/enemyHand"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
-        <include
-            layout="@layout/board"
-            android:id="@+id/enemyBoard"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
 
-        <include
-            layout="@layout/board"
-            android:layout_gravity="center"
+            <include
+                android:id="@+id/enemyStatusBar"
+                layout="@layout/status_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/playerStatusBar"
+                layout="@layout/status_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/heroes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/playerBoard" />
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
 
-        <include
-            layout="@layout/hand"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/playerHand"
-            android:layout_weight="1" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/enemyHero"
+                android:layout_marginTop="10dp">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/playerHero"
+                android:layout_marginTop="10dp">
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/main_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_margin="7dp">
+
+            <include
+                android:id="@+id/enemyHand"
+                layout="@layout/hand"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <include
+                android:id="@+id/enemyBoard"
+                layout="@layout/board"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <include
+                android:id="@+id/playerBoard"
+                layout="@layout/board"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <include
+                android:id="@+id/playerHand"
+                layout="@layout/hand"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:onClick="endTurn"
+            android:text="@string/endTurn"
+            android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/main_layout"
-        android:orientation="vertical">
-
-        <include
-            layout="@layout/status_bar"
-            android:id="@+id/enemyStatusBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <include
-            layout="@layout/status_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/playerStatusBar" />
-    </LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="endTurn"
-        android:text="@string/endTurn"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" />
-
     <include
-        layout="@layout/preview"
-        android:id="@+id/preview" />
+        android:id="@+id/preview"
+        layout="@layout/preview" />
 </RelativeLayout>

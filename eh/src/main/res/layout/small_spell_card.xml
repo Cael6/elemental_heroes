@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.cael6.eh.cael6.SpellCard xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cael6="http://schemas.android.com/apk/com.cael6.eh.cael6"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="@dimen/small_card_width"
+    android:layout_height="@dimen/small_card_height"
+    android:layout_gravity="center"
+    android:tag="card">
+
+    <RelativeLayout
+        android:layout_width="@dimen/small_card_width"
+        android:layout_height="@dimen/small_card_height">
+
+        <ImageView
+            android:tag="cardImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/main_background"
+            android:contentDescription="@string/image_background_desc" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true">
+
+                <TextView
+                    android:layout_alignParentBottom="true"
+                    android:textSize="5dp"
+                    android:padding="4dp"
+                    android:tag="effect"
+                    android:layout_width="@dimen/large_card_description_width"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/card_description_background"
+                    android:orientation="vertical"
+                    android:text="Deal 1 direct damage to target dragon. "/>
+        </RelativeLayout>
+        <LinearLayout
+            android:tag="costLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+    </RelativeLayout>
+</com.cael6.eh.cael6.SpellCard>

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <deck>
     <hero id="hero001" />
-    <dragon id="card001" quantity="4"/>
-    <dragon id="card002" quantity="4"/>
-    <dragon id="card003" quantity="4"/>
-    <dragon id="card004" quantity="4"/>
-    <dragon id="card005" quantity="4"/>
-    <dragon id="card006" quantity="4"/>
-    <egg quantity="15" />
+    <dragon id="card001" quantity="3"/>
+    <dragon id="card002" quantity="3"/>
+    <dragon id="card003" quantity="3"/>
+    <dragon id="card004" quantity="3"/>
+    <dragon id="card005" quantity="3"/>
+    <dragon id="card006" quantity="3"/>
+    <dragon id="card007" quantity="3"/>
+    <dragon id="card008" quantity="3"/>
+    <dragon id="card009" quantity="3"/>
+    <egg quantity="27" />
 </deck>

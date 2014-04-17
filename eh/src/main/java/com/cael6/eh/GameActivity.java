@@ -58,7 +58,6 @@ public class GameActivity extends Activity {
         super.onCreate(savedInstanceState);
         //Remove title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -78,7 +77,7 @@ public class GameActivity extends Activity {
         player.enemy = enemy;
         enemy.enemy = player;
 
-        RelativeLayout playerHero = (RelativeLayout) player.board.findViewById(R.id.heroZone);
+        RelativeLayout playerHero = (RelativeLayout) findViewById(R.id.playerHero);
         player.deck.hero.setCardForView(Card.SMALL_CARD, playerHero);
         playerHero.addView(player.deck.hero);
 
@@ -90,7 +89,7 @@ public class GameActivity extends Activity {
         });
         player.deck.hero.setOnDragListener(new CharacterCard.CharacterDragListener());
 
-        RelativeLayout enemyHero = (RelativeLayout) enemy.board.findViewById(R.id.heroZone);
+        RelativeLayout enemyHero = (RelativeLayout) findViewById(R.id.enemyHero);
         enemy.deck.hero.setCardForView(Card.SMALL_CARD, enemyHero);
         enemyHero.addView(enemy.deck.hero);
 
@@ -229,7 +228,7 @@ public class GameActivity extends Activity {
                 if(targetCard.health < 1){
                     if(targetCard instanceof HeroCard){
                         //player loses.
-                        finish();
+                        targetCard.getOwner().lose(this);
                         return true;
                     }else if(targetCard instanceof DragonCard){
                         DragonCard targetDragonCard = (DragonCard) targetCard;

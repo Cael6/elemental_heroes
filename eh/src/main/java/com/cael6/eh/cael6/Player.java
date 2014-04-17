@@ -1,6 +1,7 @@
 package com.cael6.eh.cael6;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cael6.eh.GameActivity;
+import com.cael6.eh.GameStatsActivity;
 import com.cael6.eh.R;
 
 import java.util.ArrayList;
@@ -361,6 +363,32 @@ public class Player {
             } else if (card instanceof EggCard){
                 aiPlayEggs(context, (EggCard) card, cardIterator );
             }
+        }
+    }
+
+    /**
+     * This player lost and the other won. Finish GameActivity and go to stats screen
+     * @param context Game Activity.
+     */
+    public void lose(GameActivity context){
+        if(!context.isFinishing() && !context.isDestroyed()) {
+            Intent intent = new Intent(context, GameStatsActivity.class);
+            //if isAi the player won.
+            String playerHeroId, enemyHeroId;
+            if (isAi) {
+                playerHeroId = enemy.deck.hero.getTag().toString();
+                enemyHeroId = deck.hero.getTag().toString();
+            } else {
+                playerHeroId = deck.hero.getTag().toString();
+                enemyHeroId = enemy.deck.hero.getTag().toString();
+            }
+
+            intent.putExtra("win", isAi);
+            intent.putExtra("playerHeroId", playerHeroId);
+            intent.putExtra("enemyHeroId", enemyHeroId);
+
+            context.startActivity(intent);
+            context.finish();
         }
     }
 }
