@@ -194,7 +194,7 @@ public class Player {
      * Player attempts to play the egg.
      *
      * @param egg The egg that the player is playing
-     * @return true if the dragon is played.
+     * @return true if the egg is played.
      */
     public boolean attemptToPlayEgg(EggCard egg) {
         if(!checkResources(egg, null)){
@@ -202,6 +202,26 @@ public class Player {
         }
         spendResources(egg, null);
         updatePlayerUiStatusBar();
+        return true;
+    }
+
+    /**
+     * Player attempts to play spell card targeting target
+     * @param spell The spell that the player is playing
+     * @param target The target for the spell card.
+     * @return true if the spell is played.
+     */
+    public boolean attemptToPlaySpellCard(SpellCard spell, Card target) {
+        if(!checkResources(spell, null)){
+            return false;
+        }
+        spell.executeEffect(target);
+        target.invalidate();
+        spendResources(spell, null);
+        cardsInHand.remove(spell);
+        spell.destroyCard();
+        updatePlayerUiStatusBar();
+        enemy.updatePlayerUiStatusBar();
         return true;
     }
 

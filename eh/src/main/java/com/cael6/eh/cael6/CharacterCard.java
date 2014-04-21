@@ -27,6 +27,7 @@ public class CharacterCard extends Card {
     public int turns = 0;
     public ArrayList<ITrait> traits;
     protected int maxTurns = 1;
+    protected int maxHealth;
 
     public CharacterCard(Context context) {
         super(context);
@@ -39,6 +40,7 @@ public class CharacterCard extends Card {
         if (0 != style) {
             generateFromStyle(context, set, style);
         }
+        maxHealth = health;
     }
 
     public CharacterCard(Context context, int cardStyle) {
@@ -53,6 +55,7 @@ public class CharacterCard extends Card {
         this.health = card.health;
         this.turns = card.turns;
         this.traits = card.traits;
+        this.maxHealth = card.maxHealth;
     }
 
     public static boolean checkAttack(CharacterCard card, CharacterCard targetCard) {
@@ -135,14 +138,28 @@ public class CharacterCard extends Card {
         turns = maxTurns;
     }
 
-    public void damageCard(int amount) {
+    public boolean attackCard(int amount){
+        return damageCard(Math.max(0, amount - defense));
+    }
+
+    public boolean damageCard(int amount) {
         this.health -= amount;
         TextView healthTV = (TextView) this.findViewWithTag("health");
         if (healthTV != null) {
             healthTV.setText(String.valueOf(health));
-            healthTV.setTextColor(0xFFAA1111);
+            healthTV.setTextColor(0xFFCCCCCC);
             healthTV.invalidate();
         }
+        if(health <= 0){
+            if(this instanceof DragonCard){
+                getOwner().dragonsOnBoard.remove(this);
+                ((DragonCard)this).killed();
+            } else if(this instanceof HeroCard) {
+                this.getOwner().lose((GameActivity)this.getContext());
+            }
+            return true;
+        }
+        return false;
     }
 
     public void enterBattleField() {
@@ -165,6 +182,10 @@ public class CharacterCard extends Card {
             return true;
         }
         return false;
+    }
+
+    public void heal(int amount){
+        health = Math.min(maxHealth, health + amount);
     }
 
     /**
@@ -220,15 +241,52 @@ public class CharacterCard extends Card {
         public boolean onDrag(View v, DragEvent event) {
             if(event.getLocalState() instanceof EggCard){
                 return true;
+            } else if(event.getLocalState() instanceof SpellCard){
+                return spellDrag((SpellCard)event.getLocalState(), (CharacterCard)v,event.getAction());
+            } else {
+                CharacterCard card = (CharacterCard) event.getLocalState();
+                GameActivity context = (GameActivity) v.getContext();
+                int action = event.getAction();
+                CharacterCard targetCard = (CharacterCard) v;
+                if (!card.movable && !card.equals(targetCard)) {
+                    switch (action) {
+                        case DragEvent.ACTION_DRAG_STARTED:
+                            defaultBackground = v.getBackground();
+                            break;
+                        case DragEvent.ACTION_DRAG_ENTERED:
+                            //set background target shape
+                            //context.setBackground(v, context.creatureZoneEnterShape);
+                            break;
+                        case DragEvent.ACTION_DRAG_EXITED:
+                            //set background back to default background
+                            context.setBackground(v, defaultBackground);
+                            break;
+                        case DragEvent.ACTION_DROP:
+                            // Dropped, reassign View to ViewGroup
+                            if (card.turns > 0) {
+                                context.attackCard(card, targetCard);
+                            }
+                            context.setBackground(v, null);
+                            break;
+                        case DragEvent.ACTION_DRAG_ENDED:
+                            //set background back to default background
+                            context.setBackground(v, defaultBackground);
+                        default:
+                            break;
+                    }
+                    return true;
+                } else {
+                    return true;
+                }
             }
-            CharacterCard card = (CharacterCard)event.getLocalState();
-            GameActivity context = (GameActivity)v.getContext();
-            int action = event.getAction();
-            CharacterCard targetCard = (CharacterCard) v;
-            if(!card.movable && !card.equals(targetCard)){
+        }
+
+        private boolean spellDrag(SpellCard spell, CharacterCard target, int action){
+            GameActivity context = (GameActivity) spell.getContext();
+            if (spell.isValidTarget(target)) {
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED:
-                        defaultBackground = v.getBackground();
+                        //defaultBackground = v.getBackground();
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
                         //set background target shape
@@ -236,23 +294,22 @@ public class CharacterCard extends Card {
                         break;
                     case DragEvent.ACTION_DRAG_EXITED:
                         //set background back to default background
-                        context.setBackground(v, defaultBackground);
+//                        context.setBackground(v, defaultBackground);
                         break;
                     case DragEvent.ACTION_DROP:
                         // Dropped, reassign View to ViewGroup
-                        if(card.turns > 0){
-                            context.attackCard(card, targetCard);
-                        }
-                        context.setBackground(v, null);
+
+                        spell.getOwner().attemptToPlaySpellCard(spell, target);
+//                        context.setBackground(v, null);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         //set background back to default background
-                        context.setBackground(v, defaultBackground);
+//                        context.setBackground(v, defaultBackground);
                     default:
                         break;
                 }
                 return true;
-            }else{
+            } else {
                 return true;
             }
         }

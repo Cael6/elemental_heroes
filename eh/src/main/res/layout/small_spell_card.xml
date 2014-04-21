@@ -35,6 +35,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/card_description_background"
                     android:orientation="vertical"
+                    android:textColor="#111111"
                     android:text="Deal 1 direct damage to target dragon. "/>
         </RelativeLayout>
         <LinearLayout

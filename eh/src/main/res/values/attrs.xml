@@ -19,7 +19,6 @@
         <attr name="attack" format="integer" />
         <attr name="defense" format="integer" />
         <attr name="health" format="integer" />
-        <attr name="effect" format="string"/>
         <attr name="image" format="reference"/>
         <attr name="hatchCost" format="integer" />
         <attr name="endurance" format="boolean" />
@@ -31,9 +30,10 @@
         <attr name="airShield" format="integer" />
     </declare-styleable>
     <declare-styleable name="SpellCard">
-        <attr name="text" format="string|reference" />
+        <attr name="effect" format="string|reference" />
         <attr name="function" format="integer" />
         <attr name="breathCost" format="integer" />
+        <attr name="validTargets" format="integer" />
     </declare-styleable>
     <declare-styleable name="MagicTextView">
         <attr name="innerShadowColor" format="color"/>

@@ -125,4 +125,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/eggCard"
         style="@style/EggCard"/>
+
+    <com.cael6.eh.cael6.SpellCard
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spell001"
+        android:tag="spell001"
+        app:image="@drawable/main_background"
+        app:breathCost="2"
+        app:effect="Deal 1 direct damage to target."
+        app:function="1"
+        app:validTargets="1"
+        style="@style/SpellCard"/>
 </LinearLayout>

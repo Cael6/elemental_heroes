@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <deck>
     <hero id="hero001" />
+    <spell id="spell001" quantity="27"/>
     <dragon id="card001" quantity="3"/>
     <dragon id="card002" quantity="3"/>
     <dragon id="card003" quantity="3"/>

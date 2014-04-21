@@ -1,16 +1,5 @@
 package com.cael6.eh;
 
-import com.cael6.eh.cael6.CTouchListener;
-import com.cael6.eh.cael6.Card;
-import com.cael6.eh.cael6.CharacterCard;
-import com.cael6.eh.cael6.CharacterCard.CharacterDragListener;
-import com.cael6.eh.cael6.CreatureZoneDragListener;
-import com.cael6.eh.cael6.EggCard.EggDragListener;
-import com.cael6.eh.cael6.DragonCard;
-import com.cael6.eh.cael6.EggCard;
-import com.cael6.eh.cael6.HeroCard;
-import com.cael6.eh.cael6.Player;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -22,36 +11,49 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.cael6.eh.cael6.CTouchListener;
+import com.cael6.eh.cael6.Card;
+import com.cael6.eh.cael6.CharacterCard;
+import com.cael6.eh.cael6.CharacterCard.CharacterDragListener;
+import com.cael6.eh.cael6.CreatureZoneDragListener;
+import com.cael6.eh.cael6.DragonCard;
+import com.cael6.eh.cael6.EggCard;
+import com.cael6.eh.cael6.EggCard.EggDragListener;
+import com.cael6.eh.cael6.HeroCard;
+import com.cael6.eh.cael6.Player;
+import com.cael6.eh.cael6.SpellCard;
+
 public class GameActivity extends Activity {
 
     //<editor-fold desc="Privates">
     public Player player;
-    private Player enemy;
     public boolean previewOpen = false;
-
+    public Drawable creatureZoneEnterShape;
+    public Drawable creatureZoneNormalShape;
+    public int startingHandSize = 5;
+    private Player enemy;
     //</editor-fold>
     //<editor-fold desc="Views">
     //Top to hand
     private LinearLayout enemyStatusBar;
-
     private LinearLayout enemyHand;
-
     private LinearLayout enemyBoard;
-
     private LinearLayout playerBoard;
 
+    //</editor-fold>
     private LinearLayout playerHand;
-
     private LinearLayout playerStatusBar;
-
     private LinearLayout preview;
 
-    //</editor-fold>
-
-    public Drawable creatureZoneEnterShape;
-    public Drawable creatureZoneNormalShape;
-
-    public int startingHandSize = 5;
+    @SuppressLint("NewApi")
+    public static void setBackground(View view, Drawable background) {
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            view.setBackgroundDrawable(background);
+        } else {
+            view.setBackground(background);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,24 +103,24 @@ public class GameActivity extends Activity {
         });
         enemy.deck.hero.setOnDragListener(new CharacterDragListener());
 
-        for(int i = 0; i <player.board.getChildCount(); i++){
+        for (int i = 0; i < player.board.getChildCount(); i++) {
             View v = player.board.getChildAt(i);
             Object tag;
             if (v != null) {
                 tag = v.getTag();
-                if(tag !=null && tag.equals("creatureZone")){
+                if (tag != null && tag.equals("creatureZone")) {
                     v.setOnDragListener(new CreatureZoneDragListener(this));
                 }
             }
         }
-        for(int i = 0; i < startingHandSize; i++){
+        for (int i = 0; i < startingHandSize; i++) {
             enemy.drawCard();
             player.drawCard();
 
         }
     }
 
-    private void initViews(){
+    private void initViews() {
         enemyStatusBar = (LinearLayout) findViewById(R.id.enemyStatusBar);
         enemyHand = (LinearLayout) findViewById(R.id.enemyHand).findViewWithTag("hand");
         enemyBoard = (LinearLayout) findViewById(R.id.enemyBoard);
@@ -131,13 +133,13 @@ public class GameActivity extends Activity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
     }
 
     @Override
     public void onBackPressed() {
-        if(previewOpen){
+        if (previewOpen) {
             //if preview open close it with cancelCardSelect
             cancelCardSelect(null);
         } else {
@@ -146,9 +148,9 @@ public class GameActivity extends Activity {
         }
     }
 
-    public void previewCard(Card card){
+    public void previewCard(Card card) {
 
-        RelativeLayout preview = (RelativeLayout)this.preview.findViewWithTag("card");
+        RelativeLayout preview = (RelativeLayout) this.preview.findViewWithTag("card");
         RelativeLayout.LayoutParams params =
                 new RelativeLayout.LayoutParams(
                         getResources().getDimensionPixelSize(R.dimen.large_card_width),
@@ -156,48 +158,46 @@ public class GameActivity extends Activity {
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
 
         if (preview != null) {
-            if(preview.getChildAt(0) instanceof Card){
+            if (preview.getChildAt(0) instanceof Card) {
                 preview.removeViewAt(0);
             }
         }
 
         Card previewCard;
-        if(card instanceof HeroCard){
-            previewCard = new HeroCard(this, (HeroCard)card, card.getOwner());
-        }
-        else if(card instanceof DragonCard){
-            previewCard = new DragonCard(this, (DragonCard)card, card.getOwner());
-        }else{
+        if (card instanceof HeroCard) {
+            previewCard = new HeroCard(this, (HeroCard) card, card.getOwner());
+        } else if (card instanceof DragonCard) {
+            previewCard = new DragonCard(this, (DragonCard) card, card.getOwner());
+        } else if (card instanceof SpellCard) {
+            previewCard = new SpellCard(this, (SpellCard) card, card.getOwner());
+        } else {
             previewCard = null;
         }
-        previewCard.setCardForView(Card.LARGE_CARD, preview);
         if (preview != null) {
+            previewCard.setCardForView(Card.LARGE_CARD, preview);
             preview.addView(previewCard, 0, params);
-        }
-
-        if (preview != null) {
             if ((preview.getParent()) != null) {
-                ((ViewGroup)preview.getParent()).setVisibility(View.VISIBLE);
+                ((ViewGroup) preview.getParent()).setVisibility(View.VISIBLE);
             }
         }
         previewOpen = true;
         disableBackgroundActions();
     }
 
-    public void cancelCardSelect(View view){
-        LinearLayout preview = (LinearLayout)findViewById(R.id.preview);
+    public void cancelCardSelect(View view) {
+        LinearLayout preview = (LinearLayout) findViewById(R.id.preview);
         preview.setVisibility(View.INVISIBLE);
         previewOpen = false;
         enableBackgroundActions();
     }
 
-    public void endTurn(View view){
+    public void endTurn(View view) {
         player.endTurn(this);
     }
 
-    public boolean dropDragonCard(DragonCard dragon, EggCard egg, Player player){
-        ViewGroup container = (ViewGroup)egg.getParent();
-        if(player.attemptToPlayDragonCard(dragon, egg)){
+    public boolean dropDragonCard(DragonCard dragon, EggCard egg, Player player) {
+        ViewGroup container = (ViewGroup) egg.getParent();
+        if (player.attemptToPlayDragonCard(dragon, egg)) {
             ViewGroup owner = (ViewGroup) dragon.getParent();
             if (owner != null) {
                 owner.removeView(dragon);
@@ -216,46 +216,27 @@ public class GameActivity extends Activity {
     }
 
     /**
-     *
-     * @param card attacking card
+     * @param card       attacking card
      * @param targetCard card being attacked
      * @return true if the targetCard is kill
      */
     public boolean attackCard(CharacterCard card, CharacterCard targetCard) {
-        if(card.spendAction()){
-            if(CharacterCard.checkAttack(card, targetCard)){
-                targetCard.damageCard(card.attack - targetCard.defense);
-                if(targetCard.health < 1){
-                    if(targetCard instanceof HeroCard){
-                        //player loses.
-                        targetCard.getOwner().lose(this);
-                        return true;
-                    }else if(targetCard instanceof DragonCard){
-                        DragonCard targetDragonCard = (DragonCard) targetCard;
-                        targetDragonCard.killed();
-                        card.kill(targetCard);
-                    }
-                    return true;
+        if (card.spendAction()) {
+            if (CharacterCard.checkAttack(card, targetCard)) {
+                boolean targetKilled = targetCard.damageCard(card.attack - targetCard.defense);
+                if(targetKilled){
+                    card.kill(targetCard);
                 }
                 player.updatePlayerUiStatusBar();
                 enemy.updatePlayerUiStatusBar();
+                return targetKilled;
             }
         }
         return false;
     }
 
-    @SuppressLint("NewApi")
-    public static void setBackground(View view, Drawable background){
-        int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackgroundDrawable(background);
-        } else {
-            view.setBackground(background);
-        }
-    }
-
     public boolean dropEggCard(EggCard egg, ViewGroup container, Player player) {
-        if(player.attemptToPlayEgg(egg)){
+        if (player.attemptToPlayEgg(egg)) {
             ViewGroup owner = (ViewGroup) egg.getParent();
             if (owner != null) {
                 owner.removeView(egg);
@@ -275,7 +256,7 @@ public class GameActivity extends Activity {
      * disables the user from being able to do things while the preview is open.
      */
     public void disableBackgroundActions() {
-        
+
     }
 
     public void enableBackgroundActions() {

@@ -39,6 +39,10 @@ public class EggCard extends Card {
         return hatchTimer;
     }
 
+    public void subtractHatchTimer(int amount){
+        hatchTimer = Math.max(0, hatchTimer - amount);
+    }
+
     @Override
     protected void setCardChildrenValues() {
         //Do nothing
