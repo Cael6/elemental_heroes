@@ -156,6 +156,10 @@ public class Card extends FrameLayout implements ICard {
         }
     }
 
+    public void regenerateView() {
+        setCardChildrenValues();
+    }
+
     /**
      * removes the view from the game and puts into graveyard
      */
@@ -173,4 +177,5 @@ public class Card extends FrameLayout implements ICard {
     public boolean checkResources(Object extraResources) {
         return false;
     }
+
 }

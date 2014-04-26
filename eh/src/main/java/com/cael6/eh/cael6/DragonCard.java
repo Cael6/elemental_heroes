@@ -1,13 +1,9 @@
 package com.cael6.eh.cael6;
 
-import android.annotation.TargetApi;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -70,6 +66,9 @@ public class DragonCard extends CharacterCard{
 
     }
 
+    public void enterBattleField() {
+        loopTraits(null, ITrait.TRIGGER_DRAGON_ENTER_BATTLEFIELD);
+    }
 
     public int getHatchCost() {
         return hatchCost;

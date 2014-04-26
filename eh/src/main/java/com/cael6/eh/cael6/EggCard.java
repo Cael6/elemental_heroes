@@ -35,17 +35,22 @@ public class EggCard extends Card {
         super(context, card, owner);
     }
 
+    public void setHatchTimer(int amount){
+        hatchTimer = amount;
+    }
+
     public int getHatchTimer() {
         return hatchTimer;
     }
 
-    public void subtractHatchTimer(int amount){
+    public void subtractHatchTimer(int amount) {
         hatchTimer = Math.max(0, hatchTimer - amount);
     }
 
     @Override
     protected void setCardChildrenValues() {
-        //Do nothing
+        image = getContext().getResources().getDrawable(R.drawable.egg);
+        super.setCardChildrenValues();
         ((TextView) findViewWithTag("hatch_count")).setText(Integer.toString(hatchTimer));
     }
 
@@ -99,8 +104,10 @@ public class EggCard extends Card {
             Card card = (Card) event.getLocalState();
             GameActivity context = (GameActivity) v.getContext();
             int action = event.getAction();
-            if (card instanceof DragonCard) {
-                EggCard egg = (EggCard) v;
+            EggCard egg = (EggCard) v;
+            if (card instanceof SpellCard) {
+                return spellDrag((SpellCard) card, egg, action);
+            } else if (card instanceof DragonCard && card.getOwner().equals(egg.getOwner())) {
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         // do nothing
@@ -112,12 +119,44 @@ public class EggCard extends Card {
                     case DragEvent.ACTION_DROP:
                         // Dropped, reassign View to ViewGroup
                         if (context.dropDragonCard((DragonCard) card, egg, context.player)) {
-                            context.player.dragonsOnBoard.add((DragonCard)card);
+                            context.player.dragonsOnBoard.add((DragonCard) card);
                         }
                         egg.setVisibility(View.VISIBLE);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         egg.setVisibility(View.VISIBLE);
+                    default:
+                        break;
+                }
+                return true;
+            } else {
+                return true;
+            }
+        }
+
+        private boolean spellDrag(SpellCard spell, EggCard target, int action) {
+            if (spell.isValidTarget(target)) {
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        //defaultBackground = v.getBackground();
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        //set background target shape
+                        //context.setBackground(v, context.creatureZoneEnterShape);
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        //set background back to default background
+//                        context.setBackground(v, defaultBackground);
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        // Dropped, reassign View to ViewGroup
+
+                        spell.getOwner().attemptToPlaySpellCard(spell, target, true);
+//                        context.setBackground(v, null);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        //set background back to default background
+//                        context.setBackground(v, defaultBackground);
                     default:
                         break;
                 }

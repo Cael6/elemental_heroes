@@ -1,14 +1,12 @@
 package com.cael6.eh.cael6;
 
 import android.annotation.TargetApi;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.DragEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -138,11 +136,18 @@ public class CharacterCard extends Card {
         turns = maxTurns;
     }
 
-    public boolean attackCard(int amount){
-        return damageCard(Math.max(0, amount - defense));
+    public boolean attack(CharacterCard target, boolean removeIfKilled){
+        if(spendAction()){
+            return target.attacked(attack, removeIfKilled);
+        }
+        return false;
     }
 
-    public boolean damageCard(int amount) {
+    public boolean attacked(int amount, boolean removeIfKilled){
+        return damaged(Math.max(0, amount - defense), removeIfKilled);
+    }
+
+    public boolean damaged(int amount, boolean removeIfKilled) {
         this.health -= amount;
         TextView healthTV = (TextView) this.findViewWithTag("health");
         if (healthTV != null) {
@@ -152,7 +157,9 @@ public class CharacterCard extends Card {
         }
         if(health <= 0){
             if(this instanceof DragonCard){
-                getOwner().dragonsOnBoard.remove(this);
+                if(removeIfKilled) {
+                    getOwner().dragonsOnBoard.remove(this);
+                }
                 ((DragonCard)this).killed();
             } else if(this instanceof HeroCard) {
                 this.getOwner().lose((GameActivity)this.getContext());
@@ -162,14 +169,10 @@ public class CharacterCard extends Card {
         return false;
     }
 
-    public void enterBattleField() {
-        loopTraits(null, ITrait.TRIGGER_ENTER_BATTLEFIELD);
-    }
-
     protected boolean loopTraits(ArrayList<Card> targets, int trigger) {
         for (ITrait trait : traits) {
             if (trait.checkTrigger(trigger)) {
-                return trait.traitEffect(this, targets, ITrait.TRIGGER_KILL);
+                return trait.traitEffect(this, targets, trigger);
             }
         }
         return false;
@@ -299,7 +302,7 @@ public class CharacterCard extends Card {
                     case DragEvent.ACTION_DROP:
                         // Dropped, reassign View to ViewGroup
 
-                        spell.getOwner().attemptToPlaySpellCard(spell, target);
+                        spell.getOwner().attemptToPlaySpellCard(spell, target, true);
 //                        context.setBackground(v, null);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:

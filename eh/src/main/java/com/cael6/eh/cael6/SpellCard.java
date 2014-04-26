@@ -23,22 +23,21 @@ public class SpellCard extends Card{
     public String effect;
     public int validTargets;
 
+    public final static int TARGET_CHARACTER = 1;
+    public final static int TARGET_EGG = 2;
+    public final static int TARGET_HERO = 3;
+    public final static int TARGET_DRAGON = 4;
 
-    private final static int TARGET_CHARACTER = 1;
-    private final static int TARGET_EGG = 2;
-    private final static int TARGET_HERO = 3;
-    private final static int TARGET_DRAGON = 4;
-
-    private final static int EFFECT_POISON_BLAST = 1;
-    private final static int EFFECT_FIREBALL = 2;
-    private final static int EFFECT_DESTROY_EGG = 3;
-    private final static int EFFECT_ROCK_THROW = 4;
-    private final static int EFFECT_DELAY_EGG = 5;
-    private final static int EFFECT_UNHATCH = 6;
-    private final static int EFFECT_EGG_SWEEP = 7;
-    private final static int EFFECT_MINOR_HEAL = 8;
-    private final static int EFFECT_MAJOR_HEAL = 9;
-    private final static int EFFECT_MASS_HEAL = 10;
+    public final static int EFFECT_POISON_BLAST = 1;
+    public final static int EFFECT_FIREBALL = 2;
+    public final static int EFFECT_DESTROY_EGG = 3;
+    public final static int EFFECT_ROCK_THROW = 4;
+    public final static int EFFECT_DELAY_EGG = 5;
+    public final static int EFFECT_UNHATCH = 6;
+    public final static int EFFECT_EGG_SWEEP = 7;
+    public final static int EFFECT_MINOR_HEAL = 8;
+    public final static int EFFECT_MAJOR_HEAL = 9;
+    public final static int EFFECT_MASS_HEAL = 10;
 
     public final static int POISON_BLAST_DAMAGE = 1;
     public final static int FIREBALL_DAMAGE = 2;
@@ -182,8 +181,6 @@ public class SpellCard extends Card{
         }
     }
 
-
-
     public void executeEffect(Card target){
         switch (functionId){
             case EFFECT_POISON_BLAST:
@@ -225,8 +222,10 @@ public class SpellCard extends Card{
      */
     private void massHeal(HeroCard target) {
         target.heal(MASS_HEAL_AMOUNT);
+        target.regenerateView();
         for(CharacterCard card : target.getOwner().dragonsOnBoard){
             card.heal(MASS_HEAL_AMOUNT);
+            card.regenerateView();
         }
     }
 
@@ -236,6 +235,7 @@ public class SpellCard extends Card{
      */
     private void majorHeal(CharacterCard target) {
         target.heal(MAJOR_HEAL_AMOUNT);
+        target.regenerateView();
     }
 
     /**
@@ -244,6 +244,7 @@ public class SpellCard extends Card{
      */
     private void minorHeal(CharacterCard target) {
         target.heal(MINOR_HEAL_AMOUNT);
+        target.regenerateView();
     }
 
     /**
@@ -257,11 +258,19 @@ public class SpellCard extends Card{
         dragonOwner.cardsInHand.add(target);
         boardZone.removeView(target);
         dragonOwner.hand.addView(target);
+        if(dragonOwner.cardsDefaultHidden){
+            target.hideCard();
+        }
 
         LayoutInflater infl = LayoutInflater.from(getContext());
         ViewGroup cards = (ViewGroup)infl.inflate(R.layout.cards, boardZone);
-        EggCard eggFromInfl = (EggCard)cards.findViewById(R.layout.egg_card);
-        EggCard egg = new EggCard(target.getContext(), eggFromInfl, target.getOwner());
+
+        EggCard egg = null;
+        if (cards != null) {
+            egg = (EggCard)cards.findViewById(R.id.eggCard);
+        }
+        ((ViewGroup)egg.getParent()).removeView(egg);
+
         egg.generateCardForView(boardZone);
         boardZone.addView(egg);
     }
@@ -276,6 +285,10 @@ public class SpellCard extends Card{
         eggOwner.cardsInHand.add(target);
         ((ViewGroup)target.getParent()).removeView(target);
         eggOwner.hand.addView(target);
+        target.setHatchTimer(0);
+        if(eggOwner.cardsDefaultHidden){
+            target.hideCard();
+        }
     }
 
     /**
@@ -284,6 +297,7 @@ public class SpellCard extends Card{
      */
     private void delayEgg(EggCard target) {
         target.subtractHatchTimer(DELAY_EGG_AMOUNT);
+        target.regenerateView();
     }
 
     /**
@@ -292,7 +306,8 @@ public class SpellCard extends Card{
      * @param target
      */
     private void rockThrow(CharacterCard target) {
-        target.attackCard(ROCK_THROW_DAMAGE);
+        target.attacked(ROCK_THROW_DAMAGE, true);
+        target.regenerateView();
     }
 
     /**
@@ -310,7 +325,8 @@ public class SpellCard extends Card{
      * @param target
      */
     private void fireball(CharacterCard target) {
-        target.damageCard(FIREBALL_DAMAGE);
+        target.damaged(FIREBALL_DAMAGE, true);
+        regenerateView();
     }
 
     /**
@@ -319,6 +335,7 @@ public class SpellCard extends Card{
      * @param target
      */
     private void poisonBlast(CharacterCard target){
-        target.damageCard(POISON_BLAST_DAMAGE);
+        target.damaged(POISON_BLAST_DAMAGE, true);
+        regenerateView();
     }
 }

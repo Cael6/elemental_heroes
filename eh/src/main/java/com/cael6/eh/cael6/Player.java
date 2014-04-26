@@ -209,17 +209,20 @@ public class Player {
      * Player attempts to play spell card targeting target
      * @param spell The spell that the player is playing
      * @param target The target for the spell card.
+     * @param destroyIfCast
      * @return true if the spell is played.
      */
-    public boolean attemptToPlaySpellCard(SpellCard spell, Card target) {
+    public boolean attemptToPlaySpellCard(SpellCard spell, Card target, boolean destroyIfCast) {
         if(!checkResources(spell, null)){
             return false;
         }
         spell.executeEffect(target);
         target.invalidate();
         spendResources(spell, null);
-        cardsInHand.remove(spell);
-        spell.destroyCard();
+        if(destroyIfCast) {
+            cardsInHand.remove(spell);
+            spell.destroyCard();
+        }
         updatePlayerUiStatusBar();
         enemy.updatePlayerUiStatusBar();
         return true;
@@ -313,7 +316,7 @@ public class Player {
             while (enemyCardIterator.hasNext()) {
                 CharacterCard enemyCard = enemyCardIterator.next();
                 if (card.attack > enemyCard.defense) {
-                    if (context.attackCard(card, enemyCard)) {
+                    if (card.attack(enemyCard, false)) {
                         enemyCardIterator.remove();
                     }
                 }
@@ -382,7 +385,117 @@ public class Player {
                 aiPlayDragon(context, (DragonCard) card, cardIterator);
             } else if (card instanceof EggCard){
                 aiPlayEggs(context, (EggCard) card, cardIterator );
+            } else if(card instanceof SpellCard){
+                aiPlaySpell(context, (SpellCard) card, cardIterator);
             }
+        }
+    }
+
+    private void aiPlaySpell(GameActivity context, SpellCard card, ListIterator<Card> cardIterator) {
+        switch(card.functionId) {
+            case SpellCard.EFFECT_MASS_HEAL:
+                if (deck.hero.health < deck.hero.maxHealth / 2
+                        && attemptToPlaySpellCard(card, deck.hero, false)) {
+                    cardIterator.remove();
+                    card.destroyCard();
+                }
+                break;
+            case SpellCard.EFFECT_MAJOR_HEAL:
+                if (deck.hero.health < deck.hero.maxHealth - SpellCard.MAJOR_HEAL_AMOUNT
+                        && attemptToPlaySpellCard(card, deck.hero, false)) {
+                    cardIterator.remove();
+                    card.destroyCard();
+                } else {
+                    for (DragonCard dragon : dragonsOnBoard) {
+                        if (dragon.health < dragon.health - SpellCard.MAJOR_HEAL_AMOUNT / 2 + 1
+                                && attemptToPlaySpellCard(card, dragon, false)) {
+                            cardIterator.remove();
+                            card.destroyCard();
+                        }
+                    }
+                }
+                break;
+            case SpellCard.EFFECT_MINOR_HEAL:
+                if (deck.hero.health < deck.hero.maxHealth - SpellCard.MINOR_HEAL_AMOUNT
+                        && attemptToPlaySpellCard(card, deck.hero, false)) {
+                    cardIterator.remove();
+                    card.destroyCard();
+                } else {
+                    for (DragonCard dragon : dragonsOnBoard) {
+                        if (dragon.health < dragon.health - SpellCard.MINOR_HEAL_AMOUNT / 2 + 1
+                                && attemptToPlaySpellCard(card, dragon, false)) {
+                            cardIterator.remove();
+                            card.destroyCard();
+                            break;
+                        }
+                    }
+                }
+                break;
+            case SpellCard.EFFECT_FIREBALL:
+                if (enemy.deck.hero.health <= SpellCard.FIREBALL_DAMAGE
+                        && attemptToPlaySpellCard(card, enemy.deck.hero, false)) {
+                    cardIterator.remove();
+                    card.destroyCard();
+                } else {
+                    for (DragonCard dragon : enemy.dragonsOnBoard) {
+                        if (dragon.health <= SpellCard.FIREBALL_DAMAGE
+                                && attemptToPlaySpellCard(card, dragon, false)) {
+                            cardIterator.remove();
+                            card.destroyCard();
+                            break;
+                        }
+                    }
+                }
+                break;
+            case SpellCard.EFFECT_UNHATCH:
+                DragonCard biggestDragon = null;
+                int threatLevel = 0;
+                for (DragonCard dragon : enemy.dragonsOnBoard) {
+                    int currThreat = 0;
+                    currThreat += dragon.getHatchCost();
+                    currThreat += dragon.attack;
+                    currThreat += dragon.defense;
+                    currThreat *= dragon.health / dragon.maxHealth;
+                    if (currThreat > threatLevel) {
+                        threatLevel = currThreat;
+                        biggestDragon = dragon;
+                    }
+                }
+                if (null != biggestDragon
+                        && attemptToPlaySpellCard(card, biggestDragon, false)) {
+                    cardIterator.remove();
+                    card.destroyCard();
+                }
+                break;
+            case SpellCard.EFFECT_EGG_SWEEP:
+            case SpellCard.EFFECT_DELAY_EGG:
+            case SpellCard.EFFECT_DESTROY_EGG:
+                EggCard biggestEgg = null;
+                for (EggCard egg : enemy.eggsOnBoard) {
+                    if ((null == biggestEgg || egg.getHatchTimer() > biggestEgg.getHatchTimer())
+                            && attemptToPlaySpellCard(card, egg, false)) {
+                        cardIterator.remove();
+                        card.destroyCard();
+                    }
+                }
+                break;
+            case SpellCard.EFFECT_ROCK_THROW:
+                if (enemy.deck.hero.health <= SpellCard.ROCK_THROW_DAMAGE
+                        && attemptToPlaySpellCard(card, enemy.deck.hero, false)) {
+                    cardIterator.remove();
+                    card.destroyCard();
+                } else {
+                    for (DragonCard dragon : enemy.dragonsOnBoard) {
+                        if (dragon.health <= SpellCard.FIREBALL_DAMAGE
+                                && attemptToPlaySpellCard(card, dragon, false)) {
+                            cardIterator.remove();
+                            card.destroyCard();
+                            break;
+                        }
+                    }
+                }
+                break;
+        
         }
     }
 

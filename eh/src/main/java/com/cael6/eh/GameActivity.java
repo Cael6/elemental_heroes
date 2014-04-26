@@ -223,7 +223,7 @@ public class GameActivity extends Activity {
     public boolean attackCard(CharacterCard card, CharacterCard targetCard) {
         if (card.spendAction()) {
             if (CharacterCard.checkAttack(card, targetCard)) {
-                boolean targetKilled = targetCard.damageCard(card.attack - targetCard.defense);
+                boolean targetKilled = targetCard.damaged(card.attack - targetCard.defense, true);
                 if(targetKilled){
                     card.kill(targetCard);
                 }

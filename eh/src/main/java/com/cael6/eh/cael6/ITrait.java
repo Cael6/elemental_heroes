@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public interface ITrait {
     public final static int TRIGGER_KILL = 1;
-    public final static int TRIGGER_ENTER_BATTLEFIELD = 2;
+    public final static int TRIGGER_DRAGON_ENTER_BATTLEFIELD = 2;
     public final static int TRIGGER_START_TURN = 3;
     public final static int TRIGGER_AFTER_RESET = 5;
     public final static int TRIGGER_AFTER_ATTACK = 4;

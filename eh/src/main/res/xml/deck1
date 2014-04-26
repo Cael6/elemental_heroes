@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <deck>
     <hero id="hero001" />
-    <spell id="spell001" quantity="27"/>
+    <spell id="spell001" quantity="2"/>
+    <spell id="spell002" quantity="2"/>
+    <spell id="spell003" quantity="2"/>
+    <spell id="spell004" quantity="2"/>
+    <spell id="spell005" quantity="2"/>
+    <spell id="spell006" quantity="2"/>
+    <spell id="spell007" quantity="2"/>
+    <spell id="spell008" quantity="2"/>
+    <spell id="spell009" quantity="2"/>
+    <spell id="spell010" quantity="2"/>
     <dragon id="card001" quantity="3"/>
     <dragon id="card002" quantity="3"/>
     <dragon id="card003" quantity="3"/>
