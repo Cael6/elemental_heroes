@@ -48,7 +48,7 @@ public class Player {
         this.boardPositions = new ArrayList<ViewGroup>();
         createDragonBreath();
         drawDragonBreath();
-        for (int j = 1; j < board.getChildCount(); j++) {
+        for (int j = 0; j < board.getChildCount(); j++) {
             RelativeLayout boardPosition = (RelativeLayout) board.getChildAt(j);
             boardPositions.add(boardPosition);
         }
@@ -476,6 +476,7 @@ public class Player {
                             && attemptToPlaySpellCard(card, egg, false)) {
                         cardIterator.remove();
                         card.destroyCard();
+                        break;
                     }
                 }
                 break;
@@ -486,7 +487,7 @@ public class Player {
                     card.destroyCard();
                 } else {
                     for (DragonCard dragon : enemy.dragonsOnBoard) {
-                        if (dragon.health <= SpellCard.FIREBALL_DAMAGE
+                        if (dragon.health + dragon.defense <= SpellCard.ROCK_THROW_DAMAGE
                                 && attemptToPlaySpellCard(card, dragon, false)) {
                             cardIterator.remove();
                             card.destroyCard();
@@ -495,7 +496,22 @@ public class Player {
                     }
                 }
                 break;
-        
+            case SpellCard.EFFECT_POISON_BLAST:
+                if (enemy.deck.hero.health <= SpellCard.POISON_BLAST_DAMAGE
+                        && attemptToPlaySpellCard(card, enemy.deck.hero, false)) {
+                    cardIterator.remove();
+                    card.destroyCard();
+                } else {
+                    for (DragonCard dragon : enemy.dragonsOnBoard) {
+                        if (dragon.health <= SpellCard.POISON_BLAST_DAMAGE
+                                && attemptToPlaySpellCard(card, dragon, false)) {
+                            cardIterator.remove();
+                            card.destroyCard();
+                            break;
+                        }
+                    }
+                }
+                break;
         }
     }
 

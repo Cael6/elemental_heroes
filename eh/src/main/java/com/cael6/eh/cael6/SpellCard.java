@@ -273,6 +273,7 @@ public class SpellCard extends Card{
 
         egg.generateCardForView(boardZone);
         boardZone.addView(egg);
+        dragonOwner.eggsOnBoard.add(egg);
     }
 
     /**

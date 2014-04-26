@@ -104,6 +104,7 @@ public class DragonCard extends CharacterCard{
         }
 
         hatchCostTV.setText(Integer.toString(hatchCost));
+        costLL.removeAllViews();
         costLL.addView(hatchCostTV);
         TextView attackText = (TextView)this.findViewWithTag("attack");
         attackText.setText(String.valueOf(attack));

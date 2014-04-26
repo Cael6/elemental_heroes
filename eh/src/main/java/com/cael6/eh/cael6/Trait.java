@@ -92,7 +92,7 @@ public class Trait {
 
         public BattleReadyTrait(){
             super(R.drawable.battle_ready, R.layout.battle_ready);
-            this.trigger = ITrait.TRIGGER_ENTER_BATTLEFIELD;
+            this.trigger = ITrait.TRIGGER_DRAGON_ENTER_BATTLEFIELD;
         }
 
         @Override
