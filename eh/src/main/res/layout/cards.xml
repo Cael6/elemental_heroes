@@ -14,7 +14,7 @@
         app:health="2"
         app:hatchCost="1"
         app:enrage="true"
-        app:image="@drawable/campfire"
+        app:image="@drawable/dragon_card"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -25,7 +25,7 @@
         app:defense="1"
         app:health="2"
         app:hatchCost="1"
-        app:image="@drawable/pyro_freak"
+        app:image="@drawable/dragon_card"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -37,7 +37,7 @@
         app:health="2"
         app:hatchCost="2"
         app:battleReady="true"
-        app:image="@drawable/fire_striker"
+        app:image="@drawable/dragon_card"
         style="@style/DragonCard"/>
 
 
@@ -50,7 +50,7 @@
         app:hatchCost="3"
         app:health="3"
         app:enrage="true"
-        app:image="@drawable/elrath"
+        app:image="@drawable/dragon_card"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -62,7 +62,7 @@
         app:health="2"
         app:hatchCost="3"
         app:battleReady="true"
-        app:image="@drawable/numbal"
+        app:image="@drawable/dragon_card"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -75,7 +75,7 @@
         app:hatchCost="4"
         app:battleReady="true"
         app:enrage="true"
-        app:image="@drawable/wallc"
+        app:image="@drawable/dragon_card"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -86,7 +86,7 @@
         app:defense="0"
         app:health="4"
         app:hatchCost="1"
-        app:image="@drawable/main_background"
+        app:image="@drawable/dragon_card"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -97,7 +97,7 @@
         app:defense="2"
         app:health="1"
         app:hatchCost="1"
-        app:image="@drawable/main_background"
+        app:image="@drawable/dragon_card"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -108,7 +108,7 @@
         app:defense="0"
         app:health="1"
         app:hatchCost="1"
-        app:image="@drawable/main_background"
+        app:image="@drawable/dragon_card"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.HeroCard
