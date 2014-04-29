@@ -20,6 +20,7 @@
         <attr name="defense" format="integer" />
         <attr name="health" format="integer" />
         <attr name="image" format="reference"/>
+        <attr name="activeImage" format="reference" />
         <attr name="hatchCost" format="integer" />
         <attr name="endurance" format="boolean" />
         <attr name="battleReady" format="boolean"/>

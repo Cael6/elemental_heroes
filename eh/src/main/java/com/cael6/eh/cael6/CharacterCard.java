@@ -202,7 +202,7 @@ public class CharacterCard extends Card {
         loopTraits(targets, ITrait.TRIGGER_KILL);
     }
 
-    protected void setCardChildrenValues() {
+    public void setCardChildrenValues() {
         super.setCardChildrenValues();
 
         TextView defenseText = (TextView) this.findViewWithTag("defense");
@@ -251,29 +251,31 @@ public class CharacterCard extends Card {
                 GameActivity context = (GameActivity) v.getContext();
                 int action = event.getAction();
                 CharacterCard targetCard = (CharacterCard) v;
-                if (!card.movable && !card.equals(targetCard)) {
+                if (!card.movable && !card.inHand && !card.equals(targetCard)
+                        && !card.getOwner().equals(targetCard.getOwner())) {
                     switch (action) {
                         case DragEvent.ACTION_DRAG_STARTED:
-                            defaultBackground = v.getBackground();
+                            card.getOwner().inactivateAllPlayables();
+                            targetCard.isActive = true;
+                            targetCard.setCardChildrenValues();
                             break;
                         case DragEvent.ACTION_DRAG_ENTERED:
-                            //set background target shape
-                            //context.setBackground(v, context.creatureZoneEnterShape);
+                            //nothing
                             break;
                         case DragEvent.ACTION_DRAG_EXITED:
-                            //set background back to default background
-                            context.setBackground(v, defaultBackground);
+                            //nothing
                             break;
                         case DragEvent.ACTION_DROP:
-                            // Dropped, reassign View to ViewGroup
+                            //Attack Card
                             if (card.turns > 0) {
                                 context.attackCard(card, targetCard);
                             }
                             context.setBackground(v, null);
                             break;
                         case DragEvent.ACTION_DRAG_ENDED:
-                            //set background back to default background
-                            context.setBackground(v, defaultBackground);
+                            targetCard.isActive = false;
+                            targetCard.setCardChildrenValues();
+                            card.getOwner().setPlayableCards();
                         default:
                             break;
                     }
@@ -289,7 +291,9 @@ public class CharacterCard extends Card {
             if (spell.isValidTarget(target)) {
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED:
-                        //defaultBackground = v.getBackground();
+                        spell.getOwner().inactivateAllPlayables();
+                        target.isActive = true;
+                        target.setCardChildrenValues();
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
                         //set background target shape
@@ -306,8 +310,9 @@ public class CharacterCard extends Card {
 //                        context.setBackground(v, null);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
-                        //set background back to default background
-//                        context.setBackground(v, defaultBackground);
+                        target.isActive = false;
+                        target.setCardChildrenValues();
+                        spell.getOwner().setPlayableCards();
                     default:
                         break;
                 }

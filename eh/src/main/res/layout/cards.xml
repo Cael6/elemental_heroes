@@ -15,6 +15,7 @@
         app:hatchCost="1"
         app:enrage="true"
         app:image="@drawable/dragon_card"
+        app:activeImage="@drawable/dragon_card_active"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -26,6 +27,7 @@
         app:health="2"
         app:hatchCost="1"
         app:image="@drawable/dragon_card"
+        app:activeImage="@drawable/dragon_card_active"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -38,6 +40,7 @@
         app:hatchCost="2"
         app:battleReady="true"
         app:image="@drawable/dragon_card"
+        app:activeImage="@drawable/dragon_card_active"
         style="@style/DragonCard"/>
 
 
@@ -51,6 +54,7 @@
         app:health="3"
         app:enrage="true"
         app:image="@drawable/dragon_card"
+        app:activeImage="@drawable/dragon_card_active"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -63,6 +67,7 @@
         app:hatchCost="3"
         app:battleReady="true"
         app:image="@drawable/dragon_card"
+        app:activeImage="@drawable/dragon_card_active"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -76,6 +81,7 @@
         app:battleReady="true"
         app:enrage="true"
         app:image="@drawable/dragon_card"
+        app:activeImage="@drawable/dragon_card_active"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -87,6 +93,7 @@
         app:health="4"
         app:hatchCost="1"
         app:image="@drawable/dragon_card"
+        app:activeImage="@drawable/dragon_card_active"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -98,6 +105,7 @@
         app:health="1"
         app:hatchCost="1"
         app:image="@drawable/dragon_card"
+        app:activeImage="@drawable/dragon_card_active"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.DragonCard
@@ -109,6 +117,7 @@
         app:health="1"
         app:hatchCost="1"
         app:image="@drawable/dragon_card"
+        app:activeImage="@drawable/dragon_card_active"
         style="@style/DragonCard"/>
 
     <com.cael6.eh.cael6.HeroCard
@@ -117,7 +126,8 @@
         android:id="@+id/hero001"
         android:tag="hero001"
         app:dragonBreathGen="2"
-        app:image="@drawable/general_huo"
+        app:image="@drawable/hero_card"
+        app:activeImage="@drawable/hero_card_active"
         style="@style/HeroCard"/>
 
     <com.cael6.eh.cael6.EggCard
@@ -131,7 +141,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell001"
         android:tag="spell001"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="1"
         app:effect="Deal 1 direct damage to target."
         app:function="1"
@@ -143,7 +154,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell002"
         android:tag="spell002"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="3"
         app:effect="Deal 2 direct damage to target."
         app:function="2"
@@ -155,7 +167,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell003"
         android:tag="spell003"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="6"
         app:effect="Destroy target egg card."
         app:function="3"
@@ -167,7 +180,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell004"
         android:tag="spell004"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="5"
         app:effect="Deal 4 indirect damage to target."
         app:function="4"
@@ -179,7 +193,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell005"
         android:tag="spell005"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="2"
         app:effect="Reduce hatch counter of target egg by 2."
         app:function="5"
@@ -191,7 +206,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell006"
         android:tag="spell006"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="4"
         app:effect="Send target dragon back to its owner's hand and replace with an egg card."
         app:function="6"
@@ -203,7 +219,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell007"
         android:tag="spell007"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="4"
         app:effect="Return target egg card to its owner's hand."
         app:function="7"
@@ -215,7 +232,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell008"
         android:tag="spell008"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="2"
         app:effect="Heal target by 3."
         app:function="8"
@@ -227,7 +245,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell009"
         android:tag="spell009"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="5"
         app:effect="Heal target by 7."
         app:function="9"
@@ -239,7 +258,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/spell010"
         android:tag="spell010"
-        app:image="@drawable/main_background"
+        app:image="@drawable/spell_card"
+        app:activeImage="@drawable/spell_card_active"
         app:breathCost="6"
         app:effect="Heal target hero and his dragons by 3."
         app:function="10"

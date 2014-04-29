@@ -68,6 +68,7 @@ public class DragonCard extends CharacterCard{
 
     public void enterBattleField() {
         loopTraits(null, ITrait.TRIGGER_DRAGON_ENTER_BATTLEFIELD);
+        inHand = false;
     }
 
     public int getHatchCost() {
@@ -84,7 +85,7 @@ public class DragonCard extends CharacterCard{
         loopTraits(null, ITrait.TRIGGER_AFTER_KILLED);
     }
 
-    protected void setCardChildrenValues(){
+    public void setCardChildrenValues(){
         super.setCardChildrenValues();
         LayoutInflater inflater = ((GameActivity) getContext()).getLayoutInflater();
         LinearLayout costLL = (LinearLayout)findViewWithTag("costLL");
@@ -114,6 +115,7 @@ public class DragonCard extends CharacterCard{
     public void setListeners() {
         if(inHand){
             setOnTouchListener(new CTouchListener(CTouchListener.TYPE_PLAYABLE));
+            setOnDragListener(null);
         } else{
             setOnTouchListener(new CTouchListener(CTouchListener.TYPE_STATIC));
             setOnDragListener(new CharacterDragListener());

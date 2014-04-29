@@ -2,17 +2,12 @@ package com.cael6.eh.cael6;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.cael6.eh.R;
-
-import java.util.ArrayList;
 
 /**
  * Created by cael6 on 23/02/14.
@@ -61,6 +56,10 @@ public class HeroCard extends CharacterCard {
         }
     }
 
+    @Override
+    public void setListeners(){
+        setOnDragListener(new CharacterCard.CharacterDragListener());
+    }
 
     public void resetActions(){
         turns = maxTurns;
@@ -68,9 +67,8 @@ public class HeroCard extends CharacterCard {
     }
 
     @Override
-    protected void setCardChildrenValues() {
+    public void setCardChildrenValues() {
         super.setCardChildrenValues();
-        ((ImageView) this.findViewWithTag("cardImage")).setImageDrawable(image);
     }
 
     @Override

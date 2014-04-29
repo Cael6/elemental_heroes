@@ -48,8 +48,7 @@ public class EggCard extends Card {
     }
 
     @Override
-    protected void setCardChildrenValues() {
-        image = getContext().getResources().getDrawable(R.drawable.egg);
+    public void setCardChildrenValues() {
         super.setCardChildrenValues();
         ((TextView) findViewWithTag("hatch_count")).setText(Integer.toString(hatchTimer));
     }
@@ -69,6 +68,9 @@ public class EggCard extends Card {
         }
         Card cardLayout = (Card) inflater.inflate(layoutResource, expectedParent, false);
 
+        image = getContext().getResources().getDrawable(R.drawable.egg);
+        active_image = getContext().getResources().getDrawable(R.drawable.egg_active);
+
         this.setLayoutParams(cardLayout.getLayoutParams());
         while (0 < cardLayout.getChildCount()) {
             View cardChild = cardLayout.getChildAt(0);
@@ -84,9 +86,12 @@ public class EggCard extends Card {
     public void setListeners() {
         if (inHand) {
             setOnTouchListener(new CTouchListener(CTouchListener.TYPE_PLAYABLE));
+            setOnDragListener(null);
             setOnClickListener(null);
         } else {
             setOnDragListener(new EggDragListener());
+            setOnTouchListener(null);
+            setOnClickListener(null);
         }
     }
 
@@ -107,10 +112,13 @@ public class EggCard extends Card {
             EggCard egg = (EggCard) v;
             if (card instanceof SpellCard) {
                 return spellDrag((SpellCard) card, egg, action);
-            } else if (card instanceof DragonCard && card.getOwner().equals(egg.getOwner())) {
+            } else if (card instanceof DragonCard && card.inHand && card.getOwner().equals(egg.getOwner())
+                    && ((DragonCard)card).getHatchCost() <= egg.getHatchTimer()) {
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED:
-                        // do nothing
+                        card.getOwner().inactivateAllPlayables();
+                        egg.isActive = true;
+                        egg.setCardChildrenValues();
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
                         break;
@@ -121,10 +129,11 @@ public class EggCard extends Card {
                         if (context.dropDragonCard((DragonCard) card, egg, context.player)) {
                             context.player.dragonsOnBoard.add((DragonCard) card);
                         }
-                        egg.setVisibility(View.VISIBLE);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
-                        egg.setVisibility(View.VISIBLE);
+                        egg.isActive = false;
+                        egg.setCardChildrenValues();
+                        card.getOwner().setPlayableCards();
                     default:
                         break;
                 }
@@ -134,11 +143,14 @@ public class EggCard extends Card {
             }
         }
 
+
         private boolean spellDrag(SpellCard spell, EggCard target, int action) {
             if (spell.isValidTarget(target)) {
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED:
-                        //defaultBackground = v.getBackground();
+                        spell.getOwner().inactivateAllPlayables();
+                        target.isActive = true;
+                        target.setCardChildrenValues();
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
                         //set background target shape
@@ -155,8 +167,9 @@ public class EggCard extends Card {
 //                        context.setBackground(v, null);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
-                        //set background back to default background
-//                        context.setBackground(v, defaultBackground);
+                        target.isActive = false;
+                        target.setCardChildrenValues();
+                        spell.getOwner().setPlayableCards();
                     default:
                         break;
                 }

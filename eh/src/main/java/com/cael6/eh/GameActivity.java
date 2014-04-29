@@ -89,7 +89,7 @@ public class GameActivity extends Activity {
                 previewCard(player.deck.hero);
             }
         });
-        player.deck.hero.setOnDragListener(new CharacterCard.CharacterDragListener());
+        player.deck.hero.setListeners();
 
         RelativeLayout enemyHero = (RelativeLayout) findViewById(R.id.enemyHero);
         enemy.deck.hero.setCardForView(Card.SMALL_CARD, enemyHero);
@@ -101,7 +101,7 @@ public class GameActivity extends Activity {
                 previewCard(enemy.deck.hero);
             }
         });
-        enemy.deck.hero.setOnDragListener(new CharacterDragListener());
+        enemy.deck.hero.setListeners();
 
         for (int i = 0; i < player.board.getChildCount(); i++) {
             View v = player.board.getChildAt(i);
@@ -116,8 +116,8 @@ public class GameActivity extends Activity {
         for (int i = 0; i < startingHandSize; i++) {
             enemy.drawCard();
             player.drawCard();
-
         }
+        player.setPlayableCards();
     }
 
     private void initViews() {
@@ -202,12 +202,13 @@ public class GameActivity extends Activity {
             if (owner != null) {
                 owner.removeView(dragon);
             }
-            dragon.setOnTouchListener(new CTouchListener(CTouchListener.TYPE_STATIC));
-            dragon.setOnDragListener(new CharacterDragListener());
+            dragon.inHand = false;
+            dragon.setListeners();
             if (container != null) {
                 container.addView(dragon);
             }
             player.updatePlayerUiStatusBar();
+            player.setPlayableCards();
             dragon.showCard();
             dragon.enterBattleField();
             return true;
@@ -228,6 +229,7 @@ public class GameActivity extends Activity {
                     card.kill(targetCard);
                 }
                 player.updatePlayerUiStatusBar();
+                player.setPlayableCards();
                 enemy.updatePlayerUiStatusBar();
                 return targetKilled;
             }
@@ -241,12 +243,17 @@ public class GameActivity extends Activity {
             if (owner != null) {
                 owner.removeView(egg);
             }
-            egg.setOnDragListener(new EggDragListener());
+            egg.inHand = false;
+            egg.setListeners();
             if (container != null) {
                 container.addView(egg);
             }
             player.updatePlayerUiStatusBar();
+            player.setPlayableCards();
             egg.showCard();
+            egg.isActive = false;
+            egg.inHand = false;
+            egg.setCardChildrenValues();
             return true;
         }
         return false;

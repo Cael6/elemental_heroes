@@ -99,10 +99,11 @@ public class SpellCard extends Card{
     }
 
     @Override
-    protected void setCardChildrenValues(){
+    public void setCardChildrenValues(){
         super.setCardChildrenValues();
         LayoutInflater inflater = ((GameActivity) getContext()).getLayoutInflater();
         LinearLayout costLL = (LinearLayout)findViewWithTag("costLL");
+        costLL.removeAllViews();
         TextView breathCostText = null;
         switch(cardSize){
             case LARGE_CARD:
@@ -258,6 +259,8 @@ public class SpellCard extends Card{
         dragonOwner.cardsInHand.add(target);
         boardZone.removeView(target);
         dragonOwner.hand.addView(target);
+        target.inHand = true;
+        target.setListeners();
         if(dragonOwner.cardsDefaultHidden){
             target.hideCard();
         }
@@ -272,8 +275,11 @@ public class SpellCard extends Card{
         ((ViewGroup)egg.getParent()).removeView(egg);
 
         egg.generateCardForView(boardZone);
+        egg.setOwner(dragonOwner);
+        egg.inHand = false;
         boardZone.addView(egg);
         dragonOwner.eggsOnBoard.add(egg);
+        egg.setListeners();
     }
 
     /**
@@ -287,6 +293,8 @@ public class SpellCard extends Card{
         ((ViewGroup)target.getParent()).removeView(target);
         eggOwner.hand.addView(target);
         target.setHatchTimer(0);
+        target.inHand = true;
+        target.setListeners();
         if(eggOwner.cardsDefaultHidden){
             target.hideCard();
         }

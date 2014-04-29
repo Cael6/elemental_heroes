@@ -36,6 +36,7 @@ public class Player {
     public Player enemy;
     public boolean isAi = false;
     public Deck graveyard;
+    private boolean isInactive = false;
 
     public Player(Context context, int deck, LinearLayout statusBar, LinearLayout hand, LinearLayout board) {
         this.deck = new Deck(context, deck, this);
@@ -54,6 +55,7 @@ public class Player {
         }
         createPlayerUiStatusBar(context);
         updatePlayerUiStatusBar();
+        setPlayableCards();
     }
 
     private void createPlayerUiStatusBar(Context context) {
@@ -178,7 +180,7 @@ public class Player {
      * Player attempts to play the dragon.
      *
      * @param dragon The dragon that the player is playing
-     * @param egg  The egg to be sacrificed for dragon cards
+     * @param egg    The egg to be sacrificed for dragon cards
      * @return true if the dragon is played.
      */
     public boolean attemptToPlayDragonCard(Card dragon, EggCard egg) {
@@ -187,6 +189,7 @@ public class Player {
         }
         spendResources(dragon, egg); //spend resources
         updatePlayerUiStatusBar(); //update ui
+        setPlayableCards();
         return true;
     }
 
@@ -197,34 +200,38 @@ public class Player {
      * @return true if the egg is played.
      */
     public boolean attemptToPlayEgg(EggCard egg) {
-        if(!checkResources(egg, null)){
+        if (!checkResources(egg, null)) {
             return false;
         }
         spendResources(egg, null);
         updatePlayerUiStatusBar();
+        setPlayableCards();
         return true;
     }
 
     /**
      * Player attempts to play spell card targeting target
-     * @param spell The spell that the player is playing
-     * @param target The target for the spell card.
+     *
+     * @param spell         The spell that the player is playing
+     * @param target        The target for the spell card.
      * @param destroyIfCast
      * @return true if the spell is played.
      */
     public boolean attemptToPlaySpellCard(SpellCard spell, Card target, boolean destroyIfCast) {
-        if(!checkResources(spell, null)){
+        if (!checkResources(spell, null)) {
             return false;
         }
         spell.executeEffect(target);
         target.invalidate();
         spendResources(spell, null);
-        if(destroyIfCast) {
+        if (destroyIfCast) {
             cardsInHand.remove(spell);
             spell.destroyCard();
         }
         updatePlayerUiStatusBar();
+        setPlayableCards();
         enemy.updatePlayerUiStatusBar();
+        enemy.setPlayableCards();
         return true;
     }
 
@@ -288,9 +295,42 @@ public class Player {
         drawDragonBreath();
         resetActions();
         increaseHatch();
+        setPlayableCards();
         updatePlayerUiStatusBar();
         if (isAi) {
             aiTurn(context);
+        }
+    }
+
+    public void setPlayableCards() {
+        isInactive = false;
+        for (Card card : cardsInHand) {
+            if (deck.hero.turns < 1) {
+                card.isActive = false;
+            } else if (card instanceof DragonCard) {
+                for (EggCard egg : eggsOnBoard) {
+                    card.isActive = false;
+                    if (((DragonCard) card).getHatchCost() <= egg.getHatchTimer()) {
+                        card.isActive = true;
+                        break;
+                    }
+                }
+            } else if (card instanceof EggCard) {
+                card.isActive = true;
+            } else if (card instanceof SpellCard) {
+                card.isActive = ((SpellCard) card).dragonBreathCost <= currDragonBreathDrawn;
+            }
+            card.setCardChildrenValues();
+        }
+
+        for (DragonCard dragon : dragonsOnBoard) {
+            dragon.isActive = dragon.turns > 0;
+            dragon.setCardChildrenValues();
+        }
+
+        for (EggCard egg : eggsOnBoard) {
+            egg.isActive = false;
+            egg.setCardChildrenValues();
         }
     }
 
@@ -339,8 +379,9 @@ public class Player {
 
     /**
      * Plays Egg card
-     * @param context Current Game Activity
-     * @param egg Card to attempt to play
+     *
+     * @param context      Current Game Activity
+     * @param egg          Card to attempt to play
      * @param cardIterator iterator going through player's hand
      */
     private void aiPlayEggs(GameActivity context, EggCard egg, ListIterator<Card> cardIterator) {
@@ -358,8 +399,9 @@ public class Player {
 
     /**
      * Plays dragon card
-     * @param context Current Game Activity
-     * @param dragon dragon to attempt to play
+     *
+     * @param context      Current Game Activity
+     * @param dragon       dragon to attempt to play
      * @param cardIterator iterator going through player's hand
      */
     private void aiPlayDragon(GameActivity context, DragonCard dragon, ListIterator<Card> cardIterator) {
@@ -383,16 +425,16 @@ public class Player {
             Card card = cardIterator.next();
             if (card instanceof DragonCard) {
                 aiPlayDragon(context, (DragonCard) card, cardIterator);
-            } else if (card instanceof EggCard){
-                aiPlayEggs(context, (EggCard) card, cardIterator );
-            } else if(card instanceof SpellCard){
+            } else if (card instanceof EggCard) {
+                aiPlayEggs(context, (EggCard) card, cardIterator);
+            } else if (card instanceof SpellCard) {
                 aiPlaySpell(context, (SpellCard) card, cardIterator);
             }
         }
     }
 
     private void aiPlaySpell(GameActivity context, SpellCard card, ListIterator<Card> cardIterator) {
-        switch(card.functionId) {
+        switch (card.functionId) {
             case SpellCard.EFFECT_MASS_HEAL:
                 if (deck.hero.health < deck.hero.maxHealth / 2
                         && attemptToPlaySpellCard(card, deck.hero, false)) {
@@ -517,10 +559,11 @@ public class Player {
 
     /**
      * This player lost and the other won. Finish GameActivity and go to stats screen
+     *
      * @param context Game Activity.
      */
-    public void lose(GameActivity context){
-        if(!context.isFinishing() && !context.isDestroyed()) {
+    public void lose(GameActivity context) {
+        if (!context.isFinishing() && !context.isDestroyed()) {
             Intent intent = new Intent(context, GameStatsActivity.class);
             //if isAi the player won.
             String playerHeroId, enemyHeroId;
@@ -538,6 +581,24 @@ public class Player {
 
             context.startActivity(intent);
             context.finish();
+        }
+    }
+
+    public void inactivateAllPlayables() {
+        if (!isInactive) {
+            for (EggCard egg : eggsOnBoard) {
+                egg.isActive = false;
+                egg.setCardChildrenValues();
+            }
+            for (DragonCard dragon : dragonsOnBoard) {
+                dragon.isActive = false;
+                dragon.setCardChildrenValues();
+            }
+            for (Card card : cardsInHand) {
+                card.isActive = false;
+                card.setCardChildrenValues();
+            }
+            isInactive = true;
         }
     }
 }

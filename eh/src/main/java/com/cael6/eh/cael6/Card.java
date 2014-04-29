@@ -1,15 +1,11 @@
 package com.cael6.eh.cael6;
 
-import android.annotation.TargetApi;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -28,6 +24,8 @@ public class Card extends FrameLayout implements ICard {
     public final static int LARGE_CARD = 1;
     //</editor-fold>
     public Drawable image;
+    public Drawable active_image;
+    public boolean isActive;
     public float mRotation = 0;
     public boolean inHand;
     public boolean movable;
@@ -64,9 +62,11 @@ public class Card extends FrameLayout implements ICard {
         this.inHand = card.inHand;
         this.mRotation = card.mRotation;
         this.image = card.image;
+        this.active_image = card.active_image;
     }
 
     protected void init() {
+        this.isActive = false;
         this.inHand = false;
     }
 
@@ -85,6 +85,10 @@ public class Card extends FrameLayout implements ICard {
                         int srcId = ta.getResourceId(attr, -1);
                         image = getResources().getDrawable(srcId);
                         break;
+                    case R.styleable.Card_activeImage:
+                        int activeImageId = ta.getResourceId(attr, -1);
+                        active_image = getResources().getDrawable(activeImageId);
+                        break;
                 }
             }
         }
@@ -95,8 +99,14 @@ public class Card extends FrameLayout implements ICard {
         super.onDraw(canvas);
     }
 
-    protected void setCardChildrenValues() {
-        ((ImageView) this.findViewWithTag("cardImage")).setImageDrawable(image);
+    public void setCardChildrenValues() {
+        Drawable img;
+        if(isActive){
+            img = active_image;
+        } else {
+            img = image;
+        }
+        ((ImageView) this.findViewWithTag("cardImage")).setImageDrawable(img);
     }
 
     protected void generateCardForView(ViewGroup expectedParent) {

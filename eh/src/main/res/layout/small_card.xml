@@ -16,14 +16,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/main_background"
+            android:src="@drawable/dragon_card"
             android:contentDescription="@string/image_background_desc" />
 
         <LinearLayout
             android:tag="costLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
         </LinearLayout>
 
         <LinearLayout

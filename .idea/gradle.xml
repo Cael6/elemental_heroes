@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="C:\Users\caleb\Documents\Development\elemental_heroes" />
-            <option value="C:\Users\caleb\Documents\Development\elemental_heroes\eh" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/eh" />
           </set>
         </option>
       </GradleProjectSettings>
