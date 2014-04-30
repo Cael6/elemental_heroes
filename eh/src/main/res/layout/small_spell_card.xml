@@ -42,7 +42,8 @@
             android:tag="costLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
         </LinearLayout>
     </RelativeLayout>
 </com.cael6.eh.cael6.SpellCard>
